@@ -13,34 +13,34 @@ function App() {
   const [holderName , setHolderName] = useState('')
   const [amount , setAmount] = useState('')
   const [error , setError] = useState('')
-
+  console.log(number.length)
   function onPay(){
-    function Check(){
-      let isError = ''
-      if(cvc.length < 3){
-        setError('CVV must contain at least 3 characters.')
-      }
-      if(expire.length < 4){
+    if(number.length < 16){
+      setError('Card number must contain at least 16 characters.')
+    }else if(cvc.length < 3){
+        setError('CVC must contain at least 3 characters.')
+      }else if(expire.length < 4){
         setError('Expire date must contain at least 4 characters.')
-      }
-      if(+expire.slice(0,3) < 22 ){
+      }else if(+expire.slice(3) < `${new Date().getFullYear()}`.slice(2)){
         setError('Invalid expire date.')
+      }else if(!holderName){
+        setError("Enter cardholder's name")
+      }else if(!amount || /[a-zA-Z]/.test(amount)){
+        setError('Invalid amount')
       }
-      return isError
-    }
-    Check()
     setIsLoading(true)
-    if(isLoading){
-      Swal.fire({
-        title: 'Loading',
-        timerProgressBar: true,
-        didOpen: () => {
-          Swal.showLoading()
-        },
-      })
-    }
+    // if(isLoading){
+    //   Swal.fire({
+    //     title: 'Loading',
+    //     timerProgressBar: true,
+    //     didOpen: () => {
+    //       Swal.showLoading()
+    //     },
+    //   })
+    // }
   }
-  
+  console.log()
+  console.log()
   useEffect(()=>{
   let ccNumberInput = document.querySelector('.cc-number-input'),
 
@@ -77,6 +77,7 @@ function App() {
 			ccNumberInputOldCursor = el.selectionEnd;
 		},
 		ccNumberInputInputHandler = (e) => {
+      setError('')
 			let el = e.target,
 					newValue = unmask(el.value),
 					newCursorPosition;
@@ -153,7 +154,7 @@ function App() {
     }
   },[])
 
-  
+  console.log(error)
   return (
     <div className="App">
         <div className='Card'>
@@ -201,7 +202,7 @@ function App() {
               <button onClick={amount && number && cvc && holderName && expire?onPay: ()=>{}} className={amount && number && cvc && holderName && expire?'':'buttonDisable'}>Pay</button>
               </div>
               <div>
-                <p>
+                <p style={{color:'red' , fontFamily:"'Montserrat', sans-serif", fontWeight:'bold' , fontSize:'13px'}}>
                   {error}
                 </p>
               </div>
