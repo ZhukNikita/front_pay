@@ -3,211 +3,286 @@ import logo from './img/GP.png'
 import chip from './img/chip.png'
 import {useEffect,useState} from 'react'
 import Swal from 'sweetalert2';
-
+import {Routes, redirect , Route , useLocation} from 'react-router-dom'
 function App() {
-  const [number , setNumber] = useState('')
-  const [cvc , setCvc] = useState('')
-  const [expire , setExpire] = useState('')
-  const [method , setMethod] = useState('')
-  const [isLoading , setIsLoading] = useState(false)
-  const [holderName , setHolderName] = useState('')
-  const [amount , setAmount] = useState('')
-  const [error , setError] = useState('')
-  console.log(number.length)
+  const [holderName , setHolderName] = useState('');
+  const [amount , setAmount] = useState('');
+  const [email , setEmail] = useState('');
+  const [emailError , setEmailError] = useState('');
+  const [phone , setPhone] = useState('');
+  const [phoneError , setPhoneError] = useState('');
+  const [country , setCountry] = useState('');
+  const [countryError , setCountryError] = useState('');
+  const [city , setCity] = useState('');
+  const [cityError , setCityError] = useState('');
+  const [state , setState] = useState('');
+  const [stateError , setStateError] = useState('');
+  const [address , setAddress] = useState('');
+  const [addressError , setAddressError] = useState('');
+  const [description , setDescription] = useState('');
+  const [descriptionError , setDescriptionError] = useState('');
+  const [postalCode , setPostalCode] = useState('');
+  const [postalCodeError , setPostalCodeError] = useState('');
+  const [amountError , setAmountError] = useState('')
+  const [nameError , setNameError] = useState('')
+  const [url , setUrl] = useState('')
+  const {pathname} = useLocation()
   function onPay(){
-    if(number.length < 16){
-      setError('Card number must contain at least 16 characters.')
-    }else if(cvc.length < 3){
-        setError('CVC must contain at least 3 characters.')
-      }else if(expire.length < 4){
-        setError('Expire date must contain at least 4 characters.')
-      }else if(+expire.slice(3) < `${new Date().getFullYear()}`.slice(2)){
-        setError('Invalid expire date.')
-      }else if(!holderName){
-        setError("Enter cardholder's name")
-      }else if(!amount || /[a-zA-Z]/.test(amount)){
-        setError('Invalid amount')
-      }
-    setIsLoading(true)
-    // if(isLoading){
-    //   Swal.fire({
-    //     title: 'Loading',
-    //     timerProgressBar: true,
-    //     didOpen: () => {
-    //       Swal.showLoading()
-    //     },
-    //   })
-    // }
+    const re = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+    let newAmountError = '';
+    let newNameError = '';
+    let newEmailError = '';
+    let newPhoneError = '';
+    let newCountryError = '';
+    let newCityError = '';
+    let newStateError = '';
+    let newAddressError = '';
+    let newDescriptionError = '';
+    let newPostalError = '';
+    let error
+    if(holderName.length<5){
+      setNameError('Name min length 5')
+      error = true
+      newNameError = 'Name min length 5';
+    }
+    if(!holderName.includes(' ')){
+      setNameError('Enter name and surname')
+      error = true
+      newNameError = 'Enter name and surname';
+    }
+    if(!re.test(String(email).toLowerCase())){
+      setEmailError('Invalid Email')
+      error = true
+      newEmailError = 'Invalid Email'
+    }
+    if(!phone){
+      setPhoneError('Please enter phone number')
+      error = true
+      newPhoneError = 'Please enter phone number'
+    }
+    if(/[a-zA-Z]/.test(phone)){
+      setPhoneError('Invalid phone')
+      error = true
+      newPhoneError = 'Invalid phone'
+    }
+    if(!country){
+      setCountryError('Please enter country code')
+      error = true
+      newCountryError = 'Please enter country code'
+    }
+    if(country.length > 2){
+      setCountryError('Please enter only country code')
+      error = true
+      newCountryError = 'Please enter only country code'
+    }
+    if(!city){
+      setCityError('Please enter city')
+      error = true
+      newCityError = 'Please enter city'
+    }
+    if(!state){
+      setStateError('Please enter state')
+      error = true
+      newStateError = 'Please enter state'
+    }
+    if(!address){
+      setAddressError('Please enter address')
+      error = true
+      newAddressError= 'Please enter address'
+    }
+    if(!description){
+      setDescriptionError('Please enter description')
+      error = true
+      newDescriptionError = 'Please enter description'
+    }
+    if(!postalCode){
+      setPostalCodeError('Please enter postal code')
+      error = true
+      newPostalError = 'Please enter postal code'
+    }
+    if(+amount < 1){
+      setAmountError('Min amount 1$')
+      error = true
+      newAmountError = 'Min amount 1$';
+    }
+    if(+amount > 20000){
+      setAmountError('Max amount 20000$')
+      error = true
+      newAmountError = 'Max amount 20000$';
+    }
+    if(/[a-zA-Z]/.test(amount)){
+      setAmountError('Invalid amount')
+      error = true
+      newAmountError = 'Invalid amount';
+    }
+    if(/[!@#$%^&*()_+{}\[\]:;<>,.?~\\|/-\d]/.test(holderName)){
+      setNameError('Invalid name')
+      error = true
+      newNameError = 'Invalid name';
+    }
+    if (newAmountError === '' 
+    && newNameError === ''
+    && newEmailError === '' 
+    && newPhoneError === '' 
+    && newCountryError === ''
+    && newCityError === ''
+    && newStateError === ''
+    && newAddressError === ''
+    && newDescriptionError === ''
+    && newPostalError === '') {
+      const orderId = Date.now();
+      const redirectUrl = `https://secure.pinpaygate.com/hpp?project=bf2dca9c69dc4f9ca615556dfe190145&price=${(+amount).toFixed(2)}&user_name=${holderName.replace(/ /g, "+")}&user_contact_email=${email}&user_phone=${phone}&result_url=https%3A%2F%2Fexample.com%2Fresult&description=${description}&user_country=${country.toUpperCase()}&user_city=${city}&user_state=${state}&user_address=${address.replace(/ /g, "+")}&user_postal_code=${postalCode}&order_id=${orderId}&currency=USD&success_url=http://localhost:3000/success&failure_url=http://localhost:3000/failure&locale=en`;
+      setUrl(redirectUrl)
+      // window.location.href = redirectUrl;
+    } else {
+      setNameError(newNameError);
+      setAmountError(newAmountError);
+    }
   }
-  console.log()
-  console.log()
-  useEffect(()=>{
-  let ccNumberInput = document.querySelector('.cc-number-input'),
+  if(pathname.includes('success')){
+    let timerInterval
+    Swal.fire({
+      title: 'Payment success!',
+      icon:'success',
+      timer: 3000,
+      timerProgressBar: true,
+      confirmButtonText: 'Close',
+      didOpen: () => {
+        timerInterval = setInterval(() => {
+        }, 100)
+      },
+      willClose: () => {
+        window.location.href = 'http://localhost:3000'
+        clearInterval(timerInterval)
+      }
+    }).then((result) => {
+      /* Read more about handling dismissals below */
+      if (result.dismiss === Swal.DismissReason.timer) {
+        console.log('I was closed by the timer')
+      }
+    })
+  }
+  if(pathname.includes('failure')){
+    let timerInterval
+    Swal.fire({
+      title: 'Payment fail!',
+      icon:'error',
+      timer: 3000,
+      timerProgressBar: true,
+      confirmButtonText: 'Close',
+      didOpen: () => {
+        timerInterval = setInterval(() => {
+        }, 100)
+      },
+      willClose: () => {
+        window.location.href = 'http://localhost:3000'
+        clearInterval(timerInterval)
+      }
+    }).then((result) => {
+      /* Read more about handling dismissals below */
+      if (result.dismiss === Swal.DismissReason.timer) {
+        console.log('I was closed by the timer')
+      }
+    })
+  }
 
-		ccNumberSeparator = " ",
-		ccNumberInputOldValue,
-		ccNumberInputOldCursor,
-		
-		ccExpiryInput = document.querySelector('.cc-expiry-input'),
-		ccExpiryPattern = /^\d{0,4}$/g,
-		ccExpirySeparator = "/",
-		ccExpiryInputOldValue,
-		ccExpiryInputOldCursor,
-		
-		ccCVCInput = document.querySelector('.cc-cvc-input'),
-		ccCVCPattern = /^\d{0,3}$/g,
-		
-		mask = (value, limit, separator) => {
-			var output = [];
-			for (let i = 0; i < value.length; i++) {
-				if ( i !== 0 && i % limit === 0) {
-					output.push(separator);
-				}
-				
-				output.push(value[i]);
-			}
-			
-			return output.join("");
-		},
-		unmask = (value) => value.replace(/[^\d]/g, ''),
-		checkSeparator = (position, interval) => Math.floor(position / (interval + 1)),
-		ccNumberInputKeyDownHandler = (e) => {
-			let el = e.target;
-			ccNumberInputOldValue = el.value;
-			ccNumberInputOldCursor = el.selectionEnd;
-		},
-		ccNumberInputInputHandler = (e) => {
-      setError('')
-			let el = e.target,
-					newValue = unmask(el.value),
-					newCursorPosition;
-          setNumber(newValue)
-
-      let lengthPattern = '{0,20}',
-      ccNumberPattern = new RegExp('^\\d' + lengthPattern + '$', 'g');
-
-			if ( newValue.match(ccNumberPattern) ) {
-				newValue = mask(newValue, 4, ccNumberSeparator);
-				
-				newCursorPosition = 
-					ccNumberInputOldCursor - checkSeparator(ccNumberInputOldCursor, 4) + 
-					checkSeparator(ccNumberInputOldCursor + (newValue.length - ccNumberInputOldValue.length), 4) + 
-					(unmask(newValue).length - unmask(ccNumberInputOldValue).length);
-				
-				el.value = (newValue !== "") ? newValue : "";
-			} else {
-				el.value = ccNumberInputOldValue;
-				newCursorPosition = ccNumberInputOldCursor;
-			}
-			
-			el.setSelectionRange(newCursorPosition, newCursorPosition);
-			
-			highlightCC(el.value);
-		},
-		highlightCC = (ccValue) => {
-			let ccCardType = '',
-					ccCardTypePatterns = {
-						visa: /^4/,
-						mastercard: /^5/,
-						maestro: /^6/,
-					};
-			
-			for (const cardType in ccCardTypePatterns) {
-				if ( ccCardTypePatterns[cardType].test(ccValue) ) {
-					ccCardType = cardType;
-          setMethod(cardType)
-					break;
-				}
-			}
-			
-			let activeCC = document.querySelector('.cc-types__img--active'),
-					newActiveCC = document.querySelector(`.cc-types__img--${ccCardType}`);
-			
-			if (activeCC) activeCC.classList.remove('cc-types__img--active');
-			if (newActiveCC) newActiveCC.classList.add('cc-types__img--active');
-		},
-		ccExpiryInputKeyDownHandler = (e) => {
-			let el = e.target;
-			ccExpiryInputOldValue = el.value;
-			ccExpiryInputOldCursor = el.selectionEnd;
-		},
-		ccExpiryInputInputHandler = (e) => {
-      setExpire(e.target.value)
-			let el = e.target,
-					newValue = el.value;
-			
-			newValue = unmask(newValue);
-			if ( newValue.match(ccExpiryPattern) ) {
-				newValue = mask(newValue, 2, ccExpirySeparator);
-				el.value = newValue;
-			} else {
-				el.value = ccExpiryInputOldValue;
-			}
-		};
-    if(ccNumberInput){
-      ccNumberInput.addEventListener('keydown', ccNumberInputKeyDownHandler);
-      ccNumberInput.addEventListener('input', ccNumberInputInputHandler);
-    }
-    if(ccExpiryInput){
-      ccExpiryInput.addEventListener('keydown', ccExpiryInputKeyDownHandler);
-      ccExpiryInput.addEventListener('input', ccExpiryInputInputHandler);
-    }
-  },[])
-
-  console.log(error)
   return (
     <div className="App">
-        <div className='Card'>
-            <img className='Logo' src={logo}/>
-            <div className="wrapper">
-            <div className="cc-types">
-              <img className="cc-types__img cc-types__img--visa" style={method ==='visa'? {filter:'none'}:{}} onClick={()=>setMethod('visa')}/>
-              <img className="cc-types__img cc-types__img--mastercard" style={method ==='mastercard'? {filter:'none'}:{}} onClick={()=>setMethod('mastercard')}/>
-              <img className="cc-types__img cc-types__img--maestro" style={method ==='maestro'? {filter:'none'}:{}} onClick={()=>setMethod('maestro')}/>
-            </div>
+      <Routes>
+        <Route path={'/'} element={
+          <div className='Card'>
+                <img className='Logo' src={logo}/>
+                <div className="wrapper">
+                <form>
+                  <div className='CardNumber'>
+                      <div className='CardInputs'>
+                        <label>Full Name</label>
+                        <input type="tel" placeholder='Full Name' maxLength='23' className="cc-number-input" onChange={(e)=>{setHolderName(e.target.value); setNameError('')}}/>
+                        {nameError? <p style={{color:'red' , fontFamily:"'Montserrat', sans-serif", fontWeight:'bold' , fontSize:'13px' , marginTop:'20px' , position:'absolute' , bottom:'-32px'}}>{nameError}</p> : ''}
+                      </div>
+                  </div>
+                  <div className='CardNumber'>
+                      <div className='CardInputs'>
+                        <label>Email</label>
+                        <input type="tel" placeholder='example@email.com' maxLength='23' className="cc-number-input" onChange={(e)=>{setEmail(e.target.value); setEmailError('')}}/>
+                        {emailError? <p style={{color:'red' , fontFamily:"'Montserrat', sans-serif", fontWeight:'bold' , fontSize:'13px' , marginTop:'20px' , position:'absolute' , bottom:'-32px'}}>{emailError}</p> : ''}
+                      </div>
+                  </div>
+                  <div className='CardNumber'>
+                      <div className='CardInputs'>
+                        <label>Phone</label>
+                        <input type="tel" placeholder='Phone number' maxLength='23' className="cc-number-input" onChange={(e)=>{setPhone(e.target.value); setPhoneError('')}}/>
+                        {phoneError? <p style={{color:'red' , fontFamily:"'Montserrat', sans-serif", fontWeight:'bold' , fontSize:'13px' , marginTop:'20px' , position:'absolute' , bottom:'-32px'}}>{phoneError}</p> : ''}
+                      </div>
+                  </div>
+                  <div className='CardNumber'>
+                      <div className='CardInputs'>
+                        <label>User country</label>
+                        <input type="tel" placeholder='Country' maxLength='23' className="cc-number-input" onChange={(e)=>{setCountry(e.target.value); setCountryError('')}}/>
+                        {countryError? <p style={{color:'red' , fontFamily:"'Montserrat', sans-serif", fontWeight:'bold' , fontSize:'13px' , marginTop:'20px' , position:'absolute' , bottom:'-32px'}}>{countryError}</p> : ''}
+                      </div>
+                  </div>
+                  <div className='CardNumber'>
+                      <div className='CardInputs'>
+                        <label>User city</label>
+                        <input type="tel" placeholder='City' maxLength='23' className="cc-number-input" onChange={(e)=>{setCity(e.target.value); setCityError('')}}/>
+                        {cityError? <p style={{color:'red' , fontFamily:"'Montserrat', sans-serif", fontWeight:'bold' , fontSize:'13px' , marginTop:'20px' , position:'absolute' , bottom:'-32px'}}>{cityError}</p> : ''}
+                      </div>
+                  </div>
+                  <div className='CardNumber'>
+                      <div className='CardInputs'>
+                        <label>User state</label>
+                        <input type="tel" placeholder='State' maxLength='23' className="cc-number-input" onChange={(e)=>{setState(e.target.value); setStateError('')}}/>
+                        {stateError? <p style={{color:'red' , fontFamily:"'Montserrat', sans-serif", fontWeight:'bold' , fontSize:'13px' , marginTop:'20px' , position:'absolute' , bottom:'-32px'}}>{stateError}</p> : ''}
+                      </div>
+                  </div>
+                  <div className='CardNumber'>
+                      <div className='CardInputs'>
+                        <label>User address</label>
+                        <input type="tel" placeholder='Address' maxLength='23' className="cc-number-input" onChange={(e)=>{setAddress(e.target.value); setAddressError('')}}/>
+                        {addressError? <p style={{color:'red' , fontFamily:"'Montserrat', sans-serif", fontWeight:'bold' , fontSize:'13px' , marginTop:'20px' , position:'absolute' , bottom:'-32px'}}>{addressError}</p> : ''}
+                      </div>
+                  </div>
+                  <div className='CardNumber'>
+                      <div className='CardInputs'>
+                        <label>User postal code</label>
+                        <input type="tel" placeholder='Postal code' maxLength='23' className="cc-number-input" onChange={(e)=>{setPostalCode(e.target.value); setPostalCodeError('')}}/>
+                        {postalCodeError? <p style={{color:'red' , fontFamily:"'Montserrat', sans-serif", fontWeight:'bold' , fontSize:'13px' , marginTop:'20px' , position:'absolute' , bottom:'-32px'}}>{postalCodeError}</p> : ''}
+                      </div>
+                  </div>
+                  <div className='CardNumber'>
+                      <div className='CardInputs'>
+                        <label>Description</label>
+                        <input type="tel" placeholder='Description' maxLength='23' className="cc-number-input" onChange={(e)=>{setDescription(e.target.value); setDescriptionError('')}}/>
+                        {descriptionError? <p style={{color:'red' , fontFamily:"'Montserrat', sans-serif", fontWeight:'bold' , fontSize:'13px' , marginTop:'20px' , position:'absolute' , bottom:'-32px'}}>{descriptionError}</p> : ''}
+                      </div>
+                  </div>
+                </form>  
+                <div className='CardPayment'>
+                  <div className='CardPaymentInput'>
+                        <label>Payment Amount(USD)</label>
+                        <input type="text" maxLength="30" placeholder='00.0' className="cc-cvc-input" onChange={(e)=>{setAmount(e.target.value);setAmountError('')}}/>
+                        {amountError? <p style={{color:'red' , fontFamily:"'Montserrat', sans-serif", fontWeight:'bold' , fontSize:'13px' , marginTop:'20px', position:'absolute' , bottom:'-32px'}}>{amountError}</p> : ''}
 
-            <div className='CardTemplate'>
-              <div className='CardNumber' style={{justifyContent:'space-between' , height:'41.83px'}}>
-                <img src={chip} width={50}  style={{filter:'brightness(0.9)'}}/>
-                {method === 'visa'? <img className="cc-types__img cc-types__img--visa"  style={{filter:'none'}}/>
-                :method === 'mastercard'?<img className="cc-types__img cc-types__img--mastercard"   style={{filter:'none'}}/>
-                :method === 'maestro'?<img className="cc-types__img cc-types__img--maestro"  style={{filter:'none'}}/> : <div className='empty'></div>}
-              </div>
-              <div className='CardNumber'>
-                  <div className='CardInputs'>
-                    <label>Card Number</label>
-                    <input type="tel" placeholder='0000 0000 0000 0000' maxLength='23' className="cc-number-input" />
                   </div>
-                  <div className='CardInputsCVC'>
-                    <label>Expires</label>
-                    <input type="text" placeholder='MM/YY' maxLength="5" className="cc-expiry-input"/>
+                    <button onClick={onPay} className={amountError === '' && nameError === '' && holderName !== '' && amount !== ''?"Pay":'buttonDisable'}>Pay</button>
                   </div>
-              </div>
-              <div className='CardNumber'>
-                  <div className='CardInputs'>
-                    <label>Cardholder Name</label>
-                    <input type="text" maxLength="30" placeholder='Cardholder Name' className="cc-card-name"onChange={(e)=>setHolderName(e.target.value)}/>
-                  </div>
-                  <div className='CardInputsCVC'>
-                    <label>CVC</label>
-                    <input type="text" maxLength="3" placeholder='123' className="cc-cvc-input"onChange={(e)=>setCvc(e.target.value)}/>
-                  </div>
+                  {
+                    url && (
+                      <div style={{width:'90%' , height:'100%',wordWrap:'break-word', display:'flex' , alignItems:'center', flexDirection:'column' , justifyContent:'center'}}>
+                        <div style={{width:'90%' , height:'100%',wordWrap:'break-word'}}>
+                          {url} 
+                        </div>
+                        <button className='Pay' style={{marginTop:'20px'}} onClick={()=> navigator.clipboard.writeText(url)}>Copy</button>
+                      </div>
+                    )
+                  }
               </div>
             </div>
-            <div className='CardPayment'>
-              <div className='CardPaymentInput'>
-                    <label>Payment Amount</label>
-                    <input type="text" maxLength="30" placeholder='00.0' className="cc-cvc-input" onChange={(e)=>setAmount(e.target.value)}/>
-              </div>
-              <button onClick={amount && number && cvc && holderName && expire?onPay: ()=>{}} className={amount && number && cvc && holderName && expire?'':'buttonDisable'}>Pay</button>
-              </div>
-              <div>
-                <p style={{color:'red' , fontFamily:"'Montserrat', sans-serif", fontWeight:'bold' , fontSize:'13px'}}>
-                  {error}
-                </p>
-              </div>
-          </div>
-        </div>
+        }>
+        </Route>
+      </Routes>
+
     </div>
   );
 }
