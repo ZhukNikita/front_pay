@@ -4,6 +4,7 @@ import chip from './img/chip.png'
 import {useEffect,useState} from 'react'
 import Swal from 'sweetalert2';
 import {Routes, redirect , Route , useLocation} from 'react-router-dom'
+import { Countries } from './countries';
 function App() {
   const [holderName , setHolderName] = useState('');
   const [amount , setAmount] = useState('');
@@ -64,6 +65,16 @@ function App() {
       setPhoneError('Invalid phone')
       error = true
       newPhoneError = 'Invalid phone'
+    }
+    if(/[!@#$%^&*()_+{}\[\]:;<>,.?~\\|/-]/.test(phone)){
+      setPhoneError('Must not contain characters')
+      error = true
+      newPhoneError = 'Must not contain characters'
+    }
+    if(phone.includes(' ')){
+      setPhoneError('Must not contain characters')
+      error = true
+      newPhoneError = 'Must not contain characters'
     }
     if(!country){
       setCountryError('Please enter country code')
@@ -131,7 +142,7 @@ function App() {
     && newDescriptionError === ''
     && newPostalError === '') {
       const orderId = Date.now();
-      const redirectUrl = `https://secure.pinpaygate.com/hpp?project=bf2dca9c69dc4f9ca615556dfe190145&price=${(+amount).toFixed(2)}&user_name=${holderName.replace(/ /g, "+")}&user_contact_email=${email}&user_phone=${phone}&result_url=https%3A%2F%2Fexample.com%2Fresult&description=${description}&user_country=${country.toUpperCase()}&user_city=${city}&user_state=${state}&user_address=${address.replace(/ /g, "+")}&user_postal_code=${postalCode}&order_id=${orderId}&currency=USD&success_url=http://localhost:3000/success&failure_url=http://localhost:3000/failure&locale=en`;
+      const redirectUrl = `https://secure.pinpaygate.com/hpp?project=25edc473c934416299879ccb691f8899&price=${(+amount).toFixed(2)}&user_name=${holderName.replace(/ /g, "+")}&user_contact_email=${email}&user_phone=${phone}&result_url=https%3A%2F%2Fexample.com%2Fresult&description=${description}&user_country=${country.toUpperCase()}&user_city=${city}&user_state=${state}&user_address=${address.replace(/ /g, "+")}&user_postal_code=${postalCode}&order_id=${orderId}&currency=EUR&success_url=http://localhost:3000/success&failure_url=http://localhost:3000/failure&locale=en`;
       setUrl(redirectUrl)
       // window.location.href = redirectUrl;
     } else {
@@ -185,7 +196,7 @@ function App() {
       }
     })
   }
-
+  console.log(country)
   return (
     <div className="App">
       <Routes>
@@ -216,12 +227,23 @@ function App() {
                       </div>
                   </div>
                   <div className='CardNumber'>
+                    <div className='CardInputs'>
+                      <label>Country</label>
+                      <select className='CardNumber' style={{width:'100%' , border:'1px solid #ddd' , borderRadius:'12px' , height:'44px' , fontSize:'18px' , padding:'10px 0 10px 15px', fontFamily:"'Montserrat', sans-serif"}} onChange={(e)=>setCountry(e.target.value)}>
+                        <option value={''} defaultValue={''}>Choose country</option>
+                        {
+                          Countries.map(el=> <option style={{height:'30px', width:'200px'}} key={el.code} value={el.code}>{el.code}&emsp;{el.name}</option>)
+                        }
+                      </select>
+                    </div>  
+                  </div>
+                  {/* <div className='CardNumber'>
                       <div className='CardInputs'>
                         <label>User country</label>
                         <input type="tel" placeholder='Country' maxLength='23' className="cc-number-input" onChange={(e)=>{setCountry(e.target.value); setCountryError('')}}/>
                         {countryError? <p style={{color:'red' , fontFamily:"'Montserrat', sans-serif", fontWeight:'bold' , fontSize:'13px' , marginTop:'20px' , position:'absolute' , bottom:'-32px'}}>{countryError}</p> : ''}
                       </div>
-                  </div>
+                  </div> */}
                   <div className='CardNumber'>
                       <div className='CardInputs'>
                         <label>User city</label>
