@@ -1,0 +1,46 @@
+@import 'vars.scss';
+
+.body{
+    width: 600px;
+    height: 700px;
+    background-color: #272d34;
+    border-radius: 6px;
+    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.35);
+    @include flex(center,start);
+    flex-direction: column;
+    padding: 20px;
+    font-family: $font;
+    color: #ffffff;
+    text-align: center;
+    .logo{
+        @include flex(center,center);
+            width: 80%;
+            img{
+                width: 80%;
+            }
+        }
+        .methods{
+            @include flex(center,center);
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 21.44px;
+            width: 90%;
+            
+            .method{
+                position: relative;
+                a{
+                    font-size: 24px;
+                    font-weight: bold;
+                    text-decoration: none;
+                    color: white;
+                }
+
+                @include flex(center,center);
+                cursor: pointer;
+                background-color: #38b6ff;
+                width: 40%;
+                height: 150px;
+                border-radius: 6px;
+            }
+        }
+}

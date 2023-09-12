@@ -1,0 +1,37 @@
+@import 'vars.scss';
+
+
+.body{
+    width: 600px;
+    height: 700px;
+    border-radius: 6px;
+    @include flex(center,start);
+    flex-direction: column;
+    padding: 20px;
+    font-family: $font;
+    color: #ffffff;
+    text-align: center;
+    .card{
+        padding: 20px;
+        width: 300px;
+        height: 200px;
+        background-color:  #272d34;
+        box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.35);
+        border-radius: 8px;
+        .cardHeader{
+        @include flex(center,space-between);
+        }
+        .cardBody{
+            text-align: left;
+            margin-top: 50px;
+            width: 100%;
+            @include flex(center,space-between);
+            .cardButton{
+                transition: all 0.2s ease;
+            }
+            .cardButton:active{
+                background-color: #1e1e1e;
+            }
+        }
+    }
+}
