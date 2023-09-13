@@ -14,7 +14,7 @@ function BrandMenu() {
             <img src={Logo}/>
         </div>
         <h1>Выберите бренд</h1>
-        <div class={styles.select}>
+        <div className={styles.select}>
             <select value={brand} onChange={(e)=> setBrand(e.target.value)}>
                 <option value="0">None</option>
                 <option value="1">Brand 1</option>

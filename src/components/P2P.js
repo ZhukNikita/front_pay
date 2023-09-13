@@ -2,8 +2,9 @@ import { useState , useEffect , useRef } from 'react';
 import styles from '../styles/P2P.module.scss'
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { useClickAnimation } from "../hooks/UseAnimationClick";
-
+import { useLocation } from 'react-router-dom';
 export default function P2P() {
+    const { pathname } = useLocation();
     const buttonRef = useRef();
     useClickAnimation(buttonRef, {
         color: "black",
@@ -61,6 +62,10 @@ export default function P2P() {
           setUrl(urls[Math.floor(Math.random() * urls.length)]);
         }
       }, [url, urls]);
+      if(pathname !== '/p2p'){
+        localStorage.removeItem('key')
+        localStorage.removeItem('iban')
+      }
     return(
         <div className={styles.body}>
             <h1>P2P</h1>

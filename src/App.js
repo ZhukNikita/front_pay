@@ -7,7 +7,12 @@ import P2P from './components/P2P';
 
 
 function App() {
+  const { pathname } = useLocation();
 
+  if(pathname !== '/p2p'){
+    localStorage.removeItem('key')
+    localStorage.removeItem('iban')
+  }
   return (
     <div className="App">
       <Routes>
