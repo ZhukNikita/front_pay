@@ -13,12 +13,13 @@ export default function Method({link,name,instruction}) {
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
-        width: 576,
+        width: 592,
         bgcolor: '#05152c',
-        borderRadius:'4px',
         boxShadow: 24,
         color:'white',
         p: 4,
+        
+
       };
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);

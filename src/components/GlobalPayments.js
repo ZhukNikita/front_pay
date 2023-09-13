@@ -145,7 +145,7 @@ function GlobalPayments() {
     && newDescriptionError === ''
     && newPostalError === '') {
       const orderId = Date.now();
-      const redirectUrl = `https://secure.pinpaygate.com/hpp?project=25edc473c934416299879ccb691f8899&price=${(+amount).toFixed(2)}&user_name=${holderName.replace(/ /g, "+")}&user_contact_email=${email}&user_phone=${phone}&result_url=https%3A%2F%2Fexample.com%2Fresult&description=${description}&user_country=${country.toUpperCase()}&user_city=${city}&user_state=${state}&user_address=${address.replace(/ /g, "+")}&user_postal_code=${postalCode}&order_id=${orderId}&currency=EUR&success_url=http://localhost:3000/success&failure_url=http://localhost:3000/failure&locale=en`;
+      const redirectUrl = `https://secure.pinpaygate.com/hpp?project=25edc473c934416299879ccb691f8899&price=${(+amount).toFixed(2)}&user_name=${holderName.replace(/ /g, "+")}&user_contact_email=${email}&user_phone=${phone}&result_url=https%3A%2F%2Fexample.com%2Fresult&description=${description.replace(/ /g, "+")}&user_country=${country.toUpperCase()}&user_city=${city}&user_state=${state}&user_address=${address.replace(/ /g, "+")}&user_postal_code=${postalCode}&order_id=${orderId}&currency=EUR&success_url=http://localhost:3000/success&failure_url=http://localhost:3000/failure&locale=en`;
       setUrl(redirectUrl)
       // window.location.href = redirectUrl;
     } else {
