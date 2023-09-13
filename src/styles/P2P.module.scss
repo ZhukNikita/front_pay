@@ -11,17 +11,22 @@
     font-family: $font;
     color: #ffffff;
     text-align: center;
+    h1{
+        margin-bottom: 0;
+    }
     .card{
         padding: 20px;
         width: 300px;
         height: 200px;
-        background-color:  #272d34;
+        background-color:  $cardBC;
         box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.35);
         border-radius: 8px;
         .cardHeader{
         @include flex(center,space-between);
+
         }
         .cardBody{
+
             text-align: left;
             margin-top: 50px;
             width: 100%;

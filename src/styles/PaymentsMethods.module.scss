@@ -2,8 +2,7 @@
 
 .body{
     width: 600px;
-    height: 700px;
-    background-color: #272d34;
+    background-color: $cardBC;
     border-radius: 6px;
     box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.35);
     @include flex(center,start);
@@ -16,7 +15,8 @@
         @include flex(center,center);
             width: 80%;
             img{
-                width: 80%;
+                width: 40%;
+                filter: brightness(10);
             }
         }
         .methods{
@@ -25,7 +25,7 @@
             flex-wrap: wrap;
             margin-top: 21.44px;
             width: 90%;
-            
+            margin-bottom: 21.44px;
             .method{
                 position: relative;
                 a{
@@ -37,10 +37,11 @@
 
                 @include flex(center,center);
                 cursor: pointer;
-                background-color: #38b6ff;
+                background-color: #193b6d;
                 width: 40%;
-                height: 150px;
+                height: 110px;
                 border-radius: 6px;
+                border: 1px solid rgba(192, 192, 192, 0.384);
             }
         }
 }

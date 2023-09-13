@@ -14,7 +14,7 @@ export default function Method({link,name,instruction}) {
         left: '49.5%',
         transform: 'translate(-50%, -50%)',
         width: 575,
-        bgcolor: '#272d34',
+        bgcolor: '#05152c',
         borderRadius:'4px',
         boxShadow: 24,
         color:'white',
@@ -26,7 +26,7 @@ export default function Method({link,name,instruction}) {
     return(
         <div to={link} className={styles.method}>
             <Link to={link}>{name}</Link>
-            <Button sx={{position:'absolute' , top:'0' , right:'-10px'}} onClick={handleOpen}><HelpIcon sx={{color:'#272d34'}}/></Button>
+            <Button sx={{position:'absolute' , top:'0' , right:'-10px'}} onClick={handleOpen}><HelpIcon sx={{color:'#fff'}}/></Button>
             <Modal
                 open={open}
                 onClose={handleClose}

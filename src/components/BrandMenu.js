@@ -25,7 +25,7 @@ function BrandMenu() {
         {
             brand !== '0'? 
                 <div className={styles.button}>
-                    <Link to={`https://front-pay.vercel.app/payments_methods?brand=${brand}`}>Перейти к методам платежа</Link>
+                    <Link to={`/payments_methods?brand=${brand}`}>Перейти к методам платежа</Link>
                 </div>
             :
                 <div className={styles.buttonDisable}>

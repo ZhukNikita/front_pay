@@ -5,13 +5,6 @@ import { useClickAnimation } from "../hooks/UseAnimationClick";
 import { useLocation } from 'react-router-dom';
 export default function P2P() {
     const { pathname } = useLocation();
-    const buttonRef = useRef();
-    useClickAnimation(buttonRef, {
-        color: "black",
-        size: 50,
-        duration: 600,
-        effectName: "ripple"
-      });
     const [time, setTime] = useState(() => {
         const saved = localStorage.getItem('key');
         const initialValue = JSON.parse(saved);
@@ -81,8 +74,7 @@ export default function P2P() {
                 <div className={styles.cardBody}>
                     {urls.length?<h3 style={{width:'200px' ,wordBreak:'break-all'}}>{url}</h3>: <h3 style={{width:'210px' ,wordBreak:'break-all'}}>Нет свободных IBAN</h3>}
                     
-                    
-                    <button  ref={buttonRef} onClick={()=> navigator.clipboard.writeText(url)} style={{padding:'5px'   , borderRadius:'4px' , cursor:'pointer'}}><ContentCopyIcon /></button>
+                    <ContentCopyIcon onClick={()=> navigator.clipboard.writeText(url)} sx={{padding:'5px' , borderRadius:'4px' , cursor:'pointer' , border:'none'}}/>
                 </div>
             </div>
         </div>
