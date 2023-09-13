@@ -30,7 +30,7 @@ export default function P2P() {
         localStorage.setItem('key', time);
       }, [time]);
       useEffect(() => {
-        localStorage.setItem('iban', JSON.stringify(url));
+        if(urls.length)localStorage.setItem('iban', JSON.stringify(url));
       }, [url]);
     
       useEffect(() => {
