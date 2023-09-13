@@ -14,10 +14,11 @@ export default function PaymentsMethods() {
 
       const methods = [
         {
+            id:1,
             name: 'PinPay',
             link:`/pinpay?brand=${query.get('brand')}`,
             instruction:['1. Включаем ВПН страны где находится клиент', "2. Открываем ссылку, заполняем реальные данные клиента", "3. Выбираем нужный вариант оплаты из 3 више указаных", "4. Отправляем клиенту на заполнение", "5. После успешного пополнения отправляем в Тикет запрос на зачисление в формате: Название платежки 'Inserix', Почта клиента, Сумма и время пополнения, Документы Лида"],
-            brands: ['SaveInvest']
+            brands: ['SaveInvest','VetalInvest']
         },
         // {
         //     name: '2',
@@ -25,16 +26,20 @@ export default function PaymentsMethods() {
         //     instruction:['1. Включаем ВПН страны где находится клиент', "2. Открываем ссылку, заполняем реальные данные клиента", "3. Выбираем нужный вариант оплаты из 3 више указаных", "4. Отправляем клиенту на заполнение", "5. После успешного пополнения отправляем в Тикет запрос на зачисление в формате: Название платежки 'Inserix', Почта клиента, Сумма и время пополнения, Документы Лида"],
         // },
         {
+            id:3,
+
             name: 'P2P',
             link:`/p2p?brand=${query.get('brand')}`,
             instruction:['1. Включаем ВПН страны где находится клиент', "2. Открываем ссылку, заполняем реальные данные клиента", "3. Выбираем нужный вариант оплаты из 3 више указаных", "4. Отправляем клиенту на заполнение", "5. После успешного пополнения отправляем в Тикет запрос на зачисление в формате: Название платежки 'Inserix', Почта клиента, Сумма и время пополнения, Документы Лида"],
             brands:[]
         },
         {
+            id:4,
+
             name: 'Inserix',
             link:`https://app.insirex.com/en/referral_form?trader%5Blabel%5D=IOVC`,
             instruction:['1. Включаем ВПН страны где находится клиент', "2. Открываем ссылку, заполняем реальные данные клиента", "3. Выбираем нужный вариант оплаты из 3 више указаных", "4. Отправляем клиенту на заполнение", "5. После успешного пополнения отправляем в Тикет запрос на зачисление в формате: Название платежки 'Inserix', Почта клиента, Сумма и время пополнения, Документы Лида"],
-            brands: ['SaveInvest']
+            brands: ['SaveInvest','VetalInvest']
         }
     ]
 
@@ -43,7 +48,6 @@ export default function PaymentsMethods() {
         const arr = methods.filter(el=> el.brands.includes(brand))
         return arr
     }
-    console.log(getMethods())
     return(
         <div className={styles.body}>
             <div className={styles.logo}>
@@ -51,7 +55,7 @@ export default function PaymentsMethods() {
             </div>
             <h2>Пожалуйста выберите метод платежа</h2>
             <div className={styles.methods}>
-                {getMethods()?getMethods().map(el=><Method key={el.name} name={el.name} link={el.link} instruction={el.instruction}/>):''}
+                {getMethods()?getMethods().map(el=><Method key={el.id} name={el.name} link={el.link} instruction={el.instruction}/>):''}
             </div>
         </div>
     )

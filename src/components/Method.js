@@ -11,9 +11,9 @@ export default function Method({link,name,instruction}) {
     const style = {
         position: 'absolute' ,
         top: '50%',
-        left: '49.5%',
+        left: '50%',
         transform: 'translate(-50%, -50%)',
-        width: 575,
+        width: 576,
         bgcolor: '#05152c',
         borderRadius:'4px',
         boxShadow: 24,
