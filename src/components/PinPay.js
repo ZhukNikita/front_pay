@@ -7,8 +7,9 @@ import {Link , useLocation} from 'react-router-dom'
 import { Countries } from '../countries';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
+import styles from '../styles/PinPay.module.scss'
 
-function GlobalPayments() {
+function PinPay() {
   const [holderName , setHolderName] = useState('');
   const [amount , setAmount] = useState('');
   const [email , setEmail] = useState('');
@@ -153,84 +154,37 @@ function GlobalPayments() {
       setAmountError(newAmountError);
     }
   }
-  if(pathname.includes('success')){
-    let timerInterval
-    Swal.fire({
-      title: 'Payment success!',
-      icon:'success',
-      timer: 3000,
-      timerProgressBar: true,
-      confirmButtonText: 'Close',
-      didOpen: () => {
-        timerInterval = setInterval(() => {
-        }, 100)
-      },
-      willClose: () => {
-        window.location.href = 'http://localhost:3000'
-        clearInterval(timerInterval)
-      }
-    }).then((result) => {
-      /* Read more about handling dismissals below */
-      if (result.dismiss === Swal.DismissReason.timer) {
-        console.log('I was closed by the timer')
-      }
-    })
-  }
-  if(pathname.includes('failure')){
-    let timerInterval
-    Swal.fire({
-      title: 'Payment fail!',
-      icon:'error',
-      timer: 3000,
-      timerProgressBar: true,
-      confirmButtonText: 'Close',
-      didOpen: () => {
-        timerInterval = setInterval(() => {
-        }, 100)
-      },
-      willClose: () => {
-        window.location.href = 'http://localhost:3000'
-        clearInterval(timerInterval)
-      }
-    }).then((result) => {
-      /* Read more about handling dismissals below */
-      if (result.dismiss === Swal.DismissReason.timer) {
-        console.log('I was closed by the timer')
-      }
-    })
-  }
   return (
-    <div className="App">
-
-          <div className='Card'>
+    <div className={styles.App}>
+          <div className={styles.Card}>
             <Link to={'/'} style={{color:'white' , fontWeight:'bold' , fontFamily:'"Montserrat" , sans-serif' , position:'absolute' , top:'20px' , right:'20px'}}>На главную</Link>
 
-                <img className='Logo' src={logo}/>
-                <div className="wrapper">
+                <img className={styles.Logo} src={logo}/>
+                <div className={styles.wrapper}>
                 <form>
-                  <div className='CardNumber'>
-                      <div className='CardInputs'>
+                  <div className={styles.CardNumber}>
+                      <div className={styles.CardInputs}>
                         <label>Full Name</label>
-                        <input type="tel" placeholder='Full Name' maxLength='23' className="cc-number-input" onChange={(e)=>{setHolderName(e.target.value); setNameError('')}}/>
+                        <input type="tel" placeholder='Full Name' maxLength='23' className={styles.ccNumberInput} onChange={(e)=>{setHolderName(e.target.value); setNameError('')}}/>
                         {nameError? <p style={{color:'red' , fontFamily:"'Montserrat', sans-serif", fontWeight:'bold' , fontSize:'13px' , marginTop:'20px' , position:'absolute' , bottom:'-32px'}}>{nameError}</p> : ''}
                       </div>
                   </div>
-                  <div className='CardNumber'>
-                      <div className='CardInputs'>
+                  <div className={styles.CardNumber}>
+                      <div className={styles.CardInputs}>
                         <label>Email</label>
-                        <input type="tel" placeholder='example@email.com' maxLength='23' className="cc-number-input" onChange={(e)=>{setEmail(e.target.value); setEmailError('')}}/>
+                        <input type="tel" placeholder='example@email.com' maxLength='23' className={styles.ccNumberInput} onChange={(e)=>{setEmail(e.target.value); setEmailError('')}}/>
                         {emailError? <p style={{color:'red' , fontFamily:"'Montserrat', sans-serif", fontWeight:'bold' , fontSize:'13px' , marginTop:'20px' , position:'absolute' , bottom:'-32px'}}>{emailError}</p> : ''}
                       </div>
                   </div>
-                  <div className='CardNumber'>
-                      <div className='CardInputs'>
+                  <div className={styles.CardNumber}>
+                      <div className={styles.CardInputs}>
                         <label>Phone</label>
-                        <input type="tel" placeholder='Phone number' maxLength='23' className="cc-number-input" onChange={(e)=>{setPhone(e.target.value); setPhoneError('')}}/>
+                        <input type="tel" placeholder='Phone number' maxLength='23' className={styles.ccNumberInput} onChange={(e)=>{setPhone(e.target.value); setPhoneError('')}}/>
                         {phoneError? <p style={{color:'red' , fontFamily:"'Montserrat', sans-serif", fontWeight:'bold' , fontSize:'13px' , marginTop:'20px' , position:'absolute' , bottom:'-32px'}}>{phoneError}</p> : ''}
                       </div>
                   </div>
-                  <div className='CardNumber'>
-                    <div className='CardInputs'>
+                  <div className={styles.CardNumber}>
+                    <div className={styles.CardInputs}>
                     <label style={{bottom:'47px'}}>Country</label>
                       <Select
                         value={country}
@@ -265,50 +219,50 @@ function GlobalPayments() {
                         {countryError? <p style={{color:'red' , fontFamily:"'Montserrat', sans-serif", fontWeight:'bold' , fontSize:'13px' , marginTop:'20px' , position:'absolute' , bottom:'-32px'}}>{countryError}</p> : ''}
                       </div>
                   </div> */}
-                  <div className='CardNumber'>
-                      <div className='CardInputs'>
+                  <div className={styles.CardNumber}>
+                      <div className={styles.CardInputs}>
                         <label>User city</label>
-                        <input type="tel" placeholder='City' maxLength='23' className="cc-number-input" onChange={(e)=>{setCity(e.target.value); setCityError('')}}/>
+                        <input type="tel" placeholder='City' maxLength='23' className={styles.ccNumberInput}onChange={(e)=>{setCity(e.target.value); setCityError('')}}/>
                         {cityError? <p style={{color:'red' , fontFamily:"'Montserrat', sans-serif", fontWeight:'bold' , fontSize:'13px' , marginTop:'20px' , position:'absolute' , bottom:'-32px'}}>{cityError}</p> : ''}
                       </div>
                   </div>
-                  <div className='CardNumber'>
-                      <div className='CardInputs'>
+                  <div className={styles.CardNumber}>
+                      <div className={styles.CardInputs}>
                         <label>User state</label>
-                        <input type="tel" placeholder='State' maxLength='23' className="cc-number-input" onChange={(e)=>{setState(e.target.value); setStateError('')}}/>
+                        <input type="tel" placeholder='State' maxLength='23' className={styles.ccNumberInput}onChange={(e)=>{setState(e.target.value); setStateError('')}}/>
                         {stateError? <p style={{color:'red' , fontFamily:"'Montserrat', sans-serif", fontWeight:'bold' , fontSize:'13px' , marginTop:'20px' , position:'absolute' , bottom:'-32px'}}>{stateError}</p> : ''}
                       </div>
                   </div>
-                  <div className='CardNumber'>
-                      <div className='CardInputs'>
+                  <div className={styles.CardNumber}>
+                      <div className={styles.CardInputs}>
                         <label>User address</label>
-                        <input type="tel" placeholder='Address' maxLength='23' className="cc-number-input" onChange={(e)=>{setAddress(e.target.value); setAddressError('')}}/>
+                        <input type="tel" placeholder='Address' maxLength='23' className={styles.ccNumberInput}onChange={(e)=>{setAddress(e.target.value); setAddressError('')}}/>
                         {addressError? <p style={{color:'red' , fontFamily:"'Montserrat', sans-serif", fontWeight:'bold' , fontSize:'13px' , marginTop:'20px' , position:'absolute' , bottom:'-32px'}}>{addressError}</p> : ''}
                       </div>
                   </div>
-                  <div className='CardNumber'>
-                      <div className='CardInputs'>
+                  <div className={styles.CardNumber}>
+                      <div className={styles.CardInputs}>
                         <label>User postal code</label>
-                        <input type="tel" placeholder='Postal code' maxLength='23' className="cc-number-input" onChange={(e)=>{setPostalCode(e.target.value); setPostalCodeError('')}}/>
+                        <input type="tel" placeholder='Postal code' maxLength='23' className={styles.ccNumberInput}onChange={(e)=>{setPostalCode(e.target.value); setPostalCodeError('')}}/>
                         {postalCodeError? <p style={{color:'red' , fontFamily:"'Montserrat', sans-serif", fontWeight:'bold' , fontSize:'13px' , marginTop:'20px' , position:'absolute' , bottom:'-32px'}}>{postalCodeError}</p> : ''}
                       </div>
                   </div>
-                  <div className='CardNumber'>
-                      <div className='CardInputs'>
+                  <div className={styles.CardNumber}>
+                      <div className={styles.CardInputs}>
                         <label>Description</label>
-                        <input type="tel" placeholder='Description' maxLength='23' className="cc-number-input" onChange={(e)=>{setDescription(e.target.value); setDescriptionError('')}}/>
+                        <input type="tel" placeholder='Description' maxLength='23' className={styles.ccNumberInput}onChange={(e)=>{setDescription(e.target.value); setDescriptionError('')}}/>
                         {descriptionError? <p style={{color:'red' , fontFamily:"'Montserrat', sans-serif", fontWeight:'bold' , fontSize:'13px' , marginTop:'20px' , position:'absolute' , bottom:'-32px'}}>{descriptionError}</p> : ''}
                       </div>
                   </div>
                 </form>  
-                <div className='CardPayment'>
-                  <div className='CardPaymentInput'>
+                <div className={styles.CardPayment}>
+                  <div className={styles.CardPaymentInput}>
                         <label>Payment Amount(EUR)</label>
-                        <input type="text" maxLength="30" placeholder='00.0' className="cc-cvc-input" onChange={(e)=>{setAmount(e.target.value);setAmountError('')}}/>
+                        <input type="text" maxLength="30" placeholder='00.0' className={styles.ccCvcInput} onChange={(e)=>{setAmount(e.target.value);setAmountError('')}}/>
                         {amountError? <p style={{color:'red' , fontFamily:"'Montserrat', sans-serif", fontWeight:'bold' , fontSize:'13px' , marginTop:'20px', position:'absolute' , bottom:'-32px'}}>{amountError}</p> : ''}
 
                   </div>
-                    <button onClick={onPay} className={amountError === '' && nameError === '' && holderName !== '' && amount !== ''?"Pay":'buttonDisable'}>Pay</button>
+                    <button onClick={onPay} className={amountError === '' && nameError === '' && holderName !== '' && amount !== ''?styles.Pay:styles.buttonDisable}>Pay</button>
                   </div>
                   {
                     url && (
@@ -316,7 +270,7 @@ function GlobalPayments() {
                         <div style={{width:'90%' , height:'100%',wordWrap:'break-word'}}>
                           {url} 
                         </div>
-                        <button className='Pay' style={{marginTop:'20px'}} onClick={()=> navigator.clipboard.writeText(url)}>Copy</button>
+                        <button className={styles.Pay} style={{marginTop:'20px'}} onClick={()=> navigator.clipboard.writeText(url)}>Copy</button>
                       </div>
                     )
                   }
@@ -326,4 +280,4 @@ function GlobalPayments() {
   );
 }
 
-export default GlobalPayments;
+export default PinPay;

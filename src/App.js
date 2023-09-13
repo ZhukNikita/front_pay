@@ -1,10 +1,13 @@
 import './App.css';
-import GlobalPayments from './components/GlobalPayments'
+import PinPay from './components/PinPay'
 import BrandMenu from './components/BrandMenu'
 import {Routes, redirect , Route , useLocation} from 'react-router-dom'
 import PaymentsMethods from './components/PaymentsMethods';
 import P2P from './components/P2P';
 import NoMatch from './components/NoMatch';
+import Swal from 'sweetalert2';
+import Failure from './components/Failure';
+import Success from './components/Success';
 
 function App() {
   const { pathname } = useLocation();
@@ -13,14 +16,17 @@ function App() {
     localStorage.removeItem('key')
     localStorage.removeItem('iban')
   }
+
   return (
     <div className="App">
       <Routes>
-        <Route path={'/pinpay'} element={<GlobalPayments/>}/>
+        <Route path={'/pinpay'} element={<PinPay/>}/>
         <Route path={'/'} element={<BrandMenu/>}/>
         <Route path={'/payments_methods'} element={<PaymentsMethods/>}/>
         <Route path={'/p2p'} element={<P2P/>}/>
         <Route path='*' element={<NoMatch/>}/>
+        <Route path='/failure' element={<Failure/>}/>
+        <Route path='/success' element={<Success/>}/>
       </Routes>
     </div>
   );

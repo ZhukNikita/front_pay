@@ -1,0 +1,160 @@
+@import 'vars.scss';
+
+
+.App {
+    @include flex(center,center);
+    flex-direction: column;
+    min-height: 100vh;
+    width: 100%;
+    background-color: #05152c;
+    background-size: cover;
+    background-repeat: no-repeat;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    position: relative;
+    .Card{
+        position: relative;
+        @include flex(center,start);
+        flex-direction: column;
+        width: 420px;
+        height: 100%;
+        background-color: #325A96;
+        border-radius: 16px;
+        box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.55);
+        padding: 20px;
+        
+        .Logo{
+            width: 50%;
+            filter: brightness(10);
+        }
+        .wrapper {
+            margin: 20px auto;
+            width: 90%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-direction: column;
+          gap: 20px;
+          
+          form{
+            margin-top: 20px;
+            width: 100%;
+            display: flex;
+            align-items: start;
+            justify-content: start;
+            flex-direction: column;
+            gap: 45px;
+            
+            .CardNumber{
+                display: flex;
+                align-items: center;
+                gap: 55px;
+                width: 100%;
+                height: 40px;
+                
+                .CardInputs{
+                    width: 100%;
+                    position: relative;
+                    
+                    label{
+                        position: absolute;
+                        bottom: 44px;
+                        color: white;
+                        font-weight: bold;
+                        font-family:'Montserrat', sans-serif ;
+                      }
+                      .ccNumberInput {
+                        font-size: 18px;
+                        width: calc(100% - 17px);
+                        border-radius: 12px;
+                        font-family: 'Montserrat', sans-serif;
+                        text-align: start;
+                        border: 1px solid #ddd;
+                        color: #111111;
+                        display: block;
+                        padding: 10px 0px 10px 15px;
+                        font-family: 'Montserrat', sans-serif;
+                        outline: none;
+                      }
+
+                  }
+              }
+          }
+          .CardPayment{
+            margin-top: 30px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            .CardPaymentInput{
+                width: 40%;
+                position: relative;
+                label{
+                    font-weight: bold;
+                    position: absolute;
+                    bottom: 48px;
+                    width: 200px;
+                    color: white;
+                    font-family: 'Montserrat', sans-serif;
+                  
+                  }
+                .ccCvcInput {
+                    display: inline-block;
+                    width: 50%;
+                    font-size: 18px;
+                    border-radius: 12px;
+                    font-family: 'Montserrat', sans-serif;
+                    text-align: center;
+                    padding: 10px 15px;
+                    outline: none;
+                    border: 1px solid #ddd;
+                }
+              }
+              div{
+                .Pay{
+                    border: none;
+                    background-color: #38b6ff;
+                    color: white;
+                    padding: 15px 20px;
+                    border-radius: 10px;
+                    font-size: 18px;
+                    width: 90px;
+                    height: 54px;
+                    text-align: center;
+                    text-decoration: none;
+                    transition: all 0.4s ease-in;
+                    font-family: 'Montserrat', sans-serif;
+                  
+                  }
+                  .Pay:active{
+                    border: none;
+                    background-color: #0f2f42;
+                    color: white;
+                    padding: 15px 20px;
+                    border-radius: 10px;
+                    font-size: 18px;
+                    width: 90px;
+                    height: 54px;
+                    text-align: center;
+                    text-decoration: none;
+                    transition: all 0.4s ease-in;
+                    font-family: 'Montserrat', sans-serif;
+                  
+                  }
+              }
+              .buttonDisable{
+                background: none;
+                color: white;
+                border: 1px solid #38b6ff;
+                padding: 15px 20px;
+                border-radius: 10px;
+                font-size: 18px;
+                width: 90px;
+                transition: all 0.4s ease-out;
+                font-family: 'Montserrat', sans-serif;
+              
+              }
+          }
+        }
+      }
+  }
