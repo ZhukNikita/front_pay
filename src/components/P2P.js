@@ -23,7 +23,7 @@ export default function P2P() {
       });
       const [timeOn, setTimeOn] = useState(true);
       const [usedUrls, setUsedUrls] = useState([]);
-      const urls = ['UA903052992990004149123456789', 'UA903052992990004149123456710', 'UA903052992990004149123456711', 'UA903052992990004149123456712'];
+      const urls = [];
     
       useEffect(() => {
         localStorage.setItem('key', time);
@@ -74,7 +74,8 @@ export default function P2P() {
                     </div>
                 </div>
                 <div className={styles.cardBody}>
-                    <h3 style={{width:'200px' ,wordBreak:'break-all'}}>{url}</h3>
+                    {urls.length?<h3 style={{width:'200px' ,wordBreak:'break-all'}}>{url}</h3>: <h3 style={{width:'210px' ,wordBreak:'break-all'}}>Нет свободных IBAN</h3>}
+                    
                     
                     <button  ref={buttonRef} onClick={()=> navigator.clipboard.writeText(url)} style={{padding:'5px'   , borderRadius:'4px' , cursor:'pointer'}}><ContentCopyIcon /></button>
                 </div>
