@@ -4,7 +4,7 @@ import BrandMenu from './components/BrandMenu'
 import {Routes, redirect , Route , useLocation} from 'react-router-dom'
 import PaymentsMethods from './components/PaymentsMethods';
 import P2P from './components/P2P';
-
+import NoMatch from './components/NoMatch';
 
 function App() {
   const { pathname } = useLocation();
@@ -20,6 +20,7 @@ function App() {
         <Route path={'/'} element={<BrandMenu/>}/>
         <Route path={'/payments_methods'} element={<PaymentsMethods/>}/>
         <Route path={'/p2p'} element={<P2P/>}/>
+        <Route path='*' element={<NoMatch/>}/>
       </Routes>
     </div>
   );
