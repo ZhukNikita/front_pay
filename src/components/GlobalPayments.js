@@ -3,7 +3,7 @@ import logo from '../img/GPLogo.png'
 import chip from '../img/chip.png'
 import {useEffect,useState} from 'react'
 import Swal from 'sweetalert2';
-import {Routes, redirect , Route , useLocation} from 'react-router-dom'
+import {Link , useLocation} from 'react-router-dom'
 import { Countries } from '../countries';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
@@ -203,6 +203,8 @@ function GlobalPayments() {
     <div className="App">
 
           <div className='Card'>
+            <Link to={'/'} style={{color:'white' , position:'absolute' , top:'20px' , right:'20px'}}>На главную</Link>
+
                 <img className='Logo' src={logo}/>
                 <div className="wrapper">
                 <form>

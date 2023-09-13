@@ -1,6 +1,6 @@
 import styles from '../styles/PaymentsMethods.module.scss'
 import React from "react";
-import {useLocation} from "react-router-dom";
+import {useLocation , Link} from "react-router-dom";
 import Logo from '../img/GPLogo.png'
 import Method from './Method';
 
@@ -50,6 +50,8 @@ export default function PaymentsMethods() {
     }
     return(
         <div className={styles.body}>
+            <Link to={'/'} style={{color:'white' , position:'absolute' , top:'20px' , right:'20px'}}>На главную</Link>
+
             <div className={styles.logo}>
                 <img src={Logo}/>
             </div>
