@@ -50,7 +50,7 @@ export default function PaymentsMethods() {
     }
     return(
         <div className={styles.body}>
-            <Link to={'/'} style={{color:'white' , position:'absolute' , top:'20px' , right:'20px'}}>На главную</Link>
+            <Link to={'/'} style={{color:'white', fontWeight:'bold' , fontFamily:'"Montserrat" , sans-serif' , position:'absolute' , top:'20px' , right:'20px'}}>На главную</Link>
 
             <div className={styles.logo}>
                 <img src={Logo}/>

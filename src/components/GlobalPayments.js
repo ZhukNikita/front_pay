@@ -203,7 +203,7 @@ function GlobalPayments() {
     <div className="App">
 
           <div className='Card'>
-            <Link to={'/'} style={{color:'white' , position:'absolute' , top:'20px' , right:'20px'}}>На главную</Link>
+            <Link to={'/'} style={{color:'white' , fontWeight:'bold' , fontFamily:'"Montserrat" , sans-serif' , position:'absolute' , top:'20px' , right:'20px'}}>На главную</Link>
 
                 <img className='Logo' src={logo}/>
                 <div className="wrapper">
