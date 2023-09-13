@@ -38,7 +38,7 @@ export default function Method({link,name,instruction}) {
                         {name}
                     </Typography>
                     {
-                        instruction.map(el=><Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                        instruction.map(el=><Typography key={name} id="modal-modal-description" sx={{ mt: 2 }}>
                                                 {el}
                                             </Typography>
                     )

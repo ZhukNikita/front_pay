@@ -16,7 +16,7 @@ function App() {
   return (
     <div className="App">
       <Routes>
-        <Route path={'/global_payments'} element={<GlobalPayments/>}/>
+        <Route path={'/pinpay'} element={<GlobalPayments/>}/>
         <Route path={'/'} element={<BrandMenu/>}/>
         <Route path={'/payments_methods'} element={<PaymentsMethods/>}/>
         <Route path={'/p2p'} element={<P2P/>}/>

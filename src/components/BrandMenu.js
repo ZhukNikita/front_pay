@@ -17,9 +17,7 @@ function BrandMenu() {
         <div className={styles.select}>
             <select value={brand} onChange={(e)=> setBrand(e.target.value)}>
                 <option value="0">None</option>
-                <option value="1">Brand 1</option>
-                <option value="2">Brand 2</option>
-                <option value="3">Brand 3</option>
+                <option value="SaveInvest">SafeInvest</option>
             </select>
         </div>
         {
