@@ -265,10 +265,10 @@ function PinPay() {
                     <div><button onClick={onPay} className={amountError === '' && nameError === '' && holderName !== '' && amount !== ''?styles.Pay:styles.buttonDisable}>Создать платёж</button></div>
                   </div>
                   {
-                    !url && (
+                    url && (
                       <div style={{width:'90%' , height:'100%',wordWrap:'break-word', display:'flex' , alignItems:'center', flexDirection:'column' , justifyContent:'center'}}>
                         <div style={{width:'90%' , height:'100%',wordWrap:'break-word'}}>
-                          {'url'} 
+                          {url} 
                         </div>
                         <button className={styles.Pay} style={{marginTop:'20px'}} onClick={()=> navigator.clipboard.writeText(url)}>Copy</button>
                       </div>
