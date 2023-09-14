@@ -37,7 +37,7 @@ export default function PaymentsMethods() {
             id:4,
 
             name: 'Inserix',
-            link:query.get('brand') === 'VetalInvest'?`https://app.insirex.com/en/referral_form?trader%5Blabel%5D=IOVC` : 'https://app.insirex.com/en/referral_form?trader%5Blabel%5D=IOVT',
+            link:query.get('brand') === 'SafeInvest'?'https://app.insirex.com/en/referral_form?trader%5Blabel%5D=IOVT':`https://app.insirex.com/en/referral_form?trader%5Blabel%5D=IOVC` ,
             instruction:["1.Эквайринг с верефикацией документов после оплаты",'2. Включаем ВПН страны где находится клиент', "3. Открываем ссылку, заполняем реальные данные клиента", "4.  Выбираем нужный вариант оплаты ( CC LPCS/WLC CC/ ZEN), не прошел один, значит пройдет другой", "5. Отправляем клиенту на заполнение данных карты и оптаты", "6. После успешного пополнения отправляем в Тикет запрос на зачисление в формате: Название платежки 'Inserix', Почта клиента, Сумма и время пополнения, Документы Лида"],
             brands: ['SaveInvest','VetalInvest']
         }
