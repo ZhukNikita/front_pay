@@ -18,7 +18,7 @@ export default function PaymentsMethods() {
             name: 'PinPay',
             link:`/pinpay?brand=${query.get('brand')}`,
             instruction:['1. Полный Эквайринг без верефикации', "2. Заполнить реальные данные клиента ( если нет возможности то просто левые реальные данные)", "3. Создавшуюся ссылку скопировать и отправить клиенту", "4. Проверка зачисления через ПСП"],
-            brands: ['SaveInvest','VetalInvest']
+            brands: ['SafeInvest','VetalInvest']
         },
         // {
         //     name: '2',
