@@ -259,7 +259,7 @@ function PinPay() {
                   <div className={styles.CardPaymentInput}>
                         <label>Сумма платежа(EUR)</label>
                         <input type="text" maxLength="30" placeholder='00.0' className={styles.ccCvcInput} onChange={(e)=>{setAmount(e.target.value);setAmountError('')}}/>
-                        {amountError? <p style={{color:'red' , fontFamily:"'Montserrat', sans-serif", fontWeight:'bold' , fontSize:'13px' , marginTop:'20px', position:'absolute' , bottom:'-32px'}}>{amountError}</p> : ''}
+                        {amountError? <p style={{color:'red' , fontFamily:"'Montserrat', sans-serif", fontWeight:'bold' , fontSize:'13px' , marginTop:'30px', position:'absolute' , bottom:'-47px'}}>{amountError}</p> : ''}
 
                   </div>
                     <div><button onClick={onPay} className={amountError === '' && nameError === '' && holderName !== '' && amount !== ''?styles.Pay:styles.buttonDisable}>Создать платёж</button></div>
