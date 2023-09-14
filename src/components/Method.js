@@ -25,10 +25,12 @@ export default function Method({link,name,instruction}) {
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     return(
-        <div to={link} className={styles.method}>
-            <Link to={link}>{name}</Link>
-            <Button sx={{position:'absolute' , top:'0' , right:'-10px'}} onClick={handleOpen}><HelpIcon sx={{color:'#fff'}}/></Button>
-            <Modal
+        <div className={styles.methods} style={{position:'relative' , width:'40%'}}>
+        <Link to={link} className={styles.method} onClick={()=>console.log('click')}>
+            <h3>{name}</h3>
+        </Link>
+        <HelpIcon onClick={handleOpen} sx={{position:'absolute',color:'#fff', zIndex:'3', top:'6px' , right:'8px'}}/>
+        <Modal
                 open={open}
                 onClose={handleClose}
                 aria-labelledby="modal-modal-title"
@@ -47,5 +49,6 @@ export default function Method({link,name,instruction}) {
                 </Box>
             </Modal>
         </div>
+
     )
 }
