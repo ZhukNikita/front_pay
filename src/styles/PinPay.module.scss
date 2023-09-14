@@ -28,20 +28,16 @@
             filter: brightness(10);
         }
         .wrapper {
-            margin: 20px auto;
-            width: 90%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
+          margin: 20px auto;
+          width: 90%;
+          @include flex(center, center);
           flex-direction: column;
           gap: 20px;
           
           form{
             margin-top: 20px;
             width: 100%;
-            display: flex;
-            align-items: start;
-            justify-content: start;
+            @include flex(start, start);
             flex-direction: column;
             gap: 45px;
             
@@ -83,9 +79,7 @@
           .CardPayment{
             margin-top: 30px;
             width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+            @include flex(center, space-between);
             .CardPaymentInput{
                 width: 40%;
                 position: relative;
@@ -110,7 +104,6 @@
                     border: 1px solid #ddd;
                 }
               }
-              div{
                 .Pay{
                     border: none;
                     background-color: #38b6ff;
@@ -118,8 +111,7 @@
                     padding: 15px 20px;
                     border-radius: 10px;
                     font-size: 18px;
-                    width: 90px;
-                    height: 54px;
+                    width: 120px;
                     text-align: center;
                     text-decoration: none;
                     transition: all 0.4s ease-in;
@@ -133,15 +125,13 @@
                     padding: 15px 20px;
                     border-radius: 10px;
                     font-size: 18px;
-                    width: 90px;
-                    height: 54px;
+                    width: 120px;
                     text-align: center;
                     text-decoration: none;
                     transition: all 0.4s ease-in;
                     font-family: 'Montserrat', sans-serif;
                   
                   }
-              }
               .buttonDisable{
                 background: none;
                 color: white;
@@ -149,11 +139,39 @@
                 padding: 15px 20px;
                 border-radius: 10px;
                 font-size: 18px;
-                width: 90px;
+                width: 120px;
                 transition: all 0.4s ease-out;
                 font-family: 'Montserrat', sans-serif;
               
               }
+          }
+          .Pay{
+            border: none;
+            background-color: #38b6ff;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-size: 18px;
+            width: 120px;
+            text-align: center;
+            text-decoration: none;
+            transition: all 0.4s ease-in;
+            font-family: 'Montserrat', sans-serif;
+          
+          }
+          .Pay:active{
+            border: none;
+            background-color: #0f2f42;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-size: 18px;
+            width: 120px;
+            text-align: center;
+            text-decoration: none;
+            transition: all 0.4s ease-in;
+            font-family: 'Montserrat', sans-serif;
+          
           }
         }
       }

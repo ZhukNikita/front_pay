@@ -46,42 +46,42 @@ function PinPay() {
     let newPostalError = '';
     let error
     if(holderName.length<5){
-      setNameError('Name min length 5')
+      setNameError('Минимальное количество символов: 5')
       error = true
-      newNameError = 'Name min length 5';
+      newNameError = 'Минимальное количество символов: 5';
     }
     if(!holderName.includes(' ')){
-      setNameError('Enter name and surname')
+      setNameError('Введите имя и фамилию')
       error = true
-      newNameError = 'Enter name and surname';
+      newNameError = 'Введите имя и фамилию';
     }
     if(!re.test(String(email).toLowerCase())){
-      setEmailError('Invalid Email')
+      setEmailError('Неверный формат почты')
       error = true
-      newEmailError = 'Invalid Email'
+      newEmailError = 'Неверный формат почты'
     }
     if(!phone){
-      setPhoneError('Please enter phone number')
+      setPhoneError('Пожалуйста, введите номер телефона')
       error = true
       newPhoneError = 'Please enter phone number'
     }
     if(/[a-zA-Z]/.test(phone)){
-      setPhoneError('Invalid phone')
+      setPhoneError('Неверный формат номера телефона')
       error = true
       newPhoneError = 'Invalid phone'
     }
     if(/[!@#$%^&*()_+{}\[\]:;<>,.?~\\|/-]/.test(phone)){
-      setPhoneError('Must not contain characters')
+      setPhoneError('Номер телефона не должен содержать символы и пробелы')
       error = true
       newPhoneError = 'Must not contain characters'
     }
     if(phone.includes(' ')){
-      setPhoneError('Must not contain characters')
+      setPhoneError('Номер телефона не должен содержать символы и пробелы')
       error = true
       newPhoneError = 'Must not contain characters'
     }
     if(!country){
-      setCountryError('Please enter country code')
+      setCountryError('Пожалуйста, выберите страну из списка')
       error = true
       newCountryError = 'Please enter country code'
     }
@@ -91,47 +91,47 @@ function PinPay() {
       newCountryError = 'Please enter only country code'
     }
     if(!city){
-      setCityError('Please enter city')
+      setCityError('Пожалуйста, введите город')
       error = true
       newCityError = 'Please enter city'
     }
     if(!state){
-      setStateError('Please enter state')
+      setStateError('Пожалуйста, введите область')
       error = true
       newStateError = 'Please enter state'
     }
     if(!address){
-      setAddressError('Please enter address')
+      setAddressError('Пожалуйста, введите адрес')
       error = true
       newAddressError= 'Please enter address'
     }
     if(!description){
-      setDescriptionError('Please enter description')
+      setDescriptionError('Пожалуйста, введите описание платежа')
       error = true
       newDescriptionError = 'Please enter description'
     }
     if(!postalCode){
-      setPostalCodeError('Please enter postal code')
+      setPostalCodeError('Пожалуйста, введите почтовый индекс')
       error = true
       newPostalError = 'Please enter postal code'
     }
     if(+amount < 1){
-      setAmountError('Min amount 1$')
+      setAmountError('Минимальная сумма платежа 1€')
       error = true
-      newAmountError = 'Min amount 1$';
+      newAmountError = 'Минимальная сумма платежа 1€';
     }
     if(+amount > 20000){
-      setAmountError('Max amount 20000$')
+      setAmountError('Максимальная сумма платежа 20000€')
       error = true
-      newAmountError = 'Max amount 20000$';
+      newAmountError = 'Максимальная сумма платежа 20000€';
     }
     if(/[a-zA-Z]/.test(amount)){
-      setAmountError('Invalid amount')
+      setAmountError('Неверный формат суммы платежа')
       error = true
       newAmountError = 'Invalid amount';
     }
     if(/[!@#$%^&*()_+{}\[\]:;<>,.?~\\|/-\d]/.test(holderName)){
-      setNameError('Invalid name')
+      setNameError('Поле имя не может содержать символы')
       error = true
       newNameError = 'Invalid name';
     }
@@ -164,37 +164,37 @@ function PinPay() {
                 <form>
                   <div className={styles.CardNumber}>
                       <div className={styles.CardInputs}>
-                        <label>Full Name</label>
-                        <input type="tel" placeholder='Full Name' maxLength='23' className={styles.ccNumberInput} onChange={(e)=>{setHolderName(e.target.value); setNameError('')}}/>
+                        <label>Имя и фамилия</label>
+                        <input type="tel" placeholder='Имя и фамилия' maxLength='23' className={styles.ccNumberInput} onChange={(e)=>{setHolderName(e.target.value); setNameError('')}}/>
                         {nameError? <p style={{color:'red' , fontFamily:"'Montserrat', sans-serif", fontWeight:'bold' , fontSize:'13px' , marginTop:'20px' , position:'absolute' , bottom:'-32px'}}>{nameError}</p> : ''}
                       </div>
                   </div>
                   <div className={styles.CardNumber}>
                       <div className={styles.CardInputs}>
-                        <label>Email</label>
+                        <label>Почта</label>
                         <input type="tel" placeholder='example@email.com' maxLength='23' className={styles.ccNumberInput} onChange={(e)=>{setEmail(e.target.value); setEmailError('')}}/>
                         {emailError? <p style={{color:'red' , fontFamily:"'Montserrat', sans-serif", fontWeight:'bold' , fontSize:'13px' , marginTop:'20px' , position:'absolute' , bottom:'-32px'}}>{emailError}</p> : ''}
                       </div>
                   </div>
                   <div className={styles.CardNumber}>
                       <div className={styles.CardInputs}>
-                        <label>Phone</label>
-                        <input type="tel" placeholder='Phone number' maxLength='23' className={styles.ccNumberInput} onChange={(e)=>{setPhone(e.target.value); setPhoneError('')}}/>
+                        <label>Номер телефона</label>
+                        <input type="tel" placeholder='Номер телефона' maxLength='23' className={styles.ccNumberInput} onChange={(e)=>{setPhone(e.target.value); setPhoneError('')}}/>
                         {phoneError? <p style={{color:'red' , fontFamily:"'Montserrat', sans-serif", fontWeight:'bold' , fontSize:'13px' , marginTop:'20px' , position:'absolute' , bottom:'-32px'}}>{phoneError}</p> : ''}
                       </div>
                   </div>
                   <div className={styles.CardNumber}>
                     <div className={styles.CardInputs}>
-                    <label style={{bottom:'47px'}}>Country</label>
+                    <label style={{bottom:'47px'}}>Страна</label>
                       <Select
                         value={country}
                         onChange={(e)=>{setCountry(e.target.value);setCountryError('')}}
                         displayEmpty
-                        sx={{borderRadius:'12px' , height:'44px' , width:'100%' , outline:'none' , fontFamily:'"Montserrat" , sans-serif' , fontWeight:'400' , backgroundColor:'white'}}
+                        sx={{borderRadius:'12px' , height:'44px' , width:'100%' , outline:'none', fontSize:'18px' , fontFamily:'"Montserrat" , sans-serif' , fontWeight:'400' , backgroundColor:'white'}}
                         
                       >
                         <MenuItem value="">
-                          <em>None</em>
+                          Страна
                         </MenuItem>
                         {
                             Countries.map(el=> <MenuItem style={{height:'30px', width:'200px'}} key={el.code} value={el.code}>{el.code}&emsp;{el.name}</MenuItem>)
@@ -221,56 +221,56 @@ function PinPay() {
                   </div> */}
                   <div className={styles.CardNumber}>
                       <div className={styles.CardInputs}>
-                        <label>User city</label>
-                        <input type="tel" placeholder='City' maxLength='23' className={styles.ccNumberInput}onChange={(e)=>{setCity(e.target.value); setCityError('')}}/>
+                        <label>Город</label>
+                        <input type="tel" placeholder='Город' maxLength='23' className={styles.ccNumberInput}onChange={(e)=>{setCity(e.target.value); setCityError('')}}/>
                         {cityError? <p style={{color:'red' , fontFamily:"'Montserrat', sans-serif", fontWeight:'bold' , fontSize:'13px' , marginTop:'20px' , position:'absolute' , bottom:'-32px'}}>{cityError}</p> : ''}
                       </div>
                   </div>
                   <div className={styles.CardNumber}>
                       <div className={styles.CardInputs}>
-                        <label>User state</label>
-                        <input type="tel" placeholder='State' maxLength='23' className={styles.ccNumberInput}onChange={(e)=>{setState(e.target.value); setStateError('')}}/>
+                        <label>Область</label>
+                        <input type="tel" placeholder='Область' maxLength='23' className={styles.ccNumberInput}onChange={(e)=>{setState(e.target.value); setStateError('')}}/>
                         {stateError? <p style={{color:'red' , fontFamily:"'Montserrat', sans-serif", fontWeight:'bold' , fontSize:'13px' , marginTop:'20px' , position:'absolute' , bottom:'-32px'}}>{stateError}</p> : ''}
                       </div>
                   </div>
                   <div className={styles.CardNumber}>
                       <div className={styles.CardInputs}>
-                        <label>User address</label>
-                        <input type="tel" placeholder='Address' maxLength='23' className={styles.ccNumberInput}onChange={(e)=>{setAddress(e.target.value); setAddressError('')}}/>
+                        <label>Адрес</label>
+                        <input type="tel" placeholder='Адрес' maxLength='23' className={styles.ccNumberInput}onChange={(e)=>{setAddress(e.target.value); setAddressError('')}}/>
                         {addressError? <p style={{color:'red' , fontFamily:"'Montserrat', sans-serif", fontWeight:'bold' , fontSize:'13px' , marginTop:'20px' , position:'absolute' , bottom:'-32px'}}>{addressError}</p> : ''}
                       </div>
                   </div>
                   <div className={styles.CardNumber}>
                       <div className={styles.CardInputs}>
-                        <label>User postal code</label>
-                        <input type="tel" placeholder='Postal code' maxLength='23' className={styles.ccNumberInput}onChange={(e)=>{setPostalCode(e.target.value); setPostalCodeError('')}}/>
+                        <label>Почтовый индекс</label>
+                        <input type="tel" placeholder='Почтовый индекс' maxLength='23' className={styles.ccNumberInput}onChange={(e)=>{setPostalCode(e.target.value); setPostalCodeError('')}}/>
                         {postalCodeError? <p style={{color:'red' , fontFamily:"'Montserrat', sans-serif", fontWeight:'bold' , fontSize:'13px' , marginTop:'20px' , position:'absolute' , bottom:'-32px'}}>{postalCodeError}</p> : ''}
                       </div>
                   </div>
                   <div className={styles.CardNumber}>
                       <div className={styles.CardInputs}>
-                        <label>Description</label>
-                        <input type="tel" placeholder='Description' maxLength='23' className={styles.ccNumberInput}onChange={(e)=>{setDescription(e.target.value); setDescriptionError('')}}/>
+                        <label>Описание платежа</label>
+                        <input type="tel" placeholder='Описание платежа' maxLength='23' className={styles.ccNumberInput}onChange={(e)=>{setDescription(e.target.value); setDescriptionError('')}}/>
                         {descriptionError? <p style={{color:'red' , fontFamily:"'Montserrat', sans-serif", fontWeight:'bold' , fontSize:'13px' , marginTop:'20px' , position:'absolute' , bottom:'-32px'}}>{descriptionError}</p> : ''}
                       </div>
                   </div>
                 </form>  
                 <div className={styles.CardPayment}>
                   <div className={styles.CardPaymentInput}>
-                        <label>Payment Amount(EUR)</label>
+                        <label>Сумма платежа(EUR)</label>
                         <input type="text" maxLength="30" placeholder='00.0' className={styles.ccCvcInput} onChange={(e)=>{setAmount(e.target.value);setAmountError('')}}/>
                         {amountError? <p style={{color:'red' , fontFamily:"'Montserrat', sans-serif", fontWeight:'bold' , fontSize:'13px' , marginTop:'20px', position:'absolute' , bottom:'-32px'}}>{amountError}</p> : ''}
 
                   </div>
-                    <div><button onClick={onPay} className={amountError === '' && nameError === '' && holderName !== '' && amount !== ''?styles.Pay:styles.buttonDisable}>Pay</button></div>
+                    <div><button onClick={onPay} className={amountError === '' && nameError === '' && holderName !== '' && amount !== ''?styles.Pay:styles.buttonDisable}>Создать платёж</button></div>
                   </div>
                   {
-                    url && (
+                    !url && (
                       <div style={{width:'90%' , height:'100%',wordWrap:'break-word', display:'flex' , alignItems:'center', flexDirection:'column' , justifyContent:'center'}}>
                         <div style={{width:'90%' , height:'100%',wordWrap:'break-word'}}>
-                          {url} 
+                          {'url'} 
                         </div>
-                        <button className='Pay' style={{marginTop:'20px'}} onClick={()=> navigator.clipboard.writeText(url)}>Copy</button>
+                        <button className={styles.Pay} style={{marginTop:'20px'}} onClick={()=> navigator.clipboard.writeText(url)}>Copy</button>
                       </div>
                     )
                   }
