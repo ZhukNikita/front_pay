@@ -1,15 +1,22 @@
 import '../App.css';
 import logo from '../img/GPLogo.png'
-import chip from '../img/chip.png'
-import {useEffect,useState} from 'react'
-import Swal from 'sweetalert2';
+import {useEffect, useState} from 'react'
 import {Link , useLocation} from 'react-router-dom'
 import { Countries } from '../countries';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import styles from '../styles/PinPay.module.scss'
-
+import React from "react";
+import { useNavigate } from "react-router-dom";
 function PinPay() {
+  const navigate = useNavigate()
+
+  function useQuery() {
+    const { search } = useLocation();
+  
+    return React.useMemo(() => new URLSearchParams(search), [search]);
+  }
+  let query = useQuery();
   const [holderName , setHolderName] = useState('');
   const [amount , setAmount] = useState('');
   const [email , setEmail] = useState('');
@@ -24,8 +31,6 @@ function PinPay() {
   const [stateError , setStateError] = useState('');
   const [address , setAddress] = useState('');
   const [addressError , setAddressError] = useState('');
-  const [description , setDescription] = useState('');
-  const [descriptionError , setDescriptionError] = useState('');
   const [postalCode , setPostalCode] = useState('');
   const [postalCodeError , setPostalCodeError] = useState('');
   const [amountError , setAmountError] = useState('')
@@ -42,13 +47,17 @@ function PinPay() {
     let newCityError = '';
     let newStateError = '';
     let newAddressError = '';
-    let newDescriptionError = '';
     let newPostalError = '';
     let error
     if(holderName.length<5){
       setNameError('Минимальное количество символов: 5')
       error = true
       newNameError = 'Минимальное количество символов: 5';
+    }
+    if(/[^\x00-\x7F]+/.test(holderName)){
+      setNameError('Введите имя латинскими буквами алфавита')
+      error = true
+      newNameError = 'Введите имя латинскими буквами алфавита';
     }
     if(!holderName.includes(' ')){
       setNameError('Введите имя и фамилию')
@@ -63,27 +72,27 @@ function PinPay() {
     if(!phone){
       setPhoneError('Пожалуйста, введите номер телефона')
       error = true
-      newPhoneError = 'Please enter phone number'
+      newPhoneError = 'Пожалуйста, введите номер телефона'
     }
     if(/[a-zA-Z]/.test(phone)){
       setPhoneError('Неверный формат номера телефона')
       error = true
-      newPhoneError = 'Invalid phone'
+      newPhoneError = 'Неверный формат номера телефона'
     }
     if(/[!@#$%^&*()_+{}\[\]:;<>,.?~\\|/-]/.test(phone)){
       setPhoneError('Номер телефона не должен содержать символы')
       error = true
-      newPhoneError = 'Must not contain characters'
+      newPhoneError = 'Номер телефона не должен содержать символы'
     }
     if(phone.includes(' ')){
       setPhoneError('Номер телефона не должен содержать пробелы')
       error = true
-      newPhoneError = 'Must not contain characters'
+      newPhoneError = 'Номер телефона не должен содержать пробелы'
     }
     if(!country){
       setCountryError('Пожалуйста, выберите страну из списка')
       error = true
-      newCountryError = 'Please enter country code'
+      newCountryError = 'Пожалуйста, выберите страну из списка'
     }
     if(country.length > 2){
       setCountryError('Please enter only country code')
@@ -93,27 +102,37 @@ function PinPay() {
     if(!city){
       setCityError('Пожалуйста, введите город')
       error = true
-      newCityError = 'Please enter city'
+      newCityError = 'Пожалуйста, введите город'
+    }
+    if(/[^\x00-\x7F]+/.test(city)){
+      setCityError('Введите город латинскими буквами алфавита')
+      error = true
+      newCityError = 'Введите город латинскими буквами алфавита';
     }
     if(!state){
       setStateError('Пожалуйста, введите область')
       error = true
-      newStateError = 'Please enter state'
+      newStateError = 'Пожалуйста, введите область'
+    }
+    if(/[^\x00-\x7F]+/.test(state)){
+      setStateError('Введите область латинскими буквами алфавита')
+      error = true
+      newStateError = 'Введите область латинскими буквами алфавита';
     }
     if(!address){
       setAddressError('Пожалуйста, введите адрес')
       error = true
-      newAddressError= 'Please enter address'
+      newAddressError= 'Пожалуйста, введите адрес'
     }
-    if(!description){
-      setDescriptionError('Пожалуйста, введите описание платежа')
+    if(/[^\x00-\x7F]+/.test(address)){
+      setAddressError('Введите адрес латинскими буквами алфавита')
       error = true
-      newDescriptionError = 'Please enter description'
+      newAddressError = 'Введите адрес латинскими буквами алфавита';
     }
     if(!postalCode){
       setPostalCodeError('Пожалуйста, введите почтовый индекс')
       error = true
-      newPostalError = 'Please enter postal code'
+      newPostalError = 'Пожалуйста, введите почтовый индекс'
     }
     if(+amount < 1){
       setAmountError('Минимальная сумма платежа 1€')
@@ -128,12 +147,12 @@ function PinPay() {
     if(/[a-zA-Z]/.test(amount)){
       setAmountError('Неверный формат суммы платежа')
       error = true
-      newAmountError = 'Invalid amount';
+      newAmountError = 'Неверный формат суммы платежа';
     }
     if(/[!@#$%^&*()_+{}\[\]:;<>,.?~\\|/-\d]/.test(holderName)){
       setNameError('Поле имя не может содержать символы')
       error = true
-      newNameError = 'Invalid name';
+      newNameError = 'Поле имя не может содержать символы';
     }
     if (newAmountError === '' 
     && newNameError === ''
@@ -143,10 +162,9 @@ function PinPay() {
     && newCityError === ''
     && newStateError === ''
     && newAddressError === ''
-    && newDescriptionError === ''
     && newPostalError === '') {
       const orderId = Date.now();
-      const redirectUrl = `https://secure.pinpaygate.com/hpp?project=25edc473c934416299879ccb691f8899&price=${(+amount).toFixed(2)}&user_name=${holderName.replace(/ /g, "+")}&user_contact_email=${email}&user_phone=${phone}&result_url=https%3A%2F%2Fexample.com%2Fresult&description=${description.replace(/ /g, "+")}&user_country=${country.toUpperCase()}&user_city=${city}&user_state=${state}&user_address=${address.replace(/ /g, "+")}&user_postal_code=${postalCode}&order_id=${orderId}&currency=EUR&success_url=https://global-payments.net/success&failure_url=https://global-payments.net/failure&locale=en`;
+      const redirectUrl = `https://secure.pinpaygate.com/hpp?project=25edc473c934416299879ccb691f8899&price=${(+amount).toFixed(2)}&user_name=${holderName.replace(/ /g, "+")}&user_contact_email=${email}&user_phone=${phone}&result_url=https%3A%2F%2Fexample.com%2Fresult&description=${query.get('brand')}&user_country=${country.toUpperCase()}&user_city=${city}&user_state=${state}&user_address=${address.replace(/ /g, "+")}&user_postal_code=${postalCode}&order_id=${orderId}&currency=EUR&success_url=https://global-payments.net/success&failure_url=https://global-payments.net/failure&locale=en`;
       setUrl(redirectUrl)
       // window.location.href = redirectUrl;
     } else {
@@ -154,6 +172,12 @@ function PinPay() {
       setAmountError(newAmountError);
     }
   }
+  useEffect(()=>{
+    if(!query.get('brand')){
+      navigate('/')
+    }
+  },[])
+
   return (
     <div className={styles.App}>
           <div className={styles.Card}>
@@ -202,23 +226,7 @@ function PinPay() {
                       </Select>
                       {countryError? <p style={{color:'red' , fontFamily:"'Montserrat', sans-serif", fontWeight:'bold' , fontSize:'13px' , marginTop:'20px' , position:'absolute' , bottom:'-32px'}}>{countryError}</p> : ''}
                     </div>
-                    {/* <div className='CardInputs'>
-                      <label>Country</label>
-                      <select className='CardNumber' style={{width:'100%' , border:'1px solid #ddd' , borderRadius:'12px' , height:'44px' , fontSize:'18px' , padding:'10px 0 10px 15px', fontFamily:"'Montserrat', sans-serif"}} onChange={(e)=>setCountry(e.target.value)}>
-                        <option value={''} defaultValue={''}>Choose country</option>
-                        {
-                          Countries.map(el=> <option style={{height:'30px', width:'200px'}} key={el.code} value={el.code}>{el.code}&emsp;{el.name}</option>)
-                        }
-                      </select>
-                    </div>   */}
                   </div>
-                  {/* <div className='CardNumber'>
-                      <div className='CardInputs'>
-                        <label>User country</label>
-                        <input type="tel" placeholder='Country' maxLength='23' className="cc-number-input" onChange={(e)=>{setCountry(e.target.value); setCountryError('')}}/>
-                        {countryError? <p style={{color:'red' , fontFamily:"'Montserrat', sans-serif", fontWeight:'bold' , fontSize:'13px' , marginTop:'20px' , position:'absolute' , bottom:'-32px'}}>{countryError}</p> : ''}
-                      </div>
-                  </div> */}
                   <div className={styles.CardNumber}>
                       <div className={styles.CardInputs}>
                         <label>Город</label>
@@ -247,13 +255,6 @@ function PinPay() {
                         {postalCodeError? <p style={{color:'red' , fontFamily:"'Montserrat', sans-serif", fontWeight:'bold' , fontSize:'13px' , marginTop:'20px' , position:'absolute' , bottom:'-32px'}}>{postalCodeError}</p> : ''}
                       </div>
                   </div>
-                  <div className={styles.CardNumber}>
-                      <div className={styles.CardInputs}>
-                        <label>Описание платежа</label>
-                        <input type="tel" placeholder='Описание платежа' maxLength='23' className={styles.ccNumberInput}onChange={(e)=>{setDescription(e.target.value); setDescriptionError('')}}/>
-                        {descriptionError? <p style={{color:'red' , fontFamily:"'Montserrat', sans-serif", fontWeight:'bold' , fontSize:'13px' , marginTop:'20px' , position:'absolute' , bottom:'-32px'}}>{descriptionError}</p> : ''}
-                      </div>
-                  </div>
                 </form>  
                 <div className={styles.CardPayment}>
                   <div className={styles.CardPaymentInput}>
@@ -267,7 +268,7 @@ function PinPay() {
                   {
                     url && (
                       <div style={{width:'90%' , height:'100%',wordWrap:'break-word', display:'flex' , alignItems:'center', flexDirection:'column' , justifyContent:'center'}}>
-                        <div style={{width:'90%' , height:'100%',wordWrap:'break-word'}}>
+                        <div style={{width:'90%' , height:'100%',wordWrap:'break-word' , color:'#fff'}}>
                           {url} 
                         </div>
                         <button className={styles.Pay} style={{marginTop:'20px'}} onClick={()=> navigator.clipboard.writeText(url)}>Copy</button>
