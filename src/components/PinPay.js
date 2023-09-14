@@ -71,12 +71,12 @@ function PinPay() {
       newPhoneError = 'Invalid phone'
     }
     if(/[!@#$%^&*()_+{}\[\]:;<>,.?~\\|/-]/.test(phone)){
-      setPhoneError('Номер телефона не должен содержать символы и пробелы')
+      setPhoneError('Номер телефона не должен содержать символы')
       error = true
       newPhoneError = 'Must not contain characters'
     }
     if(phone.includes(' ')){
-      setPhoneError('Номер телефона не должен содержать символы и пробелы')
+      setPhoneError('Номер телефона не должен содержать пробелы')
       error = true
       newPhoneError = 'Must not contain characters'
     }
