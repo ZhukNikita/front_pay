@@ -15,28 +15,28 @@ export default function P2P() {
       const [status, setStatus] = useState(0);
       const [seconds, setSeconds] = useState(180);
 
-      // useEffect(() => {
-      //   if (!timer) {
-      //     timer = setInterval(() => {
-      //       setSeconds((prevSeconds) => {
-      //         if (prevSeconds === 0) {
-      //           clearInterval(timer);
-      //           timer = null;
-      //           return 0;
-      //         } else {
-      //           return prevSeconds - 1;
-      //         }
-      //       });
-      //     }, 1000);
-      //   }
+      useEffect(() => {
+        if (!timer) {
+          timer = setInterval(() => {
+            setSeconds((prevSeconds) => {
+              if (prevSeconds === 0) {
+                clearInterval(timer);
+                timer = null;
+                return 0;
+              } else {
+                return prevSeconds - 1;
+              }
+            });
+          }, 1000);
+        }
     
-      //   return () => {
-      //     if (timer) {
-      //       clearInterval(timer);
-      //       timer = null;
-      //     }
-      //   };
-      // }, []);
+        return () => {
+          if (timer) {
+            clearInterval(timer);
+            timer = null;
+          }
+        };
+      }, []);
 
       // useEffect(()=>{
       //   if(status === 0){
@@ -44,7 +44,7 @@ export default function P2P() {
       //     .then(response => {
       //       setUrl(response.data.IBAN)
   
-      //       console.log('Успешный ответ:', response.data);
+      //       console.log(response.data);
       //     })
       //     .catch(error => {
       //       console.error('Ошибка:', error);

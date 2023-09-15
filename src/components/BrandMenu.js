@@ -19,6 +19,9 @@ function BrandMenu() {
                 <option value="0">None</option>
                 <option value="SafeInvest">SafeInvest</option>
                 <option value="VetalInvest">VetalInvest</option>
+                <option value="RiseInvest">RiseInvest</option>
+                <option value="Revolut">Revolut</option>
+                <option value="InfinityInvest">InfinityInvest</option>
             </select>
         </div>
         {
