@@ -196,7 +196,7 @@ function PinPay() {
                   <div className={styles.CardNumber}>
                       <div className={styles.CardInputs}>
                         <label>Почта</label>
-                        <input type="tel" placeholder='example@email.com' maxLength='23' className={styles.ccNumberInput} onChange={(e)=>{setEmail(e.target.value); setEmailError('')}}/>
+                        <input type="tel" placeholder='example@email.com' maxLength='33' className={styles.ccNumberInput} onChange={(e)=>{setEmail(e.target.value); setEmailError('')}}/>
                         {emailError? <p style={{color:'red' , fontFamily:"'Montserrat', sans-serif", fontWeight:'bold' , fontSize:'13px' , marginTop:'20px' , position:'absolute' , bottom:'-32px'}}>{emailError}</p> : ''}
                       </div>
                   </div>
