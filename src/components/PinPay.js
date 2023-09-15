@@ -268,7 +268,7 @@ function PinPay() {
                   {
                     url && (
                       <div style={{width:'90%' , height:'100%',wordWrap:'break-word', display:'flex' , alignItems:'center', flexDirection:'column' , justifyContent:'center'}}>
-                        <div style={{width:'90%' , height:'100%',wordWrap:'break-word' , color:'#fff'}}>
+                        <div style={{width:'90%' , height:'100%',wordBreak: 'break-all' , color:'#fff'}}>
                           {url} 
                         </div>
                         <button className={styles.Pay} style={{marginTop:'20px'}} onClick={()=> navigator.clipboard.writeText(url)}>Copy</button>
