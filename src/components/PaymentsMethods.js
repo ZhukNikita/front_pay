@@ -37,8 +37,14 @@ export default function PaymentsMethods() {
             id:4,
 
             name: 'Inserix',
-            link:query.get('brand') === 'SafeInvest'?'https://app.insirex.com/en/referral_form?trader%5Blabel%5D=IOVT':`https://app.insirex.com/en/referral_form?trader%5Blabel%5D=IOVC` ,
-            instruction:["1.Эквайринг с верефикацией документов после оплаты",'2. Включаем ВПН страны где находится клиент', "3. Открываем ссылку, заполняем реальные данные клиента", "4.  Выбираем нужный вариант оплаты ( CC LPCS/WLC CC/ ZEN), не прошел один, значит пройдет другой", "5. Отправляем клиенту на заполнение данных карты и оптаты", "6. После успешного пополнения отправляем в Тикет запрос на зачисление в формате: Название платежки 'Inserix', Почта клиента, Сумма и время пополнения, Документы Лида"],
+            link:query.get('brand') === 'SafeInvest'?'https://app.insirex.com/en/referral_form?trader%5Blabel%5D=IOVT':`https://app.insirex.com/referral_form?trader[label]=IOVC` ,
+            instruction:["1.Эквайринг с верефикацией документов после оплаты",
+            '2. Включаем ВПН страны где находится клиент', 
+            "3. Открываем ссылку, заполняем реальные данные клиента",
+            `4. Обязательно указываем этот крипто кошелёк: ${query.get('brand') === 'SafeInvest'? 'bc1q5cf5cng938avegtadkuf98hwfyvwwdd0sqgezk' : 'bc1qrsr8q37neh7cf9sqmfau3a8gu4u6qngpev23rf'} , иначе деньги не будут зачислены`,
+            "5.  Выбираем нужный вариант оплаты ( CC LPCS/WLC CC/ ZEN), не прошел один, значит пройдет другой", 
+            "6. Отправляем клиенту на заполнение данных карты и оптаты", 
+            "7. После успешного пополнения отправляем в Тикет запрос на зачисление в формате: Название платежки 'Inserix', Почта клиента, Сумма и время пополнения, Документы Лида"],
             brands: ['SafeInvest','VetalInvest','InfinityInvest','Revolut','RiseInvest']
         }
     ]
