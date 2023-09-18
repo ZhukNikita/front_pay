@@ -5,4 +5,11 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+}
+.swal2-popup {
+  font-family: "Nunito", serif;
+}
+.swal2-popup button {
+  font-family: "Nunito", serif;
 }

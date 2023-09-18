@@ -1,0 +1,61 @@
+@import './vars.scss';
+.body{
+    width: calc(24% - 60px);
+    height: 93vh;
+    border-right: 1px dashed $cardBC;
+    @include flex(center,space-between);
+    flex-direction: column;
+    padding: 30px;
+    .content{
+    @include flex(center,start);
+    flex-direction: column;
+
+        h2{
+            color: rgb(183, 220, 233);
+            font-family: 'Nunito', sans-serif;
+        }
+        .logo{
+            width: 85%;
+            filter: brightness(10) , ;
+            filter: contrast(70%);
+        }
+        .paymentsList{
+            width: 100%;
+            @include flex(center,start);
+            flex-direction: column;
+            gap: 25px;
+            .payment{
+                @include flex(center,center);
+                color: rgb(183, 220, 233);
+                font-size: 22px;
+                font-family: 'Nunito', sans-serif;
+                font-weight: 700;
+                width: 91%;
+                height: 60px;
+                border-radius: 12px;
+                background-color: $cardBC;
+                transition: all 0.3s ease;
+                cursor: pointer;
+            }
+            .payment:hover{
+                background-color: #25487c;
+            }
+        }
+    }
+    .logout{
+        padding: 15px 20px;
+        border: none;
+        border-radius: 12px;
+        background-color: $cardBC;
+        color: rgb(183, 220, 233);
+        font-family: 'Nunito', sans-serif;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+    }
+    .logout:hover{
+        background-color: #25487c;
+    }
+
+}

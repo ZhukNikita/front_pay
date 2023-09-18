@@ -1,4 +1,4 @@
-import styles from '../styles/P2P.module.scss'
+import styles from '../../styles/P2P.module.scss'
 export default function NoMatch(){
     return(
         <div className={styles.body}>

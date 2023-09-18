@@ -71,19 +71,19 @@ export default function P2P() {
     };
   }, []);
 
-  // useEffect(() => {
-  //   if (status === 0 && seconds === 180) {
-  //     axios
-  //       .get('http://localhost:5000/p2p')
-  //       .then((response) => {
-  //         setUrl(response.data.IBAN);
-  //         console.log(response.data);
-  //       })
-  //       .catch((error) => {
-  //         console.error('Ошибка:', error);
-  //       });
-  //   }
-  // }, [status , seconds]);
+  useEffect(() => {
+    if (status === 0 && seconds === 180) {
+      axios
+        .get('http://localhost:5000/p2p')
+        .then((response) => {
+          setUrl(response.data.IBAN);
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.error('Ошибка:', error);
+        });
+    }
+  }, [status , seconds]);
 
   if (pathname !== '/p2p') {
     localStorage.removeItem('key');
