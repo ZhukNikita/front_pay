@@ -1,21 +1,15 @@
 import './App.css';
 import PinPay from './components/PinPay'
 import BrandMenu from './components/BrandMenu'
-import {Routes, redirect , Route , useLocation} from 'react-router-dom'
+import {Routes, Route} from 'react-router-dom'
 import PaymentsMethods from './components/PaymentsMethods';
 import P2P from './components/P2P';
 import NoMatch from './components/NoMatch';
-import Swal from 'sweetalert2';
 import Failure from './components/Failure';
 import Success from './components/Success';
 
 function App() {
-  const { pathname } = useLocation();
 
-  if(pathname !== '/p2p'){
-    localStorage.removeItem('key')
-    localStorage.removeItem('iban')
-  }
 
   return (
     <div className="App">
