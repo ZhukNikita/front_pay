@@ -69,11 +69,11 @@ export default function P2P() {
         text: 'Время жизни платежного метода истекло!',
         confirmButtonText: 'На главную',
         willClose: () => {
-          window.location.href = 'http://localhost:3000/'
+          window.location.href = '/'
         }
       }).then((result) => {
         if (result.isConfirmed) {
-          window.location.href = 'http://localhost:3000/'
+          window.location.href = '/'
         }
       })
       setUrl('')
