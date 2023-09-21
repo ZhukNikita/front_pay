@@ -1,40 +1,58 @@
 @import 'vars.scss';
 
 
-.body{
+.body {
     width: 600px;
     height: 700px;
     border-radius: 6px;
-    @include flex(center,start);
+    @include flex(center, start);
     flex-direction: column;
     padding: 20px;
     font-family: $font;
     color: #ffffff;
     text-align: center;
-    h1{
+
+    h1 {
         margin-bottom: 0;
     }
-    .card{
+
+    .card {
         padding: 20px;
         width: 300px;
-        height: 200px;
-        background-color:  $cardBC;
-        box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.35);
+        background-color: $cardBC;
+        box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.35);
         border-radius: 8px;
-        .cardHeader{
-        @include flex(center,space-between);
+
+        .cardHeader {
+            @include flex(center, space-between);
 
         }
-        .cardBody{
+
+        .cardBody {
 
             text-align: left;
-            margin-top: 50px;
+            margin-top: 20px;
             width: 100%;
-            @include flex(center,space-between);
-            .cardButton{
+            @include flex(center, space-between);
+            .creditsBody{
+                @include flex(center, space-between);
+                flex-direction: column;
+
+            }
+            .credits {
+                @include flex(start, start);
+                flex-direction: column;
+
+                h3 {
+                    margin-top: 5px;
+                }
+            }
+
+            .cardButton {
                 transition: all 0.2s ease;
             }
-            .cardButton:active{
+
+            .cardButton:active {
                 background-color: #1e1e1e;
             }
         }
