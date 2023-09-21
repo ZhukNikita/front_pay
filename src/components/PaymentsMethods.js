@@ -1,8 +1,9 @@
 import styles from '../styles/PaymentsMethods.module.scss'
 import React from "react";
-import {useLocation , Link} from "react-router-dom";
+import {useLocation , Link, Navigate} from "react-router-dom";
 import Logo from '../img/GPLogo.png'
 import Method from './Method';
+import secureLocalStorage from 'react-secure-storage';
 
 export default function PaymentsMethods() {
     function useQuery() {
@@ -49,14 +50,20 @@ export default function PaymentsMethods() {
         }
     ]
 
+    const userMethods = secureLocalStorage.getItem('methods')
     const getMethods = () => {
-        const brand = query.get('brand')
-        const arr = methods.filter(el=> el.brands.includes(brand))
-        return arr
+        let methodsTemp = []
+        for(let method of userMethods){
+            methodsTemp.push(methods.filter(el=> el.name === method))
+        }
+        return methodsTemp.flat()
+    }
+    if(!secureLocalStorage.getItem('isLogged')){
+        return <Navigate to={'/login'}/>
     }
     return(
         <div className={styles.body}>
-            <Link to={'/'} style={{color:'white', fontWeight:'bold' , fontFamily:'"Montserrat" , sans-serif' , position:'absolute' , top:'20px' , right:'20px'}}>На главную</Link>
+            <button className={styles.logout} onClick={()=>{secureLocalStorage.removeItem('isLogged') ; secureLocalStorage.removeItem('role') ; secureLocalStorage.removeItem('userId') ; window.location.href = '/login'}}>Вийти</button>
 
             <div className={styles.logo}>
                 <img src={Logo}/>

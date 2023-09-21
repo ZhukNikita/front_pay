@@ -12,7 +12,7 @@ import Snackbar from '@mui/material/Snackbar';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import MuiAlert from '@mui/material/Alert';
-
+import DeleteIcon from '@mui/icons-material/Delete';
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
@@ -37,7 +37,6 @@ const style = {
 export default function AddUsers(){
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
     const [login, setLogin] = React.useState('')
     const [password, setPassword] = React.useState('')
     const [loginDirty, setLoginDirty] = React.useState(false)
@@ -55,10 +54,15 @@ export default function AddUsers(){
     const [isInserixCheck , setIsInserixCheck] = React.useState(false);
     const [isP2PCheck , setIsP2PCheck] = React.useState(false);
     const [selectedPayments, setSelectedPayments] = React.useState([]);
+    const [deletePayment, setDeletePayments] = React.useState('');
 
-    React.useEffect(() => {
-        console.log(selectedPayments);
-      }, [selectedPayments]);
+    const handleClose = () => {
+        setOpen(false);
+        setSelectedPayments([]);
+        setIsP2PCheck(false);
+        setIsInserixCheck(false);
+        setIsPinPayCheck(false)
+    };
 
     React.useEffect(() => {
       
@@ -66,25 +70,25 @@ export default function AddUsers(){
           let updatedSelectedPayments = [...prevSelectedPayments];
       
           if (isPinPayCheck === true) {
-            if(!selectedPayments.includes('PinPay')){
-                updatedSelectedPayments.push('PinPay');
+            if(!selectedPayments.includes('1')){
+                updatedSelectedPayments.push('1');
             }
           } else{
-            updatedSelectedPayments = updatedSelectedPayments.filter(el => el !== 'PinPay');
+            updatedSelectedPayments = updatedSelectedPayments.filter(el => el !== '1');
           }
           if (isP2PCheck === true) {
-            if(!selectedPayments.includes('P2P')){
-                updatedSelectedPayments.push('P2P');
+            if(!selectedPayments.includes('3')){
+                updatedSelectedPayments.push('3');
             }
           } else {
-            updatedSelectedPayments = updatedSelectedPayments.filter(el => el !== 'P2P');
+            updatedSelectedPayments = updatedSelectedPayments.filter(el => el !== '3');
           }
           if (isInserixCheck === true) {
-            if(!selectedPayments.includes('Inserix')){
-                updatedSelectedPayments.push('Inserix');
+            if(!selectedPayments.includes('2')){
+                updatedSelectedPayments.push('2');
             }
           } else {
-            updatedSelectedPayments = updatedSelectedPayments.filter(el => el !== 'Inserix');
+            updatedSelectedPayments = updatedSelectedPayments.filter(el => el !== '2');
           }
       
           return updatedSelectedPayments;
@@ -166,11 +170,24 @@ export default function AddUsers(){
           </IconButton>
         </React.Fragment>
       );
+      function generateRandomPassword(length) {
+        const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        let password = "";
+      
+        for (let i = 0; i < length; i++) {
+          const randomIndex = Math.floor(Math.random() * charset.length);
+          password += charset.charAt(randomIndex);
+        }
+      
+        return password;
+      }
+      
     const Create = async () =>{
         const createdBy = secureLocalStorage.getItem('userId')
         try{
-            const {data} = await axios.post('http://localhost:5000/registration', {login , password, brand , role, createdBy})
-            await axios.post('http://localhost:5000/users',{createdBy}).then(res=> setUsers(res.data[0].reverse()));
+            const randomPassword = generateRandomPassword(10);
+            const {data} = await axios.post('http://localhost:5000/registration', {login , randomPassword, brand , role, createdBy, selectedPayments})
+            await axios.post('http://localhost:5000/users',{createdBy}).then(res=> setUsers(res.data.reverse()));
             return data
         }catch(e){
             console.log(e)
@@ -183,7 +200,7 @@ export default function AddUsers(){
     React.useEffect( ()=>{
         const createdBy = secureLocalStorage.getItem('userId')
         try{
-            axios.post('http://localhost:5000/users', {createdBy}).then(res=> setUsers(res.data[0].reverse()))
+            axios.post('http://localhost:5000/users', {createdBy}).then(res=> setUsers(res.data.reverse()))
         }catch(e){
             console.log(e)
         }
@@ -193,7 +210,11 @@ export default function AddUsers(){
         <div className={styles.body}>
             <div className={styles.header}>
                <h1>Пользователи</h1>
-               <button onClick={handleOpen} ><AddIcon/>Добавить</button>
+               <div className={styles.buttons}>
+                <button onClick={handleOpen} ><AddIcon/>Добавить <br/>платежный метод </button>
+                  <button className={styles.deleteButton} onClick={handleOpen}><DeleteIcon/>Удалить<br/> платежный метод</button>
+                  <button onClick={handleOpen} ><AddIcon/>Добавить <br/>пользователя</button>
+               </div>
             </div>
             <div className={styles.table}>
                 <UserList users={users} setUsers={setUsers}/>
@@ -221,13 +242,13 @@ export default function AddUsers(){
                             loginDirty && loginError && <div style={{color:'red', fontSize:'13px', margin:'0' , fontFamily:"'Nunito',sans-serif",fontWeight:'bold'}}>{loginError}</div>
                         }
                     </div>
-                    <div style={{width:'100%' , display:'flex' , flexDirection:'column'}}>
+                    {/* <div style={{width:'100%' , display:'flex' , flexDirection:'column'}}>
                         <label style={{color:'white' , width:'100%', fontFamily:"'Nunito',sans-serif"}}>Пароль</label>
                         <input onBlur={BlurHandle} name='password' onChange={passwordHandler} style={{outline:'none', padding:'15px 20px', fontFamily:'"Nunito"  ,sans-serif' , fontSize:'18px' , border:'1px solid #38b6ff', borderRadius:'8px'}} placeholder='Пароль'/>
                         {
                             passwordDirty && passwordError && <div style={{color:'red', fontSize:'13px', margin:'0' , fontFamily:"'Nunito',sans-serif",fontWeight:'bold'}}>{passwordError}</div>
                         }
-                    </div>
+                    </div> */}
                     <div style={{width:'100%' , display:'flex' , flexDirection:'column'}}>
                         <label style={{color:'white' , width:'100%', fontFamily:"'Nunito',sans-serif"}}>Бренд</label>
                         <select onChange={(e)=> {setBrand(e.target.value); setBrandError('')}} style={{outline:'none', padding:'15px 20px', fontFamily:'"Nunito"  ,sans-serif' , fontSize:'18px' , border:'1px solid #38b6ff', borderRadius:'8px' , width:'100%'}} placeholder='Бренд'>

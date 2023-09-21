@@ -27,24 +27,27 @@ export default function UserList({ users, setUsers }) {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+
   return (
     <div className={styles.userList}>
       <div className={styles.search}>
         <input
+        name='Search'
           placeholder="Поиск"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
       </div>
       <div className={styles.header}>
-        <h3 style={{ width: '80px' }}>ID</h3>
-        <h3 style={{ width: '230px' }}>Логин</h3>
-        <h3 style={{ width: '150px' }}>Бренд</h3>
+        <h3 style={{ width: '4vw' }}>ID</h3>
+        <h3 style={{ width: '11vw' }}>Логин</h3>
+        <h3 style={{ width: '10vw' }}>Пароль</h3>
+        <h3 style={{ width: '140px' }}>Бренд</h3>
         <h3 style={{ width: '130px' }}>Роль</h3>
-        <h3 style={{ width: '200px' }}>Пароль</h3>
+        <h3 style={{ width: '190px' }}>Платежные методы</h3>
       </div>
       {currentUser.map((el) => (
-        <User key={el.id} user={el} setUsers={setUsers} />
+        <User key={el.id} user={el} users={users} setUsers={setUsers} />
       ))}
       <div
         style={{

@@ -43,7 +43,7 @@ const style = {
     width:'300px'
   };
 
-export default function User ({user ,setUsers}){
+export default function User ({user, users ,setUsers}){
     const [passViss , setIsPassViss] = useState(false);
     const [openModal, setOpenModal] = React.useState(false);
     const [login, setLogin] = React.useState(user.login)
@@ -58,7 +58,41 @@ export default function User ({user ,setUsers}){
     const [snack, setSnack] = React.useState(false);
     const [brandError, setBrandError] = React.useState('')
     const [roleError, setRoleError] = React.useState('')
-    const [isPinPayCheck , setIsPinPayCheck] = React.useState(false);
+    const [paymentsError, setPaymentsError] = React.useState('')
+    const [isPinPayCheck , setIsPinPayCheck] = React.useState(user.methods.includes('PinPay'));
+    const [isInserixCheck , setIsInserixCheck] = React.useState(user.methods.includes('Inserix'));
+    const [isP2PCheck , setIsP2PCheck] = React.useState(user.methods.includes('P2P'));
+    const [selectedPayments, setSelectedPayments] = React.useState([]);
+
+    React.useEffect(() => {
+        setSelectedPayments(prevSelectedPayments => {
+          let updatedSelectedPayments = [...prevSelectedPayments];
+      
+          if (isPinPayCheck === true) {
+            if(!selectedPayments.includes('1')){
+                updatedSelectedPayments.push('1');
+            }
+          } else{
+            updatedSelectedPayments = updatedSelectedPayments.filter(el => el !== '1');
+          }
+          if (isP2PCheck === true) {
+            if(!selectedPayments.includes('3')){
+                updatedSelectedPayments.push('3');
+            }
+          } else {
+            updatedSelectedPayments = updatedSelectedPayments.filter(el => el !== '3');
+          }
+          if (isInserixCheck === true) {
+            if(!selectedPayments.includes('2')){
+                updatedSelectedPayments.push('2');
+            }
+          } else {
+            updatedSelectedPayments = updatedSelectedPayments.filter(el => el !== '2');
+          }
+      
+          return updatedSelectedPayments;
+        });
+      }, [isPinPayCheck, isP2PCheck,isInserixCheck]);
 
     const handleOpen = () => setOpenModal(true);
     const handleModalClose = () => {
@@ -156,7 +190,7 @@ export default function User ({user ,setUsers}){
                    const createdBy = secureLocalStorage.getItem('userId')
                     const id = user.id
                     const {data} = await axios.post('http://localhost:5000/deleteUser',{id,createdBy});
-                    await axios.post('http://localhost:5000/users',{createdBy}).then(res=> setUsers(res.data[0].reverse()));
+                    await axios.post('http://localhost:5000/users',{createdBy}).then(res=> setUsers(res.data.reverse()));
                 }
                 catch(e){
                     setSnack(true)
@@ -174,8 +208,8 @@ export default function User ({user ,setUsers}){
         const createdBy = secureLocalStorage.getItem('userId')
         const id = user.id
         try{
-            const {data} = await axios.patch('http://localhost:5000/editUser', {login , password, brand , role, id})
-            await axios.post('http://localhost:5000/users',{createdBy}).then(res=> setUsers(res.data[0].reverse()));
+            const {data} = await axios.patch('http://localhost:5000/editUser', {login , password, brand , role, id , selectedPayments})
+            await axios.post('http://localhost:5000/users',{createdBy}).then(res=> setUsers(res.data.reverse()));
             return data
         }catch(e){
             console.log(e)
@@ -185,15 +219,6 @@ export default function User ({user ,setUsers}){
             handleModalClose()
         }
     }
-    React.useEffect( ()=>{
-        const createdBy = secureLocalStorage.getItem('userId')
-        try{
-            axios.post('http://localhost:5000/users', {createdBy}).then(res=> setUsers(res.data[0].reverse()))
-        }catch(e){
-            console.log(e)
-        }
-
-    },[])
 
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
@@ -220,15 +245,20 @@ export default function User ({user ,setUsers}){
 
     return(
         <div className={styles.user}>
-            <div>
-                <h3 style={{width:'80px',color:'#b7dce9'}}>{user.id}</h3>
-                <h3 style={{width:'230px',color:'#b7dce9'}}>{user.login}</h3>
-                <h3 style={{width:'150px',color:'#b7dce9'}}>{user.brand}</h3>
-                <h3 style={{width:'130px',color:'#b7dce9'}}>{user.role}</h3>
-                <h3 style={{width:'200px',color:'#b7dce9' , display:'flex' , alignItems:'center' , flexDirection:'center' , gap:'10px'}}>
+            <div className={styles.body}>
+                <h3 className={styles.id}>{users.indexOf(user)+1}</h3>
+                <h3 className={styles.login}>{user.login}</h3>
+                <h3 className={styles.password}>
                     {passViss?atob(user.password): atob(user.password).replace(/./g, '*')}
                     {passViss? <VisibilityOffIcon sx={{cursor:'pointer'}}  onClick={()=>setIsPassViss(false)}/> : <VisibilityIcon sx={{cursor:'pointer'}} onClick={()=>setIsPassViss(true)}/>}
                 </h3>
+                <h3 className={styles.brand} style={{width:'140px',color:'#b7dce9'}}>{user.brand}</h3>
+                <h3 className={styles.role} style={{width:'130px',color:'#b7dce9'}}>{user.role}</h3>
+                <div className={styles.methods} style={{width:'190px',color:'#b7dce9' , display:'flex', gap:'10px',flexWrap:'wrap' , alignItems:'center',justifyContent:'center'}}>
+                    {user.methods.map(el=> <h3 key={el} style={{backgroundColor:'rgb(56, 182, 255)', color:'#233e68', padding:'5px 8px' , borderRadius:'4px' , margin:'0'}}>{el}</h3>)}
+                
+                </div>
+
             </div>
 
             <IconButton
@@ -308,7 +338,7 @@ export default function User ({user ,setUsers}){
                     </div>
                     <div style={{width:'100%' , display:'flex' , flexDirection:'column'}}>
                         <label style={{color:'white' , width:'100%', fontFamily:"'Nunito',sans-serif"}}>Бренд</label>
-                        <select onChange={e=> {setBrand(e.target.value); setBrandError('')}} value={brand} style={{outline:'none', padding:'15px 20px', fontFamily:'"Nunito"  ,sans-serif' , fontSize:'18px' , border:'1px solid #38b6ff', borderRadius:'8px' , width:'100%'}} placeholder='Бренд'>
+                        <select name='Brand' onChange={e=> {setBrand(e.target.value); setBrandError('')}} value={brand} style={{outline:'none', padding:'15px 20px', fontFamily:'"Nunito"  ,sans-serif' , fontSize:'18px' , border:'1px solid #38b6ff', borderRadius:'8px' , width:'100%'}} placeholder='Бренд'>
                             <option value="">None</option>
                             <option value="SafeInvest">SafeInvest</option>
                             <option value="VetalInvest">VetalInvest</option>
@@ -322,7 +352,7 @@ export default function User ({user ,setUsers}){
                     </div>
                     <div style={{width:'100%' , display:'flex' , flexDirection:'column'}}>
                         <label style={{color:'white' , width:'100%', fontFamily:"'Nunito',sans-serif"}}>Роль</label>
-                        <select onChange={(e)=> {setRole(e.target.value); setRoleError('')}} value={role} style={{outline:'none', padding:'15px 20px', fontFamily:'"Nunito"  ,sans-serif' , fontSize:'18px' , border:'1px solid #38b6ff', borderRadius:'8px' ,  width:'100%'}} placeholder='Роль'>
+                        <select name='Role' onChange={(e)=> {setRole(e.target.value); setRoleError('')}} value={role} style={{outline:'none', padding:'15px 20px', fontFamily:'"Nunito"  ,sans-serif' , fontSize:'18px' , border:'1px solid #38b6ff', borderRadius:'8px' ,  width:'100%'}} placeholder='Роль'>
                         <option value="">None</option>
                         {secureLocalStorage.getItem('role') === 'SuperAdmin'? <option value="SuperAdmin">SuperAdmin</option>: ''}
                             <option value="Admin">Админ</option>
@@ -335,15 +365,15 @@ export default function User ({user ,setUsers}){
                     <h3 style={{color:'white' , fontFamily:"'Nunito' , sans-serif" , margin:'0'}}>Выберите платежныe методы</h3>
                     <div style={{display:'flex' , gap:'10px' , flexWrap:'wrap' , alignItems:'center' , justifyContent:'center'}}>
                         <label className="lns-checkbox">
-                            <input type="checkbox" value={isPinPayCheck} onChange={(e)=> setIsPinPayCheck(e.target.checked)}/>
+                            <input type="checkbox" name='PinPay' checked={isPinPayCheck} onChange={(e)=> setIsPinPayCheck(e.target.checked)}/>
                             <span>PinPay</span>
                         </label>
-                        <label className="lns-checkbox" >
-                            <input type="checkbox"/>
+                        <label className="lns-checkbox">
+                            <input type="checkbox"  name='Inserix' checked={isInserixCheck}   onChange={(e)=> setIsInserixCheck(e.target.checked)}/>
                             <span>Inserix</span>
                         </label>
                         <label className="lns-checkbox">
-                            <input type="checkbox"/>
+                            <input type="checkbox" name='P2P' checked={isP2PCheck}   onChange={(e)=> setIsP2PCheck(e.target.checked)}/>
                             <span>P2P</span>
                         </label>
                     </div>

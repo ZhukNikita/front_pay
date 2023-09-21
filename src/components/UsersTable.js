@@ -24,17 +24,6 @@ const columns = [
   },
 ];
 
-const rows = [
-  { id: 1, lastName: 'Snow', firstName: 'Jon', brand: 'VetalInvest' , role:'Адмін' },
-  { id: 2, lastName: 'Lannister', firstName: 'Cersei', brand: 'RiseInvest', role:'Финансист' },
-  { id: 3, lastName: 'Lannister', firstName: 'Jaime', brand: 'Revolut', role:'Супер Пользователь' },
-  { id: 4, lastName: 'Stark', firstName: 'Arya', brand: 'InfinityInvest', role:'Супер Пользователь' },
-  { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', brand: 'RiseInvest', role:'Супер Пользователь' },
-  { id: 6, lastName: 'Melisandre', firstName: 'Daenerys', brand: 'Revolut', role:'Финансист' },
-  { id: 7, lastName: 'Clifford', firstName: 'Ferrara', brand: 'InfinityInvest', role:'Супер Пользователь' },
-  { id: 8, lastName: 'Frances', firstName: 'Rossini', brand: 'RiseInvest', role:'Супер Пользователь' },
-  { id: 9, lastName: 'Roxie', firstName: 'Harvey', brand: 'RiseInvest', role:'Финансист' },
-];
 
 export default function UsersTable({users}) {
 

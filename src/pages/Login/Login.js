@@ -59,13 +59,14 @@ export default function Login() {
         try{
             const {data} = await axios.post('http://localhost:5000/login',{login,password});
             if(data){
-                secureLocalStorage.setItem('role' , data.existingUsers[0].role);
+                secureLocalStorage.setItem('role' , data.role);
                 secureLocalStorage.setItem('isLogged' , true);
-                secureLocalStorage.setItem('userId' , data.existingUsers[0].id);
-                if(data.existingUsers[0].role === 'SuperAdmin') {
-                    window.location.href = 'http://localhost:3000/panel'
+                secureLocalStorage.setItem('userId' , data.id);
+                secureLocalStorage.setItem('methods' , data.methods);
+                if(data.role === 'SuperAdmin') {
+                    window.location.href = '/panel'
                 }else {
-                    window.location.href = 'http://localhost:3000/'
+                    window.location.href = '/payments_methods'
                 }
             }
 
@@ -78,7 +79,7 @@ export default function Login() {
         if(secureLocalStorage.getItem('role') === 'SuperAdmin') {
             return <Navigate to={'/panel'}/>
         }else {
-            return <Navigate to={'/'}/>
+            return <Navigate to={'/payments_methods'}/>
         }
     }
 

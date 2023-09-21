@@ -6,27 +6,47 @@
     height: 93vh;
     font-family: 'Nunito', sans-serif;
     .header{
-        margin-right: 40px;
-        margin-left: 40px;
         @include flex(center,space-between);
         h1{
             color: rgb(183, 220, 233);
         }
-        button{
+        .buttons{
             @include flex(center,center);
-            gap: 6px;
-            padding: 15px 20px;
-            border: none;
-            border-radius: 12px;
-            background-color: $cardBC;
-            color: rgb(183, 220, 233);
-            font-family: 'Nunito', sans-serif;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        button:hover{
-            background-color: #25487c;
+            gap: 20px;
+            .deleteButton{
+                @include flex(center,center);
+                gap: 6px;
+                padding: 15px 20px;
+                border: none;
+                border-radius: 12px;
+                background-color: rgba(255, 72, 66, 0.36);
+                color: rgb(216, 43, 66);
+                font-family: 'Nunito', sans-serif;
+                font-weight: bold;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+            .deleteButton:hover{
+                background-color: rgba(255, 72, 66, 0.56);
+                color: rgb(240, 39, 66);
+
+            }
+            button{
+                @include flex(center,center);
+                gap: 6px;
+                padding: 15px 20px;
+                border: none;
+                border-radius: 12px;
+                background-color: $cardBC;
+                color: rgb(183, 220, 233);
+                font-family: 'Nunito', sans-serif;
+                font-weight: bold;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+            button:hover{
+                background-color: #25487c;
+            }
         }
     }
     .table{
