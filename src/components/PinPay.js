@@ -8,6 +8,7 @@ import MenuItem from '@mui/material/MenuItem';
 import styles from '../styles/PinPay.module.scss'
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import secureLocalStorage from 'react-secure-storage';
 function PinPay() {
   const navigate = useNavigate()
 
@@ -177,6 +178,8 @@ function PinPay() {
       navigate('/')
     }
   },[])
+
+
 
   return (
     <div className={styles.App}>

@@ -1,7 +1,7 @@
 import styles from '../styles/Navbar.module.scss'
 import Logo from '../img/GPLogo.png'
 import React from "react";
-import {useLocation} from "react-router-dom";
+import {Link, useLocation} from "react-router-dom";
 import secureLocalStorage from 'react-secure-storage';
 import {Navigate} from 'react-router-dom'
 
@@ -70,6 +70,8 @@ export default function NavBar() {
                 <h2>Платежные методы</h2>
                 <div className={styles.paymentsList}>
                     {getMethods()?getMethods().map(el=><div key={el.name} className={styles.payment}>{el.name}</div>):''}
+                    <Link to={'/transactions'} className={styles.payment} style={{textDecoration:'none'}}>Транзакции</Link>
+                    <Link to={'/panel'} className={styles.payment} style={{textDecoration:'none'}}>Пользователи</Link>
                 </div>
             </div>
 

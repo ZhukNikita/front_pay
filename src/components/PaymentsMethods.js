@@ -63,7 +63,7 @@ export default function PaymentsMethods() {
     }
     return(
         <div className={styles.body}>
-            <button className={styles.logout} onClick={()=>{secureLocalStorage.removeItem('isLogged') ; secureLocalStorage.removeItem('role') ; secureLocalStorage.removeItem('userId') ; window.location.href = '/login'}}>Вийти</button>
+            <button className={styles.logout} onClick={()=>{secureLocalStorage.removeItem('isLogged') ; secureLocalStorage.removeItem('role') ; secureLocalStorage.removeItem('methods') ; secureLocalStorage.removeItem('userId') ; window.location.href = '/login'}}>Вийти</button>
 
             <div className={styles.logo}>
                 <img src={Logo}/>

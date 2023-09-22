@@ -1,7 +1,7 @@
 import './App.css';
 import PinPay from './components/PinPay'
 import BrandMenu from './components/BrandMenu'
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import PaymentsMethods from './components/PaymentsMethods';
 import P2P from './components/P2P';
 import NoMatch from './pages/NoMatch/NoMatch';
@@ -12,12 +12,13 @@ import Login from './pages/Login/Login.js';
 import { useEffect, useState } from 'react';
 import axios from "axios";
 import secureLocalStorage from 'react-secure-storage';
+import Transactions from './pages/Transactions/Transactions';
 
 
 
 function App() {
   const [methods , setMethods] = useState([])
-
+  const {pathname} = useLocation()
   useEffect(() => {
     const id = secureLocalStorage.getItem('userId');
     const fetchData = async () => {
@@ -25,9 +26,17 @@ function App() {
         const response = await axios.post('http://localhost:5000/getMe', { id });
         const data = response.data; 
         if (data) {
-          setMethods(data.methods? data.methods : [])
-          secureLocalStorage.setItem('userId', data.id);
-          secureLocalStorage.setItem('methods', data.methods);
+          if(data.id === null){
+            secureLocalStorage.removeItem('userId')
+            secureLocalStorage.removeItem('methods')
+            secureLocalStorage.removeItem('role')
+            secureLocalStorage.removeItem('isLogged')
+            window.location.href = '/login'
+          }else{
+            setMethods(data.methods? data.methods : [])
+            secureLocalStorage.setItem('userId', data.id);
+            secureLocalStorage.setItem('methods', data.methods);
+          }
         }
       } catch (e) {
         console.log(e.response.data.message);
@@ -36,7 +45,7 @@ function App() {
     if(secureLocalStorage.getItem('isLogged') !== null){
       fetchData(); 
     }
-  }, []);
+  }, [pathname]);
 
   return (
     <div className="App">
@@ -49,6 +58,7 @@ function App() {
         <Route path='/failure' element={<Failure />} />
         <Route path='/success' element={<Success />} />
         <Route path='/panel' element={<Panel />} />
+        <Route path='/transactions' element={<Transactions/>} />
         <Route path='/login' element={<Login />} />
       </Routes>
     </div>

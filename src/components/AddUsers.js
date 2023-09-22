@@ -55,10 +55,22 @@ export default function AddUsers(){
     const [isP2PCheck , setIsP2PCheck] = React.useState(false);
     const [selectedPayments, setSelectedPayments] = React.useState([]);
     const [deletePayment, setDeletePayments] = React.useState('');
+    const [openDeleteModal , setOpenDeleteModal] = React.useState(false)
+    const [deletePaymentError , setDeletePaymentError] = React.useState('')
+    const handleOpenDeleteModal = () => setOpenDeleteModal(true);
+    
 
     const handleClose = () => {
         setOpen(false);
         setSelectedPayments([]);
+        setIsP2PCheck(false);
+        setIsInserixCheck(false);
+        setIsPinPayCheck(false)
+    };
+
+    const handleCloseDeleteModal = () => {
+        setOpenDeleteModal(false);
+        setDeletePayments([]);
         setIsP2PCheck(false);
         setIsInserixCheck(false);
         setIsPinPayCheck(false)
@@ -132,19 +144,19 @@ export default function AddUsers(){
             setPasswordError('Пожалуйста, введите пароль.')
         }
     }
-    const passwordHandler = (e) => {
-        setPassword(e.target.value)
-        setAuthError('')
+    // const passwordHandler = (e) => {
+    //     setPassword(e.target.value)
+    //     setAuthError('')
 
-        if (e.target.value.length < 5) {
-            setPasswordError('Пароль состоит минимум из 5 символов')
-            if (!e.target.value) {
-                setPasswordError('Пожалуйста, введите пароль')
-            }
-        } else {
-            setPasswordError('')
-        }
-    }
+    //     if (e.target.value.length < 5) {
+    //         setPasswordError('Пароль состоит минимум из 5 символов')
+    //         if (!e.target.value) {
+    //             setPasswordError('Пожалуйста, введите пароль')
+    //         }
+    //     } else {
+    //         setPasswordError('')
+    //     }
+    // }
     const BlurHandle = (e) => {
         switch (e.target.name) {
             case 'login':
@@ -197,6 +209,22 @@ export default function AddUsers(){
             handleClose()
         }
     }
+
+    const Delete = async () =>{
+        const createdBy = secureLocalStorage.getItem('userId')
+        try{
+            const {data} = await axios.post('http://localhost:5000/deletePayment', {deletePayment})
+            await axios.post('http://localhost:5000/users',{createdBy}).then(res=> setUsers(res.data.reverse()));
+            return data
+        }catch(e){
+            console.log(e)
+            setSnack(true)
+            setAuthError(e.response.data.message.status)
+        }finally{
+            handleCloseDeleteModal()
+        }
+    }
+
     React.useEffect( ()=>{
         const createdBy = secureLocalStorage.getItem('userId')
         try{
@@ -212,7 +240,7 @@ export default function AddUsers(){
                <h1>Пользователи</h1>
                <div className={styles.buttons}>
                 <button onClick={handleOpen} ><AddIcon/>Добавить <br/>платежный метод </button>
-                  <button className={styles.deleteButton} onClick={handleOpen}><DeleteIcon/>Удалить<br/> платежный метод</button>
+                  <button className={styles.deleteButton} onClick={handleOpenDeleteModal}><DeleteIcon/>Удалить<br/> платежный метод</button>
                   <button onClick={handleOpen} ><AddIcon/>Добавить <br/>пользователя</button>
                </div>
             </div>
@@ -297,6 +325,42 @@ export default function AddUsers(){
                 </Box>
                 </Fade>
       </Modal>
+      <Modal
+                aria-labelledby="transition-modal-title"
+                aria-describedby="transition-modal-description"
+                open={openDeleteModal}
+                onClose={handleCloseDeleteModal}
+                closeAfterTransition
+                slots={{ backdrop: Backdrop }}
+                slotProps={{
+                backdrop: {
+                    timeout: 500,
+                },
+                }}
+            >
+                <Fade in={openDeleteModal}>
+                <Box sx={style}>
+                    <h3 style={{color:'white' , width:'100%' ,textAlign:'center' , fontFamily:"'Nunito',sans-serif" , marginBottom:'0px'}}>Удаление платёжного метода</h3>
+                    <h4 style={{color:'white' , fontFamily:"'Nunito' , sans-serif" , margin:'0'}}>Выберите платежныe методы</h4>
+                    <div style={{width:'100%' , display:'flex' , flexDirection:'column'}}>
+                        <label style={{color:'white' , width:'100%', fontFamily:"'Nunito',sans-serif"}}>Платёжный метод</label>
+                        <select onChange={(e)=> {setDeletePayments(e.target.value); setDeletePaymentError('')}} style={{outline:'none', padding:'15px 20px', fontFamily:'"Nunito"  ,sans-serif' , fontSize:'18px' , border:'1px solid #38b6ff', borderRadius:'8px' , width:'100%'}} placeholder='Бренд'>
+                            <option value="">None</option>
+                            <option value="1">PinPay</option>
+                            <option value="2">Inserix</option>
+                            <option value="3">P2P</option>
+                        </select>
+                        {
+                            deletePaymentError && <div style={{color:'red', fontSize:'13px', margin:'0' , fontFamily:"'Nunito',sans-serif",fontWeight:'bold'}}>{deletePaymentError}</div>
+                        }
+                    </div>
+                    {
+                        !deletePaymentError && deletePayment ? <button onClick={Delete} style={{padding:'15px 20px', fontFamily:'"Nunito"  ,sans-serif' , color:'white' , fontSize:'18px' , border:'1px solid #38b6ff', borderRadius:'8px' , backgroundColor:'#38b6ff', cursor:'pointer'}}>Удалить</button> 
+                        : <button onClick={()=> setDeletePaymentError('Выберите платежный метод')} style={{padding:'15px 20px',color:'white' ,  fontFamily:'"Nunito"  ,sans-serif' , fontSize:'18px' , border:'1px solid #38b6ff', borderRadius:'8px' , background:'none', cursor:'pointer'}}>Удалить</button>
+                    }
+                </Box>
+                </Fade>
+      </Modal>
       <div>
         <Snackbar
             open={snack}
@@ -305,7 +369,7 @@ export default function AddUsers(){
             message={authError}
             action={action}
         >
-        <Alert severity="error">{authError}</Alert>
+            <Alert severity="error">{authError}</Alert>
 
         </Snackbar>
         </div>
