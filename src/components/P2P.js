@@ -72,7 +72,7 @@ export default function P2P() {
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
-        text: 'Время жизни платежного метода истекло!',
+        text: 'Время для копирования истекло!',
         confirmButtonText: 'На главную',
         willClose: () => {
           window.location.href = '/'
