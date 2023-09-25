@@ -1,23 +1,8 @@
-<<<<<<< HEAD
 import React, { useState, useEffect, useRef } from 'react';
 import styles from '../styles/P2P.module.scss';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
-
-export default function P2P() {
-  const { pathname } = useLocation();
-  const [url, setUrl] = useState(() => {
-    const saved = localStorage.getItem('iban');
-    const initialValue = JSON.parse(saved);
-    return initialValue || '';
-  });
-  const [status, setStatus] = useState(0);
-=======
-import React, { useState, useEffect } from 'react';
-import styles from '../styles/P2P.module.scss';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import axios from 'axios';
 import Swal from 'sweetalert2';
 
 export default function P2P() {
@@ -25,17 +10,13 @@ export default function P2P() {
   const [recipient, setRecipient] = useState('');
   const [bank, setBank] = useState('');
   const [bic, setBic] = useState('');
->>>>>>> p2p
   const [seconds, setSeconds] = useState(180);
 
   useEffect(() => {
     let countdownWorker;
 
     if (typeof Worker !== 'undefined') {
-<<<<<<< HEAD
       // Если поддерживаются веб-рабочие
-=======
->>>>>>> p2p
       const workerCode = `
         let timer;
 
@@ -45,21 +26,15 @@ export default function P2P() {
 
             timer = setInterval(() => {
               if (seconds === 0) {
-<<<<<<< HEAD
                 seconds = 180
-=======
->>>>>>> p2p
                 clearInterval(timer);
                 self.postMessage('countdownFinished');
                 
               } else {
-<<<<<<< HEAD
                 self.postMessage(seconds);
                 seconds--;
-=======
                 seconds--;
                 self.postMessage(seconds);
->>>>>>> p2p
               }
             }, 1000);
           }
@@ -69,11 +44,9 @@ export default function P2P() {
       const blob = new Blob([workerCode], { type: 'application/javascript' });
       countdownWorker = new Worker(URL.createObjectURL(blob));
 
-<<<<<<< HEAD
       countdownWorker.onmessage = function(event) {
         if (event.data === 'countdownFinished') {
           // Обратный отсчет завершен
-          setStatus(0);
           setSeconds(180);
         } else {
           // Получение обновленного состояния времени от Web Worker
@@ -88,7 +61,6 @@ export default function P2P() {
       countdownWorker.postMessage('countdownFinished')
     }
     if (seconds === 180) {
-=======
       countdownWorker.onmessage = function (event) {
         if (event.data === 'countdownFinished') {
 
@@ -96,12 +68,10 @@ export default function P2P() {
           setSeconds(event.data);
         }
       };
->>>>>>> p2p
       countdownWorker.postMessage('startCountdown');
     }
     return () => {
       if (countdownWorker) {
-<<<<<<< HEAD
         countdownWorker.terminate(); // Завершение Web Worker при размонтировании компонента
       }
     };
@@ -121,15 +91,6 @@ export default function P2P() {
   //   }
   // }, [status , seconds]);
 
-  if (pathname !== '/p2p') {
-    localStorage.removeItem('key');
-    localStorage.removeItem('iban');
-  }
-=======
-        countdownWorker.terminate();
-      }
-    };
-  }, []);
   useEffect(() => {
     if (seconds === 180) {
       axios
@@ -162,25 +123,20 @@ export default function P2P() {
     }
   }, [seconds]);
 
->>>>>>> p2p
   return (
     <div className={styles.body}>
       <h1>P2P</h1>
       <h2>Совершите перевод</h2>
       <div className={styles.card}>
         <div className={styles.cardHeader}>
-<<<<<<< HEAD
           <div>SPB</div>
-=======
           <div>Global Payments</div>
->>>>>>> p2p
           <div>
             <span>{('0' + Math.floor((seconds / 60) % 60)).slice(-2)}:</span>
             <span>{('0' + (seconds % 60)).slice(-2)}</span>
           </div>
         </div>
         <div className={styles.cardBody}>
-<<<<<<< HEAD
           {url ? (
             <h3 style={{ width: '200px', wordBreak: 'break-all' }}>{url}</h3>
           ) : (
@@ -191,7 +147,6 @@ export default function P2P() {
             onClick={() => navigator.clipboard.writeText(url)}
             sx={{ padding: '5px', borderRadius: '4px', cursor: 'pointer', border: 'none' }}
           />
-=======
           <div className={styles.creditsBody}>
             <div className={styles.credits}>
               <span>Iban</span>
@@ -234,7 +189,6 @@ export default function P2P() {
           {/* <button style={{ padding: '15px 5px',fontFamily:"'Nunito',sans-serif" , backgroundColor:'#38b6ff', color:'white' ,  borderRadius: '4px', cursor: 'pointer', border: 'none' }}>
                 Скопировать
           </button> */}
->>>>>>> p2p
         </div>
       </div>
     </div>
