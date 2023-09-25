@@ -2,13 +2,67 @@ import React, { useState, useEffect } from 'react';
 import User from './User';
 import styles from '../styles/UsersList.module.scss';
 import { Pagination } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import Checkbox from '@mui/material/Checkbox';
+import DeleteIcon from '@mui/icons-material/Delete';
+import Backdrop from '@mui/material/Backdrop';
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
+import Fade from '@mui/material/Fade';
+import secureLocalStorage from 'react-secure-storage';
+import axios from 'axios';
+import Snackbar from '@mui/material/Snackbar';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import MuiAlert from '@mui/material/Alert';
+const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    bgcolor: 'background.paper',
+    boxShadow: 24,
+    p: 4,
+    borderRadius: '12px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    gap: '15px',
+    backgroundColor: '#233e68',
+    width: "300px"
+};
+
 
 export default function UserList({ users, setUsers }) {
   const [usersPerPage] = useState(5);
   const [search, setSearch] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [filteredUsers, setFilteredUsers] = useState([]);
+  const [checkbox, setCheckbox] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
+  const handleOpenDeleteModal = () => setOpenDeleteModal(true);
+  const [openDeleteModal, setOpenDeleteModal] = React.useState(false)
+  const [deletePayment, setDeletePayments] = React.useState('');
+  const [deletePaymentError, setDeletePaymentError] = React.useState('')
+  const [snack, setSnack] = React.useState(false);
+  const [snackError, setSnackError] = React.useState('')
 
+  const handleCloseSnack = (event, reason) => {
+      if (reason === 'clickaway') {
+          return;
+      }
+
+      setSnack(false);
+  };
+
+  const handleCloseDeleteModal = () => {
+      setOpenDeleteModal(false);
+  };
+  console.log(checkbox)
   useEffect(() => {
     if (users) {
       const filtered = users.filter(
@@ -26,20 +80,78 @@ export default function UserList({ users, setUsers }) {
   const currentUser = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const handleSelectAll = () => {
+    setSelectAll(!selectAll);
+    if (!selectAll) {
+      // Выбрать всех пользователей
+      const allUserIds = filteredUsers.map((user) => user.id);
+      setCheckbox(allUserIds);
+    } else {
+      // Снять выбор со всех пользователей
+      setCheckbox([]);
+    }
+  };
+  const Delete = async () => {
+    const createdBy = secureLocalStorage.getItem('userId')
 
+    try {
+        const { data } = await axios.post('http://localhost:5000/deletePayment', { deletePayment , checkbox })
+        await axios.post('http://localhost:5000/users', { createdBy }).then(res => setUsers(res.data.reverse()));
+        return data
+    } catch (e) {
+        console.log(e)
+    } finally {
+        handleCloseDeleteModal()
+    }
+}    
+const action = (
+  <React.Fragment>
+      <IconButton
+          size="small"
+          aria-label="close"
+          color="warning"
+          onClick={handleCloseSnack}
 
+      >
+          <CloseIcon fontSize="small" />
+      </IconButton>
+  </React.Fragment>
+);
   return (
     <div className={styles.userList}>
       <div className={styles.search}>
         <input
-        name='Search'
+          name='Search'
           placeholder="Поиск"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
+        <div className={styles.buttons}>
+          <button><AddIcon />Добавить метод</button>
+          <button className={styles.deleteButton}  onClick={()=>{
+            if(checkbox.length === 0){
+              setSnackError('Не выбран ни один пользователь!')
+              setSnack(true)
+            }else{
+              handleOpenDeleteModal()
+            }
+            }}>
+              <DeleteIcon />Удалить метод
+              </button>
+        </div>
       </div>
       <div className={styles.header}>
-        <h3 style={{ width: '4vw' }}>ID</h3>
+        <h3 style={{ width: '4vw' }}>
+          <Checkbox
+            sx={{
+              color: '#b7dce9',
+              '&.Mui-checked': {
+                color: '#b7dce9',
+              },
+            }}
+            checked={selectAll}
+            onChange={() => handleSelectAll()}
+          /></h3>
         <h3 style={{ width: '11vw' }}>Логин</h3>
         <h3 style={{ width: '10vw' }}>Пароль</h3>
         <h3 style={{ width: '140px' }}>Бренд</h3>
@@ -47,7 +159,7 @@ export default function UserList({ users, setUsers }) {
         <h3 style={{ width: '190px' }}>Платежные методы</h3>
       </div>
       {currentUser.map((el) => (
-        <User key={el.id} user={el} users={users} setUsers={setUsers} />
+        <User key={el.id} user={el} users={users} setCheckbox={setCheckbox} selectAll={selectAll} setSelectAll={setSelectAll} checkbox={checkbox} setUsers={setUsers} />
       ))}
       <div
         style={{
@@ -65,6 +177,54 @@ export default function UserList({ users, setUsers }) {
           onChange={(event, page) => paginate(page)}
         />
       </div>
+      <Modal
+                aria-labelledby="transition-modal-title"
+                aria-describedby="transition-modal-description"
+                open={openDeleteModal}
+                onClose={handleCloseDeleteModal}
+                closeAfterTransition
+                slots={{ backdrop: Backdrop }}
+                slotProps={{
+                    backdrop: {
+                        timeout: 500,
+                    },
+                }}
+            >
+                <Fade in={openDeleteModal}>
+                    <Box sx={style}>
+                        <h3 style={{ color: 'white', width: '100%', textAlign: 'center', fontFamily: "'Nunito',sans-serif", marginBottom: '0px' }}>Удаление платёжного метода</h3>
+                        <h4 style={{ color: 'white', fontFamily: "'Nunito' , sans-serif", margin: '0' }}>Выберите платежныe методы</h4>
+                        <div style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
+                            <label style={{ color: 'white', width: '100%', fontFamily: "'Nunito',sans-serif" }}>Платёжный метод</label>
+                            <select onChange={(e) => { setDeletePayments(e.target.value); setDeletePaymentError('') }} style={{ outline: 'none', padding: '15px 20px', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', width: '100%' }} placeholder='Бренд'>
+                                <option value="">None</option>
+                                <option value="1">PinPay</option>
+                                <option value="2">Inserix</option>
+                                <option value="3">P2P</option>
+                            </select>
+                            {
+                                deletePaymentError && <div style={{ color: 'red', fontSize: '13px', margin: '0', fontFamily: "'Nunito',sans-serif", fontWeight: 'bold' }}>{deletePaymentError}</div>
+                            }
+                        </div>
+                        {
+                            !deletePaymentError && deletePayment ? <button onClick={Delete} style={{ padding: '15px 20px', fontFamily: '"Nunito"  ,sans-serif', color: 'white', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', backgroundColor: '#38b6ff', cursor: 'pointer' }}>Удалить</button>
+                                : <button onClick={() => setDeletePaymentError('Выберите платежный метод')} style={{ padding: '15px 20px', color: 'white', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', background: 'none', cursor: 'pointer' }}>Удалить</button>
+                        }
+                    </Box>
+                </Fade>
+            </Modal>
+            <div>
+                <Snackbar
+                    open={snack}
+                    autoHideDuration={4000}
+                    onClose={handleCloseSnack}
+                    message={snackError}
+                    action={action}
+                >
+                    <Alert severity="error">{snackError}</Alert>
+
+                </Snackbar>
+            </div>
     </div>
   );
 }

@@ -11,7 +11,9 @@
         margin-top: 15px;
         margin-left: 15px;
         margin-bottom: 15px;
-
+        margin-right: 15px;
+        @include flex(center,space-between);
+        flex-direction: row;
         input {
             padding: 15px;
             border: 1px solid #233e68;
@@ -25,6 +27,44 @@
 
         input::placeholder {
             color: #b7dce9;
+        }
+        .buttons{
+            @include flex(center,center);
+            gap: 10px;
+            .deleteButton{
+                @include flex(center,center);
+                gap: 6px;
+                padding: 15px 20px;
+                border: none;
+                border-radius: 12px;
+                background-color: rgba(255, 72, 66, 0.66);
+                color: rgb(99, 20, 31);
+                font-family: 'Nunito', sans-serif;
+                font-weight: bold;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+            .deleteButton:hover{
+                background-color: rgba(255, 72, 66, 0.56);
+                color: rgb(240, 39, 66);
+
+            }
+            button{
+                @include flex(center,center);
+                gap: 6px;
+                padding: 15px 20px;
+                border: none;
+                border-radius: 12px;
+                background-color: #25487c;
+                color: rgb(183, 220, 233);
+                font-family: 'Nunito', sans-serif;
+                font-weight: bold;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+            button:hover{
+                background-color: #193053;
+            }
         }
     }
 

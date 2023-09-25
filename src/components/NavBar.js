@@ -67,11 +67,14 @@ export default function NavBar() {
         <div className={styles.body}>
             <div className={styles.content}>
                 <img className={styles.logo} src={Logo}/>
-                <h2>Платежные методы</h2>
+                {/* <h2>Платежные методы</h2> */}
                 <div className={styles.paymentsList}>
-                    {getMethods()?getMethods().map(el=><div key={el.name} className={styles.payment}>{el.name}</div>):''}
-                    <Link to={'/transactions'} className={styles.payment} style={{textDecoration:'none'}}>Транзакции</Link>
+                    <Link to={'/pinpay-transactions'} className={styles.payment} style={{textDecoration:'none'}}>Транзакции Pinpay</Link>
+                    <Link to={'/insirex-transactions'} className={styles.payment} style={{textDecoration:'none'}}>Транзакции Inserix</Link>
+                    <Link to={'/p2p-transactions'} className={styles.payment} style={{textDecoration:'none'}}>Транзакции P2P</Link>
+                    {/* <Link to={'/transactions'} className={styles.payment} style={{textDecoration:'none'}}>Транзакции</Link> */}
                     <Link to={'/panel'} className={styles.payment} style={{textDecoration:'none'}}>Пользователи</Link>
+                    <Link to={'/methods'} className={styles.payment} style={{textDecoration:'none'}}>Платежные методы</Link>
                 </div>
             </div>
 

@@ -1,6 +1,6 @@
 @import './vars.scss';
 .body{
-    width: calc(24% - 60px);
+    width: calc(20% - 60px);
     height: 93vh;
     border-right: 1px dashed $cardBC;
     @include flex(center,space-between);
@@ -20,6 +20,7 @@
             filter: contrast(70%);
         }
         .paymentsList{
+            margin-top: 20px;
             width: 100%;
             @include flex(center,start);
             flex-direction: column;

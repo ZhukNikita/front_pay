@@ -20,6 +20,7 @@ import Snackbar from '@mui/material/Snackbar';
 import CloseIcon from '@mui/icons-material/Close';
 import Fade from '@mui/material/Fade';
 import MuiAlert from '@mui/material/Alert';
+import Checkbox from '@mui/material/Checkbox';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -43,7 +44,7 @@ const style = {
     width: '300px'
 };
 
-export default function User({ user, users, setUsers }) {
+export default function User({ user, users, setUsers, selectAll, setSelectAll , setCheckbox , checkbox }) {
     const [passViss, setIsPassViss] = useState(false);
     const [openModal, setOpenModal] = React.useState(false);
     const [login, setLogin] = React.useState(user.login)
@@ -63,6 +64,8 @@ export default function User({ user, users, setUsers }) {
     const [isInserixCheck, setIsInserixCheck] = React.useState(user.methods.includes('Inserix'));
     const [isP2PCheck, setIsP2PCheck] = React.useState(user.methods.includes('P2P'));
     const [selectedPayments, setSelectedPayments] = React.useState([]);
+
+    
     React.useEffect(() => {
         setSelectedPayments(prevSelectedPayments => {
             let updatedSelectedPayments = [...prevSelectedPayments];
@@ -256,11 +259,33 @@ export default function User({ user, users, setUsers }) {
             },
         },
     });
-
+    const handleSelect = (userId) => {
+        if (selectAll) {
+          setSelectAll(false);
+        }
+        setCheckbox((prev) => {
+          if (prev.includes(userId)) {
+            return prev.filter((id) => id !== userId);
+          } else {
+            return [...prev, userId];
+          }
+        });
+      };
     return (
         <div className={styles.user}>
             <div className={styles.body}>
-                <h3 className={styles.id}>{users.indexOf(user) + 1}</h3>
+                <h3 className={styles.id}>
+                    <Checkbox
+                        sx={{
+                            color: '#b7dce9',
+                            '&.Mui-checked': {
+                                color:'#b7dce9',
+                            },
+                        }}
+                        checked={checkbox.includes(user.id)}
+                        onChange={() => handleSelect(user.id)}
+                    />
+                </h3>
                 <h3 className={styles.login}>{user.login}</h3>
                 <h3 className={styles.password}>
                     {passViss ? atob(user.password) : atob(user.password).replace(/./g, '*')}

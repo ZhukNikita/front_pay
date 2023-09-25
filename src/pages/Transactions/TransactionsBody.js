@@ -1,4 +1,4 @@
-import styles from '../../styles/TransactionsBody.module.scss'
+import styles from './TransactionsBody.module.scss'
 import TransactionsChart from './TransactionsChart'
 
 export default function Transactions() {

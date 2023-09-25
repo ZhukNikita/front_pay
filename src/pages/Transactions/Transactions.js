@@ -1,5 +1,5 @@
 import NavBar from '../../components/NavBar'
-import styles from '../../styles/Transactions.module.scss'
+import styles from './Transactions.module.scss'
 import TransactionsBody from './TransactionsBody'
 
 

@@ -5,7 +5,7 @@ import { PieChart, pieArcLabelClasses , pieArcClasses} from '@mui/x-charts/PieCh
 const data = [
   { label: 'Group A', value: 333, color: '#325A96' },
   { label: 'Group B', value: 333, color: 'rgb(122, 12, 56)' },
-  { label: 'Group C', value: 333, color: 'rgb(84, 214, 44)' },
+  { label: 'Group C', value: 333, color: 'rgb(34, 154, 22)' },
 ];
 
 const sizing = {

@@ -13,6 +13,8 @@ import { useEffect, useState } from 'react';
 import axios from "axios";
 import secureLocalStorage from 'react-secure-storage';
 import Transactions from './pages/Transactions/Transactions';
+import PinpayTransactions from './pages/PinpayTransactions/PinpayTransactions';
+import P2PTransactions from './pages/P2PTransations/P2PTransactions';
 
 
 
@@ -59,6 +61,8 @@ function App() {
         <Route path='/success' element={<Success />} />
         <Route path='/panel' element={<Panel />} />
         <Route path='/transactions' element={<Transactions/>} />
+        <Route path='/pinpay-transactions' element={<PinpayTransactions/>} />
+        <Route path='/p2p-transactions' element={<P2PTransactions/>} />
         <Route path='/login' element={<Login />} />
       </Routes>
     </div>

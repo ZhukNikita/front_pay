@@ -1,0 +1,16 @@
+@import '../../styles/vars.scss';
+
+.body {
+    padding: 30px;
+    width: 76%;
+    height: 93vh;
+    font-family: 'Nunito', sans-serif;
+
+    .header {
+        @include flex(center, space-between);
+
+        h1 {
+            color: rgb(183, 220, 233);
+        }
+    }
+}
