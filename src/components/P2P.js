@@ -86,6 +86,20 @@ export default function P2P() {
     }
   }, [seconds]);
 
+  function copyToClipboard(text) {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text)
+        .then(() => {
+          console.log('Текст скопирован в буфер обмена.');
+        })
+        .catch((err) => {
+          console.error('Ошибка при копировании текста: ', err);
+        });
+    } else {
+      console.error('Браузер не поддерживает API clipboard.');
+    }
+  }
+
   return (
     <div className={styles.body}>
       <h1>P2P</h1>
@@ -135,7 +149,7 @@ export default function P2P() {
           </div>
           <ContentCopyIcon
             className={styles.cardButton}
-            onClick={() => navigator.clipboard.writeText(url + '\n' + recipient + '\n' + bank + '\n' + bic)}
+            onClick={() => copyToClipboard(url + '\n' + recipient + '\n' + bank + '\n' + bic)}
             sx={{ padding: '5px', width:'40px' , height:'40px', borderRadius: '4px', cursor: 'pointer', border: 'none' }}
           />
           {/* <button style={{ padding: '15px 5px',fontFamily:"'Nunito',sans-serif" , backgroundColor:'#38b6ff', color:'white' ,  borderRadius: '4px', cursor: 'pointer', border: 'none' }}>
