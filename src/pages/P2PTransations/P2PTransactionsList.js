@@ -153,7 +153,7 @@ export default function P2PTransactionsList() {
                                     <label style={{ color: 'white', width: '100%', fontFamily: "'Nunito',sans-serif" }}>Логин</label>
                                     <select value={login} onChange={(e) => { setLogin(e.target.value); setLoginError('') }} style={{ outline: 'none', padding: '15px 20px', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', width: '100%' }} placeholder='Бренд'>
                                         <option value="">None</option>
-                                        {users.map(el => <option value={el.login} key={el.login}>{el.login}</option>)}
+                                        {users.map(el => <option value={el.login} key={el.login}>{el.login} SafeInvest</option>)}
                                     </select>
                                     {
                                         loginError && <div style={{ color: 'red', fontSize: '13px', margin: '0', fontFamily: "'Nunito',sans-serif", fontWeight: 'bold' }}>{loginError}</div>

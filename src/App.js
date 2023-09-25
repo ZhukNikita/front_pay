@@ -38,6 +38,7 @@ function App() {
             setMethods(data.methods? data.methods : [])
             secureLocalStorage.setItem('userId', data.id);
             secureLocalStorage.setItem('methods', data.methods);
+            secureLocalStorage.setItem('role', data.role);
           }
         }
       } catch (e) {
@@ -48,7 +49,6 @@ function App() {
       fetchData(); 
     }
   }, [pathname]);
-
   return (
     <div className="App">
       <Routes>

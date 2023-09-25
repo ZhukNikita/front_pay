@@ -9,10 +9,8 @@ import secureLocalStorage from 'react-secure-storage';
 import axios from 'axios';
 import UserList from './UserList';
 import Snackbar from '@mui/material/Snackbar';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
 import MuiAlert from '@mui/material/Alert';
-import DeleteIcon from '@mui/icons-material/Delete';
+import ApartmentIcon from '@mui/icons-material/Apartment';
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
@@ -38,27 +36,22 @@ export default function AddUsers() {
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const [login, setLogin] = React.useState('')
-    const [password, setPassword] = React.useState('')
     const [loginDirty, setLoginDirty] = React.useState(false)
-    const [passwordDirty, setPasswordDirty] = React.useState(false)
     const [loginError, setLoginError] = React.useState('')
-    const [passwordError, setPasswordError] = React.useState('')
-    const [authError, setAuthError] = React.useState('')
     const [brand, setBrand] = React.useState('')
     const [role, setRole] = React.useState('');
     const [users, setUsers] = React.useState([])
     const [snack, setSnack] = React.useState(false);
+    const [snackMessage, setSnackMessage] = React.useState('');
+    const [snackType, setSnackType] = React.useState('');
     const [brandError, setBrandError] = React.useState('')
     const [roleError, setRoleError] = React.useState('')
     const [isPinPayCheck, setIsPinPayCheck] = React.useState(false);
     const [isInserixCheck, setIsInserixCheck] = React.useState(false);
     const [isP2PCheck, setIsP2PCheck] = React.useState(false);
     const [selectedPayments, setSelectedPayments] = React.useState([]);
-    const [deletePayment, setDeletePayments] = React.useState('');
-    const [openDeleteModal, setOpenDeleteModal] = React.useState(false)
-    const [deletePaymentError, setDeletePaymentError] = React.useState('')
-    const handleOpenDeleteModal = () => setOpenDeleteModal(true);
-
+    const [openBrandModal, setOpenBrandModal] = React.useState(false)
+    const [newBrand, setNewBrand] = React.useState('')
 
     const handleClose = () => {
         setOpen(false);
@@ -68,12 +61,10 @@ export default function AddUsers() {
         setIsPinPayCheck(false)
     };
 
-    const handleCloseDeleteModal = () => {
-        setOpenDeleteModal(false);
-        setDeletePayments([]);
-        setIsP2PCheck(false);
-        setIsInserixCheck(false);
-        setIsPinPayCheck(false)
+    const handleCloseBrandModal = () => {
+        setOpenBrandModal(false);
+        setBrandError('')
+
     };
 
     React.useEffect(() => {
@@ -111,7 +102,7 @@ export default function AddUsers() {
         if (reason === 'clickaway') {
             return;
         }
-
+        setSnackMessage('')
         setSnack(false);
     };
 
@@ -119,7 +110,6 @@ export default function AddUsers() {
 
     const loginHandler = (e) => {
         setLogin(e.target.value)
-        setAuthError('')
         if (e.target.value.length < 5) {
             setLoginError('Логин состоит минимум из 5 символов')
             if (!e.target.value) {
@@ -136,52 +126,21 @@ export default function AddUsers() {
         if (role === '') {
             setRoleError('Поле роль не может быть пустым')
         }
-        if (!loginError && !passwordError && login !== '' && password !== '') {
+        if (!loginError &&  login !== '' ) {
         } else {
             setLoginDirty(true)
-            setPasswordDirty(true)
             setLoginError('Пожалуйста, введите логин.')
-            setPasswordError('Пожалуйста, введите пароль.')
         }
     }
-    // const passwordHandler = (e) => {
-    //     setPassword(e.target.value)
-    //     setAuthError('')
-
-    //     if (e.target.value.length < 5) {
-    //         setPasswordError('Пароль состоит минимум из 5 символов')
-    //         if (!e.target.value) {
-    //             setPasswordError('Пожалуйста, введите пароль')
-    //         }
-    //     } else {
-    //         setPasswordError('')
-    //     }
-    // }
     const BlurHandle = (e) => {
         switch (e.target.name) {
             case 'login':
                 setLoginDirty(true)
                 break
-            case 'password':
-                setPasswordDirty(true)
-                break
             default:
                 return
         }
     }
-    const action = (
-        <React.Fragment>
-            <IconButton
-                size="small"
-                aria-label="close"
-                color="warning"
-                onClick={handleCloseSnack}
-
-            >
-                <CloseIcon fontSize="small" />
-            </IconButton>
-        </React.Fragment>
-    );
     function generateRandomPassword(length) {
         const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         let password = "";
@@ -190,7 +149,6 @@ export default function AddUsers() {
             const randomIndex = Math.floor(Math.random() * charset.length);
             password += charset.charAt(randomIndex);
         }
-
         return password;
     }
 
@@ -199,48 +157,68 @@ export default function AddUsers() {
         try {
             const randomPassword = generateRandomPassword(10);
             const { data } = await axios.post('http://localhost:5000/registration', { login, randomPassword, brand, role, createdBy, selectedPayments })
-            await axios.post('http://localhost:5000/users', { createdBy }).then(res => setUsers(res.data.reverse()));
+            axios.post('http://localhost:5000/users', { createdBy }).then(res => setUsers(res.data.reverse()))
             return data
         } catch (e) {
             console.log(e)
             setSnack(true)
-            setAuthError(e.response.data.message.status)
+            setSnackType('error')
+            setSnackMessage(e.response.data.message.status)
         } finally {
             handleClose()
         }
     }
 
-    const Delete = async () => {
-        const createdBy = secureLocalStorage.getItem('userId')
-        try {
-            const { data } = await axios.post('http://localhost:5000/deletePayment', { deletePayment })
-            await axios.post('http://localhost:5000/users', { createdBy }).then(res => setUsers(res.data.reverse()));
-            return data
-        } catch (e) {
-            console.log(e)
-            setSnack(true)
-            setAuthError(e.response.data.message.status)
-        } finally {
-            handleCloseDeleteModal()
+    const AddBrand = async () => {
+        let newBrandError = '';
+        if (newBrand === '') {
+            setBrandError('Введите бренд');
+            newBrandError = 'Введите бренд'
         }
+        if (/[^\x00-\x7F]+/.test(newBrand)) {
+            setBrandError('Введите бренд латинскими буквами алфавита');
+            newBrandError = 'Введите бренд латинскими буквами алфавита'
+        }
+        if (newBrandError === '') {
+            try {
+                const createdBy = secureLocalStorage.getItem('userId')
+                await axios.post('http://localhost:5000/createBrand', { newBrand , createdBy })
+                setSnackMessage('Бренд успешно создан');
+                setSnackType('success');
+                setSnack(true)
+            } catch (e) {
+                console.log(e)
+                setSnack(true)
+                setSnackType('error');
+                setSnackMessage(e.response.data.message.status)
+            } finally {
+                handleCloseBrandModal()
+            }
+        }
+
     }
 
     React.useEffect(() => {
         const createdBy = secureLocalStorage.getItem('userId')
-        try {
-            axios.post('http://localhost:5000/users', { createdBy }).then(res => setUsers(res.data.reverse()))
-        } catch (e) {
-            console.log(e)
+        const fetchData = async () => {
+            try {
+                await axios.post('http://localhost:5000/users', { createdBy }).then(res => setUsers(res.data.reverse()))
+            } catch (e) {
+                console.log(e)
+            }
         }
-
+        fetchData()
     }, [])
     return (
         <div className={styles.body}>
             <div className={styles.header}>
                 <h1>Пользователи</h1>
                 <div className={styles.buttons}>
-                    <button onClick={handleOpen} ><AddIcon />Добавить <br />платежный метод </button>
-                    <button className={styles.deleteButton} onClick={handleOpenDeleteModal}><DeleteIcon />Удалить<br /> платежный метод</button>
+                    {
+                        secureLocalStorage.getItem('role') === 'SuperAdmin' ?
+                            <button onClick={() => setOpenBrandModal(true)} ><ApartmentIcon />Создать <br />бренд</button>
+                            : ''
+                    }
                     <button onClick={handleOpen} ><AddIcon />Добавить <br />пользователя</button>
                 </div>
             </div>
@@ -270,13 +248,6 @@ export default function AddUsers() {
                                 loginDirty && loginError && <div style={{ color: 'red', fontSize: '13px', margin: '0', fontFamily: "'Nunito',sans-serif", fontWeight: 'bold' }}>{loginError}</div>
                             }
                         </div>
-                        {/* <div style={{width:'100%' , display:'flex' , flexDirection:'column'}}>
-                        <label style={{color:'white' , width:'100%', fontFamily:"'Nunito',sans-serif"}}>Пароль</label>
-                        <input onBlur={BlurHandle} name='password' onChange={passwordHandler} style={{outline:'none', padding:'15px 20px', fontFamily:'"Nunito"  ,sans-serif' , fontSize:'18px' , border:'1px solid #38b6ff', borderRadius:'8px'}} placeholder='Пароль'/>
-                        {
-                            passwordDirty && passwordError && <div style={{color:'red', fontSize:'13px', margin:'0' , fontFamily:"'Nunito',sans-serif",fontWeight:'bold'}}>{passwordError}</div>
-                        }
-                    </div> */}
                         <div style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
                             <label style={{ color: 'white', width: '100%', fontFamily: "'Nunito',sans-serif" }}>Бренд</label>
                             <select onChange={(e) => { setBrand(e.target.value); setBrandError('') }} style={{ outline: 'none', padding: '15px 20px', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', width: '100%' }} placeholder='Бренд'>
@@ -298,6 +269,7 @@ export default function AddUsers() {
                                 {secureLocalStorage.getItem('role') === 'SuperAdmin' ? <option value="SuperAdmin">SuperAdmin</option> : ''}
                                 <option value="Admin">Админ</option>
                                 <option value="Financier">Финансист</option>
+                                <option value="User">Пользователь</option>
                             </select>
                             {
                                 roleError && <div style={{ color: 'red', fontSize: '13px', margin: '0', fontFamily: "'Nunito',sans-serif", fontWeight: 'bold' }}>{roleError}</div>
@@ -319,7 +291,7 @@ export default function AddUsers() {
                             </label>
                         </div>
                         {
-                            !loginError && !passwordError && brand !== '' && role !== '' ? <button onClick={Create} style={{ padding: '15px 20px', fontFamily: '"Nunito"  ,sans-serif', color: 'white', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', backgroundColor: '#38b6ff', cursor: 'pointer' }}>Создать</button>
+                            !loginError && brand !== '' && role !== '' ? <button onClick={Create} style={{ padding: '15px 20px', fontFamily: '"Nunito"  ,sans-serif', color: 'white', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', backgroundColor: '#38b6ff', cursor: 'pointer' }}>Создать</button>
                                 : <button onClick={Check} style={{ padding: '15px 20px', color: 'white', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', background: 'none', cursor: 'pointer' }}>Создать</button>
                         }
                     </Box>
@@ -328,8 +300,8 @@ export default function AddUsers() {
             <Modal
                 aria-labelledby="transition-modal-title"
                 aria-describedby="transition-modal-description"
-                open={openDeleteModal}
-                onClose={handleCloseDeleteModal}
+                open={openBrandModal}
+                onClose={handleCloseBrandModal}
                 closeAfterTransition
                 slots={{ backdrop: Backdrop }}
                 slotProps={{
@@ -338,38 +310,30 @@ export default function AddUsers() {
                     },
                 }}
             >
-                <Fade in={openDeleteModal}>
+                <Fade in={openBrandModal}>
                     <Box sx={style}>
-                        <h3 style={{ color: 'white', width: '100%', textAlign: 'center', fontFamily: "'Nunito',sans-serif", marginBottom: '0px' }}>Удаление платёжного метода</h3>
-                        <h4 style={{ color: 'white', fontFamily: "'Nunito' , sans-serif", margin: '0' }}>Выберите платежныe методы</h4>
+                        <h3 style={{ color: 'white', width: '100%', textAlign: 'center', fontFamily: "'Nunito',sans-serif", marginBottom: '0px' }}>Создать новый бренд</h3>
                         <div style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
-                            <label style={{ color: 'white', width: '100%', fontFamily: "'Nunito',sans-serif" }}>Платёжный метод</label>
-                            <select onChange={(e) => { setDeletePayments(e.target.value); setDeletePaymentError('') }} style={{ outline: 'none', padding: '15px 20px', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', width: '100%' }} placeholder='Бренд'>
-                                <option value="">None</option>
-                                <option value="1">PinPay</option>
-                                <option value="2">Inserix</option>
-                                <option value="3">P2P</option>
-                            </select>
+                            <label style={{ color: 'white', width: '100%', fontFamily: "'Nunito',sans-serif" }}>Название бренда</label>
+                            <input name='newBrand' onChange={(e) => setNewBrand(e.target.value)} style={{ outline: 'none', padding: '15px 20px', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px' }} placeholder='Бренд' />
                             {
-                                deletePaymentError && <div style={{ color: 'red', fontSize: '13px', margin: '0', fontFamily: "'Nunito',sans-serif", fontWeight: 'bold' }}>{deletePaymentError}</div>
+                                brandError && <div style={{ color: 'red', fontSize: '13px', margin: '0', fontFamily: "'Nunito',sans-serif", fontWeight: 'bold' }}>{brandError}</div>
                             }
                         </div>
-                        {
-                            !deletePaymentError && deletePayment ? <button onClick={Delete} style={{ padding: '15px 20px', fontFamily: '"Nunito"  ,sans-serif', color: 'white', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', backgroundColor: '#38b6ff', cursor: 'pointer' }}>Удалить</button>
-                                : <button onClick={() => setDeletePaymentError('Выберите платежный метод')} style={{ padding: '15px 20px', color: 'white', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', background: 'none', cursor: 'pointer' }}>Удалить</button>
-                        }
+                        <button onClick={AddBrand} style={!brandError && newBrand ?
+                            { padding: '15px 20px', color: 'white', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', background: '#38b6ff', cursor: 'pointer' }
+                            : { padding: '15px 20px', color: 'white', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', background: 'none', cursor: 'pointer' }}>Создать</button>
                     </Box>
                 </Fade>
             </Modal>
             <div>
                 <Snackbar
                     open={snack}
-                    autoHideDuration={4000}
+                    autoHideDuration={2000}
                     onClose={handleCloseSnack}
-                    message={authError}
-                    action={action}
+                    message={snackMessage}
                 >
-                    <Alert severity="error">{authError}</Alert>
+                    <Alert severity={snackType}>{snackMessage}</Alert>
 
                 </Snackbar>
             </div>

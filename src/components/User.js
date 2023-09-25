@@ -44,7 +44,7 @@ const style = {
     width: '300px'
 };
 
-export default function User({ user, users, setUsers, selectAll, setSelectAll , setCheckbox , checkbox }) {
+export default function User({ user, users, setUsers, selectAll, setSelectAll, setCheckbox, checkbox }) {
     const [passViss, setIsPassViss] = useState(false);
     const [openModal, setOpenModal] = React.useState(false);
     const [login, setLogin] = React.useState(user.login)
@@ -65,7 +65,7 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll , 
     const [isP2PCheck, setIsP2PCheck] = React.useState(user.methods.includes('P2P'));
     const [selectedPayments, setSelectedPayments] = React.useState([]);
 
-    
+
     React.useEffect(() => {
         setSelectedPayments(prevSelectedPayments => {
             let updatedSelectedPayments = [...prevSelectedPayments];
@@ -107,11 +107,16 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll , 
             if (!user.methods.includes('P2P')) {
                 setIsP2PCheck(false)
             }
+            setBrand(user.brand)
+            setRole(user.role)
+            setLogin(user.login)
+            setPassword(atob(user.password))
         }
 
     }, [user]);
 
     const handleOpen = () => setOpenModal(true);
+
     const handleModalClose = () => {
         setOpenModal(false)
         setLogin(user.login)
@@ -207,17 +212,17 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll , 
                     const createdBy = secureLocalStorage.getItem('userId')
                     const id = user.id
                     const { data } = await axios.post('http://localhost:5000/deleteUser', { id, createdBy });
-                    await axios.post('http://localhost:5000/users', { createdBy }).then(res => setUsers(res.data.reverse()));
+                    axios.post('http://localhost:5000/users', { createdBy }).then(res => setUsers(res.data.reverse()))
+                    Swal.fire(
+                        "",
+                        'Пользователь успешно удалён!',
+                        'success'
+                    )
                 }
                 catch (e) {
                     setSnack(true)
                     setAuthError(e.response.data.message.status)
                 }
-                Swal.fire(
-                    "",
-                    'Пользователь удалён!',
-                    'success'
-                )
             }
         })
     }
@@ -226,7 +231,7 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll , 
         const id = user.id
         try {
             const { data } = await axios.patch('http://localhost:5000/editUser', { login, password, brand, role, id, selectedPayments })
-            await axios.post('http://localhost:5000/users', { createdBy }).then(res => setUsers(res.data.reverse()));
+            axios.post('http://localhost:5000/users', { createdBy }).then(res => setUsers(res.data.reverse()))
             return data
         } catch (e) {
             console.log(e)
@@ -261,16 +266,16 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll , 
     });
     const handleSelect = (userId) => {
         if (selectAll) {
-          setSelectAll(false);
+            setSelectAll(false);
         }
         setCheckbox((prev) => {
-          if (prev.includes(userId)) {
-            return prev.filter((id) => id !== userId);
-          } else {
-            return [...prev, userId];
-          }
+            if (prev.includes(userId)) {
+                return prev.filter((id) => id !== userId);
+            } else {
+                return [...prev, userId];
+            }
         });
-      };
+    };
     return (
         <div className={styles.user}>
             <div className={styles.body}>
@@ -279,7 +284,7 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll , 
                         sx={{
                             color: '#b7dce9',
                             '&.Mui-checked': {
-                                color:'#b7dce9',
+                                color: '#b7dce9',
                             },
                         }}
                         checked={checkbox.includes(user.id)}
@@ -392,6 +397,7 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll , 
                                     {secureLocalStorage.getItem('role') === 'SuperAdmin' ? <option value="SuperAdmin">SuperAdmin</option> : ''}
                                     <option value="Admin">Админ</option>
                                     <option value="Financier">Финансист</option>
+                                    <option value="User">Пользователь</option>
                                 </select>
                                 {
                                     roleError && <div style={{ color: 'red', fontSize: '13px', margin: '0', fontFamily: "'Nunito',sans-serif", fontWeight: 'bold' }}>{roleError}</div>
@@ -428,7 +434,7 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll , 
                 message={authError}
                 action={action}
             >
-                <Alert severity="error">{authError}</Alert>
+                <Alert severity="error" sx={{fontFamily:"'Nunito' , sans-serif"}}>{authError}</Alert>
             </Snackbar>
         </div>
     )

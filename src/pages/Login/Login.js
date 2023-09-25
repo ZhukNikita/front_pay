@@ -77,7 +77,7 @@ export default function Login() {
         }
     }
     if (secureLocalStorage.getItem('isLogged') === true) {
-        if (secureLocalStorage.getItem('role') === 'SuperAdmin') {
+        if (secureLocalStorage.getItem('role') === 'SuperAdmin' || secureLocalStorage.getItem('role') === 'Admin'  || secureLocalStorage.getItem('role') === 'Financier') {
             return <Navigate to={'/panel'} />
         } else {
             return <Navigate to={'/payments_methods'} />

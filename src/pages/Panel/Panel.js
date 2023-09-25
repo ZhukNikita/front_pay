@@ -1,7 +1,17 @@
-import styles from '../../styles/Panel.module.scss'
-import NavBar from '../../components/NavBar'
-import AddUsers from '../../components/AddUsers'
+import styles from '../../styles/Panel.module.scss';
+import NavBar from '../../components/NavBar';
+import AddUsers from '../../components/AddUsers';
+import secureLocalStorage from 'react-secure-storage';
+import {Navigate} from 'react-router-dom'
 export default function Panel() {
+    
+    if(!secureLocalStorage.getItem('isLogged')){
+        return <Navigate to={'/login'}/>
+    }
+    if(secureLocalStorage.getItem('role') === 'User' && secureLocalStorage.getItem('isLogged')){
+        return <Navigate to={'/'}/>
+    }
+
     return (
         <div className={styles.body}>
             <NavBar/>

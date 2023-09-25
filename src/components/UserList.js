@@ -15,25 +15,27 @@ import Snackbar from '@mui/material/Snackbar';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import MuiAlert from '@mui/material/Alert';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+
 const Alert = React.forwardRef(function Alert(props, ref) {
-    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    bgcolor: 'background.paper',
-    boxShadow: 24,
-    p: 4,
-    borderRadius: '12px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'column',
-    gap: '15px',
-    backgroundColor: '#233e68',
-    width: "300px"
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  bgcolor: 'background.paper',
+  boxShadow: 24,
+  p: 4,
+  borderRadius: '12px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  flexDirection: 'column',
+  gap: '15px',
+  backgroundColor: '#233e68',
+  width: "300px"
 };
 
 
@@ -50,19 +52,63 @@ export default function UserList({ users, setUsers }) {
   const [deletePaymentError, setDeletePaymentError] = React.useState('')
   const [snack, setSnack] = React.useState(false);
   const [snackError, setSnackError] = React.useState('')
-
+  const [roleSort, setRoleSort] = React.useState(null)
+  const [brandSort, setBrandSort] = React.useState(null)
+  const [loginSort, setLoginSort] = React.useState(null)
+  const [deleteOrAddPayment, setDeleteOrAddPayment] = React.useState('')
   const handleCloseSnack = (event, reason) => {
-      if (reason === 'clickaway') {
-          return;
-      }
+    if (reason === 'clickaway') {
+      return;
+    }
 
-      setSnack(false);
+    setSnack(false);
   };
+  useEffect(() => {
+    if (loginSort) {
+      const sortedUsers = [...users].sort((a, b) => a.login.localeCompare(b.login));
+      setUsers(sortedUsers);
+      setBrandSort(null)
+      setRoleSort(null)
+    }
+    if (loginSort === false) {
+      const sortedUsers = [...users].sort((a, b) => b.login.localeCompare(a.login));
+      setUsers(sortedUsers);
+      setBrandSort(null)
+      setRoleSort(null)
+    }
+  }, [loginSort]);
+  useEffect(() => {
+    if (roleSort) {
+      const sortedUsers = [...users].sort((a, b) => a.role.localeCompare(b.role));
+      setUsers(sortedUsers);
+      setBrandSort(null)
+      setLoginSort(null)
+    }
+    if (roleSort === false) {
+      const sortedUsers = [...users].sort((a, b) => b.role.localeCompare(a.role));
+      setUsers(sortedUsers);
+      setBrandSort(null)
+      setLoginSort(null)
+    }
+  }, [roleSort]);
+  useEffect(() => {
+    if (brandSort) {
+      const sortedUsers = [...users].sort((a, b) => a.brand.localeCompare(b.brand));
+      setUsers(sortedUsers);
+      setRoleSort(null)
+      setLoginSort(null)
+    }
+    if (brandSort === false) {
+      const sortedUsers = [...users].sort((a, b) => b.brand.localeCompare(a.brand));
+      setUsers(sortedUsers);
+      setRoleSort(null)
+      setLoginSort(null)
+    }
+  }, [brandSort]);
 
   const handleCloseDeleteModal = () => {
-      setOpenDeleteModal(false);
+    setOpenDeleteModal(false);
   };
-  console.log(checkbox)
   useEffect(() => {
     if (users) {
       const filtered = users.filter(
@@ -83,11 +129,9 @@ export default function UserList({ users, setUsers }) {
   const handleSelectAll = () => {
     setSelectAll(!selectAll);
     if (!selectAll) {
-      // Выбрать всех пользователей
       const allUserIds = filteredUsers.map((user) => user.id);
       setCheckbox(allUserIds);
     } else {
-      // Снять выбор со всех пользователей
       setCheckbox([]);
     }
   };
@@ -95,28 +139,40 @@ export default function UserList({ users, setUsers }) {
     const createdBy = secureLocalStorage.getItem('userId')
 
     try {
-        const { data } = await axios.post('http://localhost:5000/deletePayment', { deletePayment , checkbox })
-        await axios.post('http://localhost:5000/users', { createdBy }).then(res => setUsers(res.data.reverse()));
-        return data
+      const { data } = await axios.post('http://localhost:5000/deletePayment', { deletePayment, checkbox })
+      await axios.post('http://localhost:5000/users', { createdBy }).then(res => setUsers(res.data.reverse()))
+      return data
     } catch (e) {
-        console.log(e)
+      console.log(e)
     } finally {
-        handleCloseDeleteModal()
+      handleCloseDeleteModal()
     }
-}    
-const action = (
-  <React.Fragment>
+  }
+  const AddPayment = async ()=>{
+    const createdBy = secureLocalStorage.getItem('userId')
+    try {
+      const { data } = await axios.post('http://localhost:5000/addPayment', { deletePayment, checkbox })
+      await axios.post('http://localhost:5000/users', { createdBy }).then(res => setUsers(res.data.reverse()))
+      return data
+    } catch (e) {
+      console.log(e)
+    } finally {
+      handleCloseDeleteModal()
+    }
+  }
+  const action = (
+    <React.Fragment>
       <IconButton
-          size="small"
-          aria-label="close"
-          color="warning"
-          onClick={handleCloseSnack}
+        size="small"
+        aria-label="close"
+        color="warning"
+        onClick={handleCloseSnack}
 
       >
-          <CloseIcon fontSize="small" />
+        <CloseIcon fontSize="small" />
       </IconButton>
-  </React.Fragment>
-);
+    </React.Fragment>
+  );
   return (
     <div className={styles.userList}>
       <div className={styles.search}>
@@ -127,35 +183,69 @@ const action = (
           onChange={(e) => setSearch(e.target.value)}
         />
         <div className={styles.buttons}>
-          <button><AddIcon />Добавить метод</button>
-          <button className={styles.deleteButton}  onClick={()=>{
-            if(checkbox.length === 0){
+          <button onClick={() => {
+            if (checkbox.length === 0) {
               setSnackError('Не выбран ни один пользователь!')
               setSnack(true)
-            }else{
+            } else {
+              setDeleteOrAddPayment('add')
               handleOpenDeleteModal()
             }
-            }}>
-              <DeleteIcon />Удалить метод
-              </button>
+          }}><AddIcon />Добавить метод</button>
+          <button className={styles.deleteButton} onClick={() => {
+            if (checkbox.length === 0) {
+              setSnackError('Не выбран ни один пользователь!')
+              setSnack(true)
+            } else {
+              setDeleteOrAddPayment('delete')
+              handleOpenDeleteModal()
+            }
+          }}>
+            <DeleteIcon />Удалить метод
+          </button>
         </div>
       </div>
       <div className={styles.header}>
         <h3 style={{ width: '4vw' }}>
-          <Checkbox
-            sx={{
-              color: '#b7dce9',
-              '&.Mui-checked': {
-                color: '#b7dce9',
-              },
-            }}
-            checked={selectAll}
-            onChange={() => handleSelectAll()}
-          /></h3>
-        <h3 style={{ width: '11vw' }}>Логин</h3>
+          {
+            users.length > 0 ?
+              <Checkbox
+                sx={{
+                  color: '#b7dce9',
+                  '&.Mui-checked': {
+                    color: '#b7dce9',
+                  },
+                }}
+                checked={selectAll}
+                onChange={() => handleSelectAll()}
+              /> : ''
+          }
+        </h3>
+        <h3 style={{ width: '11vw', display: 'flex', alignItems: 'center', gap: '10px' }}>Логин
+          <ArrowUpwardIcon
+            onClick={() => { loginSort ? setLoginSort(!loginSort) : setLoginSort(true) }}
+            sx={loginSort ?
+              { width: '17px', transition: 'all 0.3s ease', transform: 'rotate(180deg)', cursor: 'pointer' }
+              : { width: '17px', transition: 'all 0.3s ease', transform: 'rotate(0deg)', cursor: 'pointer' }}
+          />
+        </h3>
         <h3 style={{ width: '10vw' }}>Пароль</h3>
-        <h3 style={{ width: '140px' }}>Бренд</h3>
-        <h3 style={{ width: '130px' }}>Роль</h3>
+        <h3 style={{ width: '140px', display: 'flex', alignItems: 'center', gap: '10px' }}>Бренд
+          <ArrowUpwardIcon
+            onClick={() => { brandSort ? setBrandSort(!brandSort) : setBrandSort(true) }}
+            sx={brandSort ?
+              { width: '17px', transition: 'all 0.3s ease', transform: 'rotate(180deg)', cursor: 'pointer' }
+              : { width: '17px', transition: 'all 0.3s ease', transform: 'rotate(0deg)', cursor: 'pointer' }}
+          />
+        </h3>
+        <h3 style={{ width: '130px', display: 'flex', alignItems: 'center', gap: '10px' }}>Роль
+          <ArrowUpwardIcon
+            onClick={() => { roleSort ? setRoleSort(!roleSort) : setRoleSort(true) }}
+            sx={roleSort ?
+              { width: '17px', transition: 'all 0.3s ease', transform: 'rotate(180deg)', cursor: 'pointer' }
+              : { width: '17px', transition: 'all 0.3s ease', transform: 'rotate(0deg)', cursor: 'pointer' }}
+          />
+        </h3>
         <h3 style={{ width: '190px' }}>Платежные методы</h3>
       </div>
       {currentUser.map((el) => (
@@ -178,53 +268,72 @@ const action = (
         />
       </div>
       <Modal
-                aria-labelledby="transition-modal-title"
-                aria-describedby="transition-modal-description"
-                open={openDeleteModal}
-                onClose={handleCloseDeleteModal}
-                closeAfterTransition
-                slots={{ backdrop: Backdrop }}
-                slotProps={{
-                    backdrop: {
-                        timeout: 500,
-                    },
-                }}
-            >
-                <Fade in={openDeleteModal}>
-                    <Box sx={style}>
-                        <h3 style={{ color: 'white', width: '100%', textAlign: 'center', fontFamily: "'Nunito',sans-serif", marginBottom: '0px' }}>Удаление платёжного метода</h3>
-                        <h4 style={{ color: 'white', fontFamily: "'Nunito' , sans-serif", margin: '0' }}>Выберите платежныe методы</h4>
-                        <div style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
-                            <label style={{ color: 'white', width: '100%', fontFamily: "'Nunito',sans-serif" }}>Платёжный метод</label>
-                            <select onChange={(e) => { setDeletePayments(e.target.value); setDeletePaymentError('') }} style={{ outline: 'none', padding: '15px 20px', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', width: '100%' }} placeholder='Бренд'>
-                                <option value="">None</option>
-                                <option value="1">PinPay</option>
-                                <option value="2">Inserix</option>
-                                <option value="3">P2P</option>
-                            </select>
-                            {
-                                deletePaymentError && <div style={{ color: 'red', fontSize: '13px', margin: '0', fontFamily: "'Nunito',sans-serif", fontWeight: 'bold' }}>{deletePaymentError}</div>
-                            }
-                        </div>
-                        {
-                            !deletePaymentError && deletePayment ? <button onClick={Delete} style={{ padding: '15px 20px', fontFamily: '"Nunito"  ,sans-serif', color: 'white', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', backgroundColor: '#38b6ff', cursor: 'pointer' }}>Удалить</button>
-                                : <button onClick={() => setDeletePaymentError('Выберите платежный метод')} style={{ padding: '15px 20px', color: 'white', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', background: 'none', cursor: 'pointer' }}>Удалить</button>
-                        }
-                    </Box>
-                </Fade>
-            </Modal>
-            <div>
-                <Snackbar
-                    open={snack}
-                    autoHideDuration={4000}
-                    onClose={handleCloseSnack}
-                    message={snackError}
-                    action={action}
-                >
-                    <Alert severity="error">{snackError}</Alert>
-
-                </Snackbar>
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        open={openDeleteModal}
+        onClose={handleCloseDeleteModal}
+        closeAfterTransition
+        slots={{ backdrop: Backdrop }}
+        slotProps={{
+          backdrop: {
+            timeout: 500,
+          },
+        }}
+      >
+        <Fade in={openDeleteModal}>
+          <Box sx={style}>
+            <h3 style={{ color: 'white', width: '100%', textAlign: 'center', fontFamily: "'Nunito',sans-serif", marginBottom: '0px' }}>
+            {deleteOrAddPayment ==='delete'? 'Удаление платёжного метода' : 'Добавление платёжного метода'}
+            </h3>
+            <h4 style={{ color: 'white', fontFamily: "'Nunito' , sans-serif", margin: '0' }}>Выберите платежныe методы</h4>
+            <div style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
+              <label style={{ color: 'white', width: '100%', fontFamily: "'Nunito',sans-serif" }}>Платёжный метод</label>
+              <select onChange={(e) => { setDeletePayments(e.target.value); setDeletePaymentError('') }} style={{ outline: 'none', padding: '15px 20px', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', width: '100%' }} placeholder='Бренд'>
+                <option value="">None</option>
+                <option value="1">PinPay</option>
+                <option value="2">Inserix</option>
+                <option value="3">P2P</option>
+              </select>
+              {
+                deletePaymentError && <div style={{ color: 'red', fontSize: '13px', margin: '0', fontFamily: "'Nunito',sans-serif", fontWeight: 'bold' }}>{deletePaymentError}</div>
+              }
             </div>
+            {
+              !deletePaymentError && deletePayment ? 
+                <button onClick={deleteOrAddPayment ==='delete'?Delete:AddPayment} 
+              style={{ padding: '15px 20px',
+               fontFamily: '"Nunito"  ,sans-serif',
+               color: 'white',
+               fontSize: '18px',
+               border: '1px solid #38b6ff',
+               borderRadius: '8px',
+               backgroundColor: '#38b6ff',
+               cursor: 'pointer' }}>{deleteOrAddPayment ==='delete'?'Удалить':'Добавить'}</button>
+                : <button onClick={() => setDeletePaymentError('Выберите платежный метод')} 
+                style={{ padding: '15px 20px',
+                 color: 'white',
+                 fontFamily: '"Nunito"  ,sans-serif',
+                 fontSize: '18px',
+                 border: '1px solid #38b6ff',
+                 borderRadius: '8px',
+                 background: 'none',
+                 cursor: 'pointer' }}>{deleteOrAddPayment ==='delete'?'Удалить':'Добавить'}</button>
+            }
+          </Box>
+        </Fade>
+      </Modal>
+      <div>
+        <Snackbar
+          open={snack}
+          autoHideDuration={4000}
+          onClose={handleCloseSnack}
+          message={snackError}
+          action={action}
+        >
+          <Alert severity="error">{snackError}</Alert>
+
+        </Snackbar>
+      </div>
     </div>
   );
 }
