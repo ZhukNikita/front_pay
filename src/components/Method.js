@@ -26,7 +26,7 @@ export default function Method({link,name,instruction}) {
     const handleClose = () => setOpen(false);
     return(
         <div className={styles.methods} style={{position:'relative' , width:'40%'}}>
-        <Link to={link} className={styles.method} onClick={()=>console.log('click')}>
+        <Link to={link} className={styles.method}>
             <h3>{name}</h3>
         </Link>
         <HelpIcon onClick={handleOpen} sx={{position:'absolute',color:'#fff', zIndex:'3', top:'6px' , right:'8px'}}/>

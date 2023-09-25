@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from '../styles/P2P.module.scss';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import axios from 'axios';
-import { useLocation } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
 export default function P2P() {
@@ -16,7 +15,6 @@ export default function P2P() {
     let countdownWorker;
 
     if (typeof Worker !== 'undefined') {
-      // Если поддерживаются веб-рабочие
       const workerCode = `
         let timer;
 
@@ -26,13 +24,10 @@ export default function P2P() {
 
             timer = setInterval(() => {
               if (seconds === 0) {
-                seconds = 180
                 clearInterval(timer);
                 self.postMessage('countdownFinished');
                 
               } else {
-                self.postMessage(seconds);
-                seconds--;
                 seconds--;
                 self.postMessage(seconds);
               }
@@ -44,23 +39,6 @@ export default function P2P() {
       const blob = new Blob([workerCode], { type: 'application/javascript' });
       countdownWorker = new Worker(URL.createObjectURL(blob));
 
-      countdownWorker.onmessage = function(event) {
-        if (event.data === 'countdownFinished') {
-          // Обратный отсчет завершен
-          setSeconds(180);
-        } else {
-          // Получение обновленного состояния времени от Web Worker
-          setSeconds(event.data);
-        }
-      };
-
-      // Начало обратного отсчета при загрузке компонента
-      countdownWorker.postMessage('startCountdown');
-    }
-    if(seconds === 0){
-      countdownWorker.postMessage('countdownFinished')
-    }
-    if (seconds === 180) {
       countdownWorker.onmessage = function (event) {
         if (event.data === 'countdownFinished') {
 
@@ -72,25 +50,10 @@ export default function P2P() {
     }
     return () => {
       if (countdownWorker) {
-        countdownWorker.terminate(); // Завершение Web Worker при размонтировании компонента
+        countdownWorker.terminate();
       }
     };
   }, []);
-
-  // useEffect(() => {
-  //   if (status === 0 && seconds === 180) {
-  //     axios
-  //       .get('http://localhost:5000/p2p')
-  //       .then((response) => {
-  //         setUrl(response.data.IBAN);
-  //         console.log(response.data);
-  //       })
-  //       .catch((error) => {
-  //         console.error('Ошибка:', error);
-  //       });
-  //   }
-  // }, [status , seconds]);
-
   useEffect(() => {
     if (seconds === 180) {
       axios
@@ -129,7 +92,6 @@ export default function P2P() {
       <h2>Совершите перевод</h2>
       <div className={styles.card}>
         <div className={styles.cardHeader}>
-          <div>SPB</div>
           <div>Global Payments</div>
           <div>
             <span>{('0' + Math.floor((seconds / 60) % 60)).slice(-2)}:</span>
@@ -137,16 +99,6 @@ export default function P2P() {
           </div>
         </div>
         <div className={styles.cardBody}>
-          {url ? (
-            <h3 style={{ width: '200px', wordBreak: 'break-all' }}>{url}</h3>
-          ) : (
-            <h3 style={{ width: '210px', wordBreak: 'break-all' }}>Нет свободных IBAN</h3>
-          )}
-
-          <ContentCopyIcon
-            onClick={() => navigator.clipboard.writeText(url)}
-            sx={{ padding: '5px', borderRadius: '4px', cursor: 'pointer', border: 'none' }}
-          />
           <div className={styles.creditsBody}>
             <div className={styles.credits}>
               <span>Iban</span>
