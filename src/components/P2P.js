@@ -3,6 +3,7 @@ import styles from '../styles/P2P.module.scss';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import Clipboard from 'react-clipboard.js';
 
 export default function P2P() {
   const [url, setUrl] = useState('');
@@ -86,19 +87,6 @@ export default function P2P() {
     }
   }, [seconds]);
 
-  function copyToClipboard(text) {
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(text)
-        .then(() => {
-          console.log('Текст скопирован в буфер обмена.');
-        })
-        .catch((err) => {
-          console.error('Ошибка при копировании текста: ', err);
-        });
-    } else {
-      console.error('Браузер не поддерживает API clipboard.');
-    }
-  }
 
   return (
     <div className={styles.body}>
@@ -147,14 +135,14 @@ export default function P2P() {
               )}
             </div>
           </div>
-          <ContentCopyIcon
-            className={styles.cardButton}
-            onClick={() => copyToClipboard(url + '\n' + recipient + '\n' + bank + '\n' + bic)}
-            sx={{ padding: '5px', width:'40px' , height:'40px', borderRadius: '4px', cursor: 'pointer', border: 'none' }}
-          />
-          {/* <button style={{ padding: '15px 5px',fontFamily:"'Nunito',sans-serif" , backgroundColor:'#38b6ff', color:'white' ,  borderRadius: '4px', cursor: 'pointer', border: 'none' }}>
-                Скопировать
-          </button> */}
+          {
+            url ? <Clipboard data-clipboard-text={`${url + '\n' + recipient + '\n' + bank + '\n' + bic}`}>
+              <ContentCopyIcon
+                className={styles.cardButton}
+                sx={{ padding: '5px', width: '40px', height: '40px', borderRadius: '4px', cursor: 'pointer', border: 'none' }}
+              />
+            </Clipboard> : ''
+          }
         </div>
       </div>
     </div>

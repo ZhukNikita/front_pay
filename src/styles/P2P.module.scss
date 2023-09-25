@@ -11,7 +11,18 @@
     font-family: $font;
     color: #ffffff;
     text-align: center;
+    button{
+        background: none;
+        border: none;
+        .cardButton {
+            transition: all 0.2s ease;
+            color: white;
+        }
 
+        .cardButton:active {
+            background-color: #1e1e1e;
+        }
+    }
     h1 {
         margin-bottom: 0;
     }
@@ -48,13 +59,7 @@
                 }
             }
 
-            .cardButton {
-                transition: all 0.2s ease;
-            }
 
-            .cardButton:active {
-                background-color: #1e1e1e;
-            }
         }
     }
 }
