@@ -57,7 +57,7 @@ export default function P2P() {
   useEffect(() => {
     if (seconds === 180) {
       axios
-        .get('http://localhost:5000/p2p')
+        .get('http://156.67.52.151:5000/p2p')
         .then((response) => {
           setUrl(response.data.IBAN);
           setRecipient(response.data.Recipient);
