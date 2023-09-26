@@ -57,18 +57,18 @@ export default function PaymentsMethods() {
             brands: ['SafeInvest','VetalInvest','InfinityInvest','Revolut','RiseInvest']
         }
     ]
-    useEffect(()=>{
-        const fetchData = async ()=> {
-            try{
-                const {data} = await axios.get(`https://merchantaccount.dev/create-transaction/iycg4swp71f8hoq?uuid=885e17e7-60f7-4470-bf54-c1ee435bb9ed`)
-                console.log(data)
-            }
-            catch(e){
-                console.log(e)
-            }
-        }
-        fetchData()
-    },[])
+    // useEffect(()=>{
+    //     const fetchData = async ()=> {
+    //         try{
+    //             const {data} = await axios.get(`https://merchantaccount.dev/create-transaction/iycg4swp71f8hoq?uuid=885e17e7-60f7-4470-bf54-c1ee435bb9ed`)
+    //             console.log(data)
+    //         }
+    //         catch(e){
+    //             console.log(e)
+    //         }
+    //     }
+    //     fetchData()
+    // },[])
     const getMethods = () => {
         const brand = query.get('brand')
         const arr = methods.filter(el=> el.brands.includes(brand))
