@@ -66,7 +66,7 @@ export default function PaymentsMethods() {
             <button className={styles.logout} onClick={()=>{secureLocalStorage.removeItem('isLogged') ; secureLocalStorage.removeItem('role') ; secureLocalStorage.removeItem('methods') ; secureLocalStorage.removeItem('userId') ; window.location.href = '/login'}}>Вийти</button>
 
             <div className={styles.logo}>
-                <img src={Logo}/>
+                <img src={Logo} alt='logo'/>
             </div>
             <h2>Пожалуйста выберите метод платежа</h2>
             <div className={styles.methods}>

@@ -75,6 +75,27 @@
         @include flex(center, start);
         padding-left: 20px;
         font-size: 0.85vw;
+        .checkbox{
+            width: 4vw;
+        }
+        .login{
+            width: 11vw;
+            @include flex(center,start);
+            gap: 10px;
+        }
+        .brand{
+            width: 10vw;
+            @include flex(center,start);
+            gap: 10px;
+        }
+        .role{
+            width: 8vw;
+            @include flex(center,start);
+            gap: 10px;
+        }
+        .password{
+            width: 10vw;
+        }
     }
 
     .user {
@@ -114,12 +135,12 @@
         }
 
         .role {
-            width: 130px;
+            width: 8vw;
             color: #b7dce9;
         }
 
         .brand {
-            width: 140px;
+            width: 10vw;
             color: #b7dce9;
         }
 

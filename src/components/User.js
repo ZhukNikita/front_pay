@@ -301,6 +301,9 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
                 <div className={styles.methods}>
                     {user.methods.map(el => <h3 key={el}>{el}</h3>)}
                 </div>
+                <div className={styles.methods}>
+                    {user.brands.map(el=> el)}
+                </div>
             </div>
             <IconButton
                 aria-label="more"

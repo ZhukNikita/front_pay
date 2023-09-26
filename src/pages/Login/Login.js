@@ -64,7 +64,7 @@ export default function Login() {
                 secureLocalStorage.setItem('isLogged', true);
                 secureLocalStorage.setItem('userId', data.id);
                 secureLocalStorage.setItem('methods', data.methods);
-                if (data.role === 'SuperAdmin') {
+                if (data.role === 'SuperAdmin' || secureLocalStorage.getItem('role') === 'Admin'  || secureLocalStorage.getItem('role') === 'Financier') {
                     window.location.href = '/panel'
                 } else {
                     window.location.href = '/payments_methods'

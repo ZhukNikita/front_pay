@@ -38,6 +38,8 @@ const style = {
   width: "300px"
 };
 
+const arrowDownStyle = { width: '17px', transition: 'all 0.3s ease', transform: 'rotate(180deg)', cursor: 'pointer' }
+const arrowUpStyle = { width: '17px', transition: 'all 0.3s ease', transform: 'rotate(0deg)', cursor: 'pointer' }
 
 export default function UserList({ users, setUsers }) {
   const [usersPerPage] = useState(5);
@@ -206,7 +208,7 @@ export default function UserList({ users, setUsers }) {
         </div>
       </div>
       <div className={styles.header}>
-        <h3 style={{ width: '4vw' }}>
+        <h3 className={styles.checkbox}>
           {
             users.length > 0 ?
               <Checkbox
@@ -221,29 +223,29 @@ export default function UserList({ users, setUsers }) {
               /> : ''
           }
         </h3>
-        <h3 style={{ width: '11vw', display: 'flex', alignItems: 'center', gap: '10px' }}>Логин
+        <h3 className={styles.login}>Логин
           <ArrowUpwardIcon
             onClick={() => { loginSort ? setLoginSort(!loginSort) : setLoginSort(true) }}
             sx={loginSort ?
-              { width: '17px', transition: 'all 0.3s ease', transform: 'rotate(180deg)', cursor: 'pointer' }
-              : { width: '17px', transition: 'all 0.3s ease', transform: 'rotate(0deg)', cursor: 'pointer' }}
+              arrowDownStyle
+              : arrowUpStyle}
           />
         </h3>
-        <h3 style={{ width: '10vw' }}>Пароль</h3>
-        <h3 style={{ width: '140px', display: 'flex', alignItems: 'center', gap: '10px' }}>Бренд
+        <h3 className={styles.password} >Пароль</h3>
+        <h3 className={styles.brand}>Бренд
           <ArrowUpwardIcon
             onClick={() => { brandSort ? setBrandSort(!brandSort) : setBrandSort(true) }}
             sx={brandSort ?
-              { width: '17px', transition: 'all 0.3s ease', transform: 'rotate(180deg)', cursor: 'pointer' }
-              : { width: '17px', transition: 'all 0.3s ease', transform: 'rotate(0deg)', cursor: 'pointer' }}
+              arrowDownStyle
+              : arrowUpStyle}
           />
         </h3>
-        <h3 style={{ width: '130px', display: 'flex', alignItems: 'center', gap: '10px' }}>Роль
+        <h3  className={styles.role} >Роль
           <ArrowUpwardIcon
             onClick={() => { roleSort ? setRoleSort(!roleSort) : setRoleSort(true) }}
             sx={roleSort ?
-              { width: '17px', transition: 'all 0.3s ease', transform: 'rotate(180deg)', cursor: 'pointer' }
-              : { width: '17px', transition: 'all 0.3s ease', transform: 'rotate(0deg)', cursor: 'pointer' }}
+              arrowDownStyle
+              : arrowUpStyle}
           />
         </h3>
         <h3 style={{ width: '190px' }}>Платежные методы</h3>
@@ -330,7 +332,7 @@ export default function UserList({ users, setUsers }) {
           message={snackError}
           action={action}
         >
-          <Alert severity="error">{snackError}</Alert>
+          <Alert severity="warning" sx={{fontFamily:"'Nunito' , sans-serif"}}>{snackError}</Alert>
 
         </Snackbar>
       </div>

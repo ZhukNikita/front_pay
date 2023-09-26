@@ -11,6 +11,7 @@ import UserList from './UserList';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import ApartmentIcon from '@mui/icons-material/Apartment';
+import MultipleSelectChip from '../pages/Panel/ChipSelect';
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
@@ -52,13 +53,19 @@ export default function AddUsers() {
     const [selectedPayments, setSelectedPayments] = React.useState([]);
     const [openBrandModal, setOpenBrandModal] = React.useState(false)
     const [newBrand, setNewBrand] = React.useState('')
-
+    const [brands, setBrands] = React.useState([])
+    const [choosenbrands, setChoosenBrands] = React.useState([])
     const handleClose = () => {
         setOpen(false);
         setSelectedPayments([]);
         setIsP2PCheck(false);
         setIsInserixCheck(false);
         setIsPinPayCheck(false)
+        setChoosenBrands([])
+        setRole('')
+        setLogin('')
+        setBrand('')
+        
     };
 
     const handleCloseBrandModal = () => {
@@ -126,7 +133,7 @@ export default function AddUsers() {
         if (role === '') {
             setRoleError('Поле роль не может быть пустым')
         }
-        if (!loginError &&  login !== '' ) {
+        if (!loginError && login !== '') {
         } else {
             setLoginDirty(true)
             setLoginError('Пожалуйста, введите логин.')
@@ -154,10 +161,12 @@ export default function AddUsers() {
 
     const Create = async () => {
         const createdBy = secureLocalStorage.getItem('userId')
+        const brandsId = choosenbrands.map(el=> `${el.id}`)
         try {
             const randomPassword = generateRandomPassword(10);
-            const { data } = await axios.post('http://localhost:5000/registration', { login, randomPassword, brand, role, createdBy, selectedPayments })
+            const { data } = await axios.post('http://localhost:5000/registration', { login, randomPassword, brand, role, createdBy, selectedPayments, brandsId })
             axios.post('http://localhost:5000/users', { createdBy }).then(res => setUsers(res.data.reverse()))
+
             return data
         } catch (e) {
             console.log(e)
@@ -182,7 +191,8 @@ export default function AddUsers() {
         if (newBrandError === '') {
             try {
                 const createdBy = secureLocalStorage.getItem('userId')
-                await axios.post('http://localhost:5000/createBrand', { newBrand , createdBy })
+                await axios.post('http://localhost:5000/createBrand', { newBrand, createdBy })
+                await axios.post('http://localhost:5000/getBrands', { createdBy }).then(res => setBrands(res.data))
                 setSnackMessage('Бренд успешно создан');
                 setSnackType('success');
                 setSnack(true)
@@ -197,18 +207,23 @@ export default function AddUsers() {
         }
 
     }
-
     React.useEffect(() => {
         const createdBy = secureLocalStorage.getItem('userId')
         const fetchData = async () => {
             try {
                 await axios.post('http://localhost:5000/users', { createdBy }).then(res => setUsers(res.data.reverse()))
+                await axios.post('http://localhost:5000/getBrands', { createdBy }).then(res => setBrands(res.data))
             } catch (e) {
                 console.log(e)
             }
         }
         fetchData()
     }, [])
+    React.useEffect(() => {
+        if(role === 'Financier' || role === 'User'){
+            setChoosenBrands([])
+        }
+    }, [role])
     return (
         <div className={styles.body}>
             <div className={styles.header}>
@@ -275,6 +290,14 @@ export default function AddUsers() {
                                 roleError && <div style={{ color: 'red', fontSize: '13px', margin: '0', fontFamily: "'Nunito',sans-serif", fontWeight: 'bold' }}>{roleError}</div>
                             }
                         </div>
+                        {
+                            role === 'Admin' || role === 'SuperAdmin'? 
+                                <div style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
+                                    <label style={{ color: 'white', width: '100%', fontFamily: "'Nunito',sans-serif" }}>Бренды для пользователя</label>
+                                    <MultipleSelectChip brands={brands} choosenbrands={choosenbrands} setChoosenBrands={setChoosenBrands} />
+                                </div>
+                                : ''
+                        }
                         <h3 style={{ color: 'white', fontFamily: "'Nunito' , sans-serif", margin: '0' }}>Выберите платежныe методы</h3>
                         <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center' }}>
                             <label className="lns-checkbox">

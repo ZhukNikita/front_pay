@@ -50,19 +50,35 @@ export default function P2PTransactionsList() {
     const [value, setValue] = useState(dayjs(''));
     const [dateError, setDateError] = useState('')
     const [transactions , setTransactions] = useState([])
+    const [usersByBrand , setUsersByBrand] = useState([])
+
     const handleClose = () => {
         setOpen(false);
+        setAmountError('')
+        setBrandError('')
+        setDateError('')
+        setLoginError('')
+        setAmount('')
+        setLogin('')
+        setBrand('')
+        setAmount('')
+        setIbanError('')
+        setIban('')
     };
+
     useEffect(() => {
         const createdBy = secureLocalStorage.getItem('userId')
-        try {
-            axios.get('http://localhost:5000/p2pGetAll').then(res => setIbans(res.data))
-            axios.post('http://localhost:5000/p2pGetAllTransactions', {createdBy}).then(res => setTransactions(res.data))
-            axios.post('http://localhost:5000/users', { createdBy }).then(res => setUsers(res.data.reverse()))
-
-        } catch (e) {
-            console.log(e)
+        const fetchData = async()=>{
+            try {
+                axios.get('http://localhost:5000/p2pGetAll').then(res => setIbans(res.data))
+                axios.post('http://localhost:5000/p2pGetAllTransactions', {createdBy}).then(res => setTransactions(res.data))
+                axios.post('http://localhost:5000/users', { createdBy }).then(res => setUsers(res.data.reverse()))
+    
+            } catch (e) {
+                console.log(e)
+            }
         }
+        fetchData()
     }, [])
 
     const Create = async () => {
@@ -98,6 +114,12 @@ export default function P2PTransactionsList() {
             setDateError('Выберите дату!')
         }
     }
+    const ChangeUsersByBrand = (e)=> {
+        setBrand(e.target.value);
+    }
+    useEffect(()=>{
+        setUsersByBrand(users.filter(el=> el.brand === brand))
+    },[brand])
     return (
         <div className={styles.transactionsList}>
             <div className={styles.search}>
@@ -119,7 +141,7 @@ export default function P2PTransactionsList() {
                 <h3 style={{ width: '7vw' }}>Загрузить чек</h3>
             </div>
             {
-                transactions.map(el=> <Transaction key={el.IBAN} setTransactions={setTransactions} transaction={el}/>)
+                transactions.map(el=> <Transaction key={el.id} setTransactions={setTransactions} transaction={el}/>)
             }
             <Modal
                 aria-labelledby="transition-modal-title"
@@ -150,19 +172,8 @@ export default function P2PTransactionsList() {
                         <div style={{ display: 'flex', alignItems: 'start', justifyContent: 'space-between', width: '100%' }}>
                             <div style={{ width: '47%', display: 'flex', flexDirection: 'column', gap: '10px' }}>
                                 <div style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
-                                    <label style={{ color: 'white', width: '100%', fontFamily: "'Nunito',sans-serif" }}>Логин</label>
-                                    <select value={login} onChange={(e) => { setLogin(e.target.value); setLoginError('') }} style={{ outline: 'none', padding: '15px 20px', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', width: '100%' }} placeholder='Бренд'>
-                                        <option value="">None</option>
-                                        {users.map(el => <option value={el.login} key={el.login}>{el.login} SafeInvest</option>)}
-                                    </select>
-                                    {
-                                        loginError && <div style={{ color: 'red', fontSize: '13px', margin: '0', fontFamily: "'Nunito',sans-serif", fontWeight: 'bold' }}>{loginError}</div>
-                                    }
-                                </div>
-
-                                <div style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
                                     <label style={{ color: 'white', width: '100%', fontFamily: "'Nunito',sans-serif" }}>Бренд</label>
-                                    <select onChange={(e) => { setBrand(e.target.value); setBrandError('') }} style={{ outline: 'none', padding: '15px 20px', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', width: '100%' }} placeholder='Бренд'>
+                                    <select onChange={(e) => {ChangeUsersByBrand(e); setBrandError('') }} style={{ outline: 'none', padding: '15px 20px', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', width: '100%' }} placeholder='Бренд'>
                                         <option value="">None</option>
                                         <option value="SafeInvest">SafeInvest</option>
                                         <option value="VetalInvest">VetalInvest</option>
@@ -172,6 +183,16 @@ export default function P2PTransactionsList() {
                                     </select>
                                     {
                                         brandError && <div style={{ color: 'red', fontSize: '13px', margin: '0', fontFamily: "'Nunito',sans-serif", fontWeight: 'bold' }}>{brandError}</div>
+                                    }
+                                </div>
+                                <div style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
+                                    <label style={{ color: 'white', width: '100%', fontFamily: "'Nunito',sans-serif" }}>Логин</label>
+                                    <select value={login} onChange={(e) => { setLogin(e.target.value); setLoginError('') }} style={{ outline: 'none', padding: '15px 20px', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', width: '100%' }} placeholder='Бренд'>
+                                        <option value="">None</option>
+                                        {usersByBrand.map(el => <option value={el.login} key={el.login}>{el.login}</option>)}
+                                    </select>
+                                    {
+                                        loginError && <div style={{ color: 'red', fontSize: '13px', margin: '0', fontFamily: "'Nunito',sans-serif", fontWeight: 'bold' }}>{loginError}</div>
                                     }
                                 </div>
                             </div>
