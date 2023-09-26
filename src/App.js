@@ -28,7 +28,7 @@ function App() {
         const response = await axios.post('http://localhost:5000/getMe', { id });
         const data = response.data; 
         if (data) {
-          if(data.id === null){
+          if(data.id === null){ 
             secureLocalStorage.removeItem('userId')
             secureLocalStorage.removeItem('methods')
             secureLocalStorage.removeItem('role')

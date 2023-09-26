@@ -14,6 +14,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { renderTimeViewClock } from '@mui/x-date-pickers/timeViewRenderers';
 import Transaction from './Transaction';
+import { Pagination } from '@mui/material';
 
 const style = {
     position: 'absolute',
@@ -50,6 +51,16 @@ export default function P2PTransactionsList() {
     const [value, setValue] = useState(dayjs(''));
     const [dateError, setDateError] = useState('')
     const [transactions , setTransactions] = useState([])
+    const [usersPerPage] = useState(5);
+    const [currentPage, setCurrentPage] = useState(1);
+  const [filteredUsers, setFilteredUsers] = useState([]);
+
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+    const totalFilteredUsers = filteredUsers.length;
+    const totalPageCount = Math.ceil(totalFilteredUsers / usersPerPage);
+    const indexOfLastUser = currentPage * usersPerPage;
+    const indexOfFirstUser = indexOfLastUser - usersPerPage;
+    const currentUser = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
     const [usersByBrand , setUsersByBrand] = useState([])
 
     const handleClose = () => {
@@ -143,6 +154,22 @@ export default function P2PTransactionsList() {
             {
                 transactions.map(el=> <Transaction key={el.id} setTransactions={setTransactions} transaction={el}/>)
             }
+                  <div
+                        style={{
+                        width: '100%',
+                        display: 'flex',
+                        justifyContent: 'right',
+                        padding: '10px 0px',
+                        }}
+                    >
+                        <Pagination
+                        count={totalPageCount}
+                        color="primary"
+                        shape="rounded"
+                        page={currentPage}
+                        onChange={(event, page) => paginate(page)}
+                        />
+                    </div>
             <Modal
                 aria-labelledby="transition-modal-title"
                 aria-describedby="transition-modal-description"
