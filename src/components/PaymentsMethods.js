@@ -1,8 +1,9 @@
 import styles from '../styles/PaymentsMethods.module.scss'
-import React from "react";
+import React, { useEffect } from "react";
 import {useLocation , Link} from "react-router-dom";
 import Logo from '../img/GPLogo.png'
 import Method from './Method';
+import axios from 'axios';
 
 export default function PaymentsMethods() {
     function useQuery() {
@@ -36,6 +37,14 @@ export default function PaymentsMethods() {
         {
             id:4,
 
+            name: 'WLX',
+            link:`https://merchantaccount.dev/create-transaction/iycg4swp71f8hoq`,
+            instruction:['P2P на KZ, RU и Молдову'],
+            brands:['VetalInvest']
+        },
+        {
+            id:5,
+
             name: 'Inserix',
             link:query.get('brand') === 'SafeInvest'?'https://app.insirex.com/en/referral_form?trader%5Blabel%5D=IOVT':`https://app.insirex.com/referral_form?trader[label]=IOVC` ,
             instruction:["1.Эквайринг с верефикацией документов после оплаты",
@@ -48,7 +57,18 @@ export default function PaymentsMethods() {
             brands: ['SafeInvest','VetalInvest','InfinityInvest','Revolut','RiseInvest']
         }
     ]
-
+    useEffect(()=>{
+        const fetchData = async ()=> {
+            try{
+                const {data} = await axios.get(`https://merchantaccount.dev/create-transaction/iycg4swp71f8hoq?uuid=885e17e7-60f7-4470-bf54-c1ee435bb9ed`)
+                console.log(data)
+            }
+            catch(e){
+                console.log(e)
+            }
+        }
+        fetchData()
+    },[])
     const getMethods = () => {
         const brand = query.get('brand')
         const arr = methods.filter(el=> el.brands.includes(brand))
