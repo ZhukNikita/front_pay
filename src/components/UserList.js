@@ -41,7 +41,7 @@ const style = {
 const arrowDownStyle = { width: '17px', transition: 'all 0.3s ease', transform: 'rotate(180deg)', cursor: 'pointer' }
 const arrowUpStyle = { width: '17px', transition: 'all 0.3s ease', transform: 'rotate(0deg)', cursor: 'pointer' }
 
-export default function UserList({ users, setUsers }) {
+export default function UserList({ users, setUsers,brands }) {
   const [usersPerPage] = useState(5);
   const [search, setSearch] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -248,10 +248,11 @@ export default function UserList({ users, setUsers }) {
               : arrowUpStyle}
           />
         </h3>
-        <h3 style={{ width: '190px' }}>Платежные методы</h3>
+        <h3 style={{ width: '230px' }}>Платежные методы</h3>
+        <h3 style={{ width: '190px' }}>Доступные бренды</h3>
       </div>
       {currentUser.map((el) => (
-        <User key={el.id} user={el} users={users} setCheckbox={setCheckbox} selectAll={selectAll} setSelectAll={setSelectAll} checkbox={checkbox} setUsers={setUsers} />
+        <User key={el.id} user={el} users={users} setCheckbox={setCheckbox} selectAll={selectAll} setSelectAll={setSelectAll} checkbox={checkbox} setUsers={setUsers} brands={brands} />
       ))}
       <div
         style={{

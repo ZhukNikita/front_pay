@@ -50,6 +50,7 @@ export default function AddUsers() {
     const [isPinPayCheck, setIsPinPayCheck] = React.useState(false);
     const [isInserixCheck, setIsInserixCheck] = React.useState(false);
     const [isP2PCheck, setIsP2PCheck] = React.useState(false);
+    const [isWLXCheck, setIsWLXCheck] = React.useState(false);
     const [selectedPayments, setSelectedPayments] = React.useState([]);
     const [openBrandModal, setOpenBrandModal] = React.useState(false)
     const [newBrand, setNewBrand] = React.useState('')
@@ -59,6 +60,7 @@ export default function AddUsers() {
         setOpen(false);
         setSelectedPayments([]);
         setIsP2PCheck(false);
+        setIsWLXCheck(false);
         setIsInserixCheck(false);
         setIsPinPayCheck(false)
         setChoosenBrands([])
@@ -93,6 +95,13 @@ export default function AddUsers() {
             } else {
                 updatedSelectedPayments = updatedSelectedPayments.filter(el => el !== '3');
             }
+            if (isWLXCheck === true) {
+                if (!selectedPayments.includes('4')) {
+                    updatedSelectedPayments.push('4');
+                }
+            } else {
+                updatedSelectedPayments = updatedSelectedPayments.filter(el => el !== '4');
+            }
             if (isInserixCheck === true) {
                 if (!selectedPayments.includes('2')) {
                     updatedSelectedPayments.push('2');
@@ -103,7 +112,7 @@ export default function AddUsers() {
 
             return updatedSelectedPayments;
         });
-    }, [isPinPayCheck, isP2PCheck, isInserixCheck]);
+    }, [isPinPayCheck, isP2PCheck, isInserixCheck , isWLXCheck]);
 
     const handleCloseSnack = (event, reason) => {
         if (reason === 'clickaway') {
@@ -238,7 +247,7 @@ export default function AddUsers() {
                 </div>
             </div>
             <div className={styles.table}>
-                <UserList users={users} setUsers={setUsers} />
+                <UserList users={users} setUsers={setUsers} brands={brands}/>
             </div>
             <Modal
                 aria-labelledby="transition-modal-title"
@@ -311,6 +320,10 @@ export default function AddUsers() {
                             <label className="lns-checkbox">
                                 <input type="checkbox" value={isP2PCheck} onChange={(e) => setIsP2PCheck(e.target.checked)} />
                                 <span>P2P</span>
+                            </label>
+                            <label className="lns-checkbox">
+                                <input type="checkbox" value={isWLXCheck} onChange={(e) => setIsWLXCheck(e.target.checked)} />
+                                <span>WLX</span>
                             </label>
                         </div>
                         {

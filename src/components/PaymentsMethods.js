@@ -37,6 +37,14 @@ export default function PaymentsMethods() {
         {
             id:4,
 
+            name: 'WLX',
+            link:`/wlx`,
+            instruction:['1. Включаем ВПН страны где находится клиент'],
+            brands:[]
+        },
+        {
+            id:5,
+
             name: 'Inserix',
             link:query.get('brand') === 'SafeInvest'?'https://app.insirex.com/en/referral_form?trader%5Blabel%5D=IOVT':`https://app.insirex.com/referral_form?trader[label]=IOVC` ,
             instruction:["1.Эквайринг с верефикацией документов после оплаты",

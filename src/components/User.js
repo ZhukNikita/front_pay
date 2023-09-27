@@ -21,6 +21,9 @@ import CloseIcon from '@mui/icons-material/Close';
 import Fade from '@mui/material/Fade';
 import MuiAlert from '@mui/material/Alert';
 import Checkbox from '@mui/material/Checkbox';
+import Tooltip from '@mui/material/Tooltip';
+import ApartmentIcon from '@mui/icons-material/Apartment';
+import MultipleSelectChip from '../pages/Panel/ChipSelect';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -44,7 +47,7 @@ const style = {
     width: '300px'
 };
 
-export default function User({ user, users, setUsers, selectAll, setSelectAll, setCheckbox, checkbox }) {
+export default function User({ user, users, setUsers, selectAll, setSelectAll, setCheckbox, checkbox , brands}) {
     const [passViss, setIsPassViss] = useState(false);
     const [openModal, setOpenModal] = React.useState(false);
     const [login, setLogin] = React.useState(user.login)
@@ -63,9 +66,11 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
     const [isPinPayCheck, setIsPinPayCheck] = React.useState(user.methods.includes('PinPay'));
     const [isInserixCheck, setIsInserixCheck] = React.useState(user.methods.includes('Inserix'));
     const [isP2PCheck, setIsP2PCheck] = React.useState(user.methods.includes('P2P'));
+    const [isWLXCheck, setIsWLXCheck] = React.useState(user.methods.includes('WLX'));
     const [selectedPayments, setSelectedPayments] = React.useState([]);
-
-
+    const [choosenbrands, setChoosenBrands] = React.useState(user.brand?brands.filter(item => user.brands.includes(item.brand)): [])
+    
+    console.log(choosenbrands)
     React.useEffect(() => {
         setSelectedPayments(prevSelectedPayments => {
             let updatedSelectedPayments = [...prevSelectedPayments];
@@ -84,6 +89,13 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
             } else {
                 updatedSelectedPayments = updatedSelectedPayments.filter(el => el !== '3');
             }
+            if (isWLXCheck === true) {
+                if (!selectedPayments.includes('4')) {
+                    updatedSelectedPayments.push('4');
+                }
+            } else {
+                updatedSelectedPayments = updatedSelectedPayments.filter(el => el !== '4');
+            }
             if (isInserixCheck === true) {
                 if (!selectedPayments.includes('2')) {
                     updatedSelectedPayments.push('2');
@@ -94,7 +106,7 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
 
             return updatedSelectedPayments;
         });
-    }, [isPinPayCheck, isP2PCheck, isInserixCheck]);
+    }, [isPinPayCheck, isP2PCheck, isInserixCheck,isWLXCheck]);
 
     React.useEffect(() => {
         if (user) {
@@ -212,7 +224,7 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
                     const createdBy = secureLocalStorage.getItem('userId')
                     const id = user.id
                     const { data } = await axios.post('http://localhost:5000/deleteUser', { id, createdBy });
-                    axios.post('http://localhost:5000/users', { createdBy }).then(res => setUsers(res.data.reverse()))
+                    await axios.post('http://localhost:5000/users', { createdBy }).then(res => setUsers(res.data.reverse()))
                     Swal.fire(
                         "",
                         'Пользователь успешно удалён!',
@@ -276,6 +288,7 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
             }
         });
     };
+
     return (
         <div className={styles.user}>
             <div className={styles.body}>
@@ -301,8 +314,10 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
                 <div className={styles.methods}>
                     {user.methods.map(el => <h3 key={el}>{el}</h3>)}
                 </div>
-                <div className={styles.methods}>
-                    {user.brands.map(el=> el)}
+                <div className={styles.methods} style={{width:'130px'}}>
+                <Tooltip title={user.brands.map(el=> <div style={{fontSize:'15px' , fontFamily:"'Nunito',sans-serif"}} key={el}>{el}</div>)} arrow>
+                    <ApartmentIcon />
+                </Tooltip>
                 </div>
             </div>
             <IconButton
@@ -406,6 +421,14 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
                                     roleError && <div style={{ color: 'red', fontSize: '13px', margin: '0', fontFamily: "'Nunito',sans-serif", fontWeight: 'bold' }}>{roleError}</div>
                                 }
                             </div>
+                            {user.role === 'SuperAdmin'
+                                ?
+                                <div style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
+                                <label style={{ color: 'white', width: '100%', fontFamily: "'Nunito',sans-serif" }}>Бренды для пользователя</label>
+                                <MultipleSelectChip brands={brands} choosenbrands={choosenbrands} setChoosenBrands={setChoosenBrands} />
+                                </div>
+                                : ''
+                            }
                             <h3 style={{ color: 'white', fontFamily: "'Nunito' , sans-serif", margin: '0' }}>Выберите платежныe методы</h3>
                             <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center' }}>
                                 <label className="lns-checkbox">
@@ -419,6 +442,10 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
                                 <label className="lns-checkbox">
                                     <input type="checkbox" name='P2P' checked={isP2PCheck} onChange={(e) => setIsP2PCheck(e.target.checked)} />
                                     <span>P2P</span>
+                                </label>
+                                <label className="lns-checkbox">
+                                    <input type="checkbox" name='WLX' checked={isWLXCheck} onChange={(e) => setIsWLXCheck(e.target.checked)} />
+                                    <span>WLX</span>
                                 </label>
                             </div>
 

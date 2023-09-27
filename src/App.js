@@ -55,6 +55,7 @@ function App() {
         <Route path={'/pinpay'} element={<PinPay />} />
         <Route path={'/'} element={<BrandMenu />} />
         <Route path={'/payments_methods'} element={<PaymentsMethods />} />
+        <Route path={'/methods'} element={<PaymentsMethods />} />
         <Route path={'/p2p'} element={<P2P />} />
         <Route path='*' element={<NoMatch />} />
         <Route path='/failure' element={<Failure />} />
