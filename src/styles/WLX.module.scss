@@ -1,0 +1,74 @@
+@import 'vars.scss';
+
+
+.body {
+  width: 600px;
+  height: 700px;
+  border-radius: 6px;
+  @include flex(center, start);
+  flex-direction: column;
+  padding: 20px;
+  font-family: $font;
+  color: #ffffff;
+  text-align: center;
+  h1 {
+    margin-bottom: 0;
+  }
+
+  .card {
+    padding: 20px;
+    width: 300px;
+    background-color: $cardBC;
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.35);
+    border-radius: 8px;
+
+    .cardHeader {
+      @include flex(center, space-between);
+
+    }
+
+    .cardBody {
+
+      text-align: left;
+      margin-top: 20px;
+      width: 100%;
+      @include flex(start, start);
+      flex-direction: column;
+      .amount{
+        width: 100%;
+        @include flex(center,start);
+        margin-bottom: 10px;
+        input{
+          width: 25%;
+          height: 42px;
+          border-top-left-radius: 8px;
+          border-bottom-left-radius: 8px;
+          border:none;
+          padding-left: 10px;
+          font-family: 'Nunito' , sans-serif;
+          font-size: 17px;
+          outline: none;
+        }
+        .amountButton{
+          display: flex;
+          flex-direction: column;
+          background-color: white;
+          border-left: 1px solid lightgray;
+          border-top-right-radius: 8px;
+          border-bottom-right-radius: 8px;
+          svg:first-child:active{
+            background-color: lightgray;
+            border-top-right-radius: 8px;
+
+          }
+          svg:last-child:active{
+            background-color: lightgray;
+            border-bottom-right-radius: 8px;
+          }
+        }
+
+      }
+
+    }
+  }
+}
