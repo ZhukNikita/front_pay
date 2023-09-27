@@ -23,23 +23,20 @@ export default function PaymentsMethods() {
         },
         {
             id: 3,
-
             name: 'P2P',
             link: `/p2p?brand=${query.get('brand')}`,
             instruction: ['1. Включаем ВПН страны где находится клиент', "2. Открываем ссылку, заполняем реальные данные клиента", "3. Выбираем нужный вариант оплаты из 3 више указаных", "4. Отправляем клиенту на заполнение", "5. После успешного пополнения отправляем в Тикет запрос на зачисление в формате: Название платежки 'Inserix', Почта клиента, Сумма и время пополнения, Документы Лида"],
             brands: ['VetalInvest']
         },
         {
-            id: 4,
-
+            id:4,
             name: 'WLX',
-            link: `https://merchantaccount.dev/create-transaction/iycg4swp71f8hoq`,
-            instruction: ['P2P на KZ, RU и Молдову'],
-            brands: ['VetalInvest']
+            link:`/wlx`,
+            instruction:['P2P на KZ, RU и Молдову'],
+            brands:['VetalInvest']
         },
         {
             id: 5,
-
             name: 'Inserix',
             link: query.get('brand') === 'SafeInvest' ? 'https://app.insirex.com/en/referral_form?trader%5Blabel%5D=IOVT' : `https://app.insirex.com/referral_form?trader[label]=IOVC`,
             instruction: ["1.Эквайринг с верефикацией документов после оплаты",
