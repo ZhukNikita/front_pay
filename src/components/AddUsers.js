@@ -318,7 +318,7 @@ export default function AddUsers() {
                             <label style={{ color: 'white', width: '100%', fontFamily: "'Nunito',sans-serif" }}>Бренд</label>
                             <select onChange={(e) => { setBrand(e.target.value); setBrandError('') }} style={{ outline: 'none', padding: '15px 20px', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', width: '100%' }} placeholder='Бренд'>
                                 <option value="">None</option>
-                                {secureLocalStorage.getItem('brands') !== undefined ? secureLocalStorage.getItem('brands').map(el => <option key={el} value={el}>{el}</option>) : ''}
+                                {secureLocalStorage.getItem('brands')? secureLocalStorage.getItem('brands').map(el => <option key={el} value={el}>{el}</option>) : ''}
                             </select>
                             {
                                 brandError && <div style={{ color: 'red', fontSize: '13px', margin: '0', fontFamily: "'Nunito',sans-serif", fontWeight: 'bold' }}>{brandError}</div>

@@ -7,21 +7,24 @@ import LinearProgress from '@mui/material/LinearProgress';
 export default function WlxTransactionsList() {
     const [transactions, setTransactions] = useState([])
     const [search, setSearch] = useState('')
-    const [usersPerPage] = useState(5);
+    const [isLoading, setIsLoading] = useState(false)
+    const [transactionsPerPage] = useState(6);
     const [currentPage, setCurrentPage] = useState(1);
-    const totalFilteredUsers = transactions.length;
-    const totalPageCount = Math.ceil(totalFilteredUsers / usersPerPage);
-    const indexOfLastUser = currentPage * usersPerPage;
-    const indexOfFirstUser = indexOfLastUser - usersPerPage;
-    const currentUser = transactions.slice(indexOfFirstUser, indexOfLastUser);
+    const totalFilteredTransactions = transactions.length;
+    const totalPageCount = Math.ceil(totalFilteredTransactions / transactionsPerPage);
+    const indexOfLastTransactions = currentPage * transactionsPerPage;
+    const indexOfFirstTransactions = indexOfLastTransactions - transactionsPerPage;
+    const currentTransactions = transactions.slice(indexOfFirstTransactions, indexOfLastTransactions);
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
     useEffect(()=>{
         const fetchData = async()=>{
+            setIsLoading(true)
             try{
                 const {data} = await axios.get('https://merchantaccount.dev/api/v1/payment-statuses/iycg4swp71f8hoq') 
                 if(data){
                     setTransactions(data.data.reverse())
+                    setIsLoading(false)
                 }
             }
             catch(e){
@@ -30,7 +33,6 @@ export default function WlxTransactionsList() {
         }   
         fetchData()
     },[])
-    console.log(transactions[0])
     return(
         <div className={styles.transactionsList}>
             <div className={styles.search}>
@@ -40,7 +42,9 @@ export default function WlxTransactionsList() {
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                 />
-                <LinearProgress sx={{width:'40%'}} color="success"/>
+                {
+                    isLoading && (<LinearProgress sx={{width:'75%' }}color='inherit' />)
+                }
             </div>
             <div className={styles.header}>
                 <h3 style={{ width: '7vw' }}>Дата</h3>
@@ -52,7 +56,7 @@ export default function WlxTransactionsList() {
                 <h3 style={{ width: '7vw' }}>Статус</h3>
             </div>
             {
-                currentUser.map(el=> <Transaction key={el.id} setTransactions={setTransactions} transaction={el}/>)
+                currentTransactions.map(el=> <Transaction key={el.uuid} setTransactions={setTransactions} transaction={el}/>)
             }
                   <div
                         style={{
@@ -71,6 +75,11 @@ export default function WlxTransactionsList() {
                         shape="rounded"
                         page={currentPage}
                         onChange={(event, page) => paginate(page)}
+                        sx={{fontFamily:"'Nunito',sans-serif",
+                        '.MuiPaginationItem-root' : {
+                            fontFamily:"'Nunito',sans-serif"
+                        }
+                    }}
                         />
                     </div>
         </div>

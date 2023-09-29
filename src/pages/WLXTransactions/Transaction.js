@@ -3,6 +3,7 @@ import TimerOffIcon from '@mui/icons-material/TimerOff';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 import TimerIcon from '@mui/icons-material/Timer';
+import {Link} from "react-router-dom";
 
 export default function Transaction({transaction}) {
     const date = new Date(transaction.created_at);
@@ -34,6 +35,7 @@ export default function Transaction({transaction}) {
                 <h3 style={{ width: '7vw' }}>
                     {getStatus(transaction.status)}
                 </h3>
+                <Link to={`https://merchantaccount.dev/edit-input-data/${transaction.uuid}`} style={{fontSize:'14px',fontWeight:'bold',backgroundColor:'#233e68', padding:'10px', borderRadius:'8px', color:'white',textDecoration:'none' , width:'70px' , display:'flex',justifyContent:'center' , textAlign:'center' , marginLeft:'3vw'}}>Загрузка данных</Link>
             </div>
         </div>
     )
