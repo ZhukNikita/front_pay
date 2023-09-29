@@ -31,7 +31,7 @@ export default function PaymentsMethods() {
         {
             id:4,
             name: 'WLX',
-            link:`/wlx`,
+            link:`https://merchantaccount.dev/create-transaction/iycg4swp71f8hoq`,
             instruction:['P2P на KZ, RU и Молдову'],
             brands:['VetalInvest']
         },
