@@ -58,7 +58,7 @@ export default function WLXPayment() {
     } catch (e) {
       console.log(e)
     }
-  } 
+  }
   const Check = () => {
     if (amount === '0') {
       setAmountError('Введите сумма транзакции')
