@@ -37,8 +37,8 @@
                 padding: 15px 20px;
                 border: none;
                 border-radius: 12px;
-                background-color: rgba(255, 72, 66, 0.66);
-                color: rgb(99, 20, 31);
+                background-color: rgba(173, 40, 36, 1);
+                color: #ffa6b2;
                 font-family: 'Nunito', sans-serif;
                 font-weight: bold;
                 cursor: pointer;
@@ -46,7 +46,7 @@
             }
             .deleteButton:hover{
                 background-color: rgba(255, 72, 66, 0.56);
-                color: rgb(240, 39, 66);
+                color: #ffa6b2;
 
             }
             button{
@@ -100,7 +100,7 @@
 
     .user {
         width: calc(100% - 20px);
-        height: 90px;
+        height: 110px;
         @include flex(center, space-between);
         flex-direction: row;
         padding-left: 20px;

@@ -47,7 +47,7 @@ const style = {
     width: '300px'
 };
 
-export default function User({ user, users, setUsers, selectAll, setSelectAll, setCheckbox, checkbox , brands}) {
+export default function User({ user, users, setUsers, selectAll, setSelectAll, setCheckbox, checkbox, brands }) {
     const [passViss, setIsPassViss] = useState(false);
     const [openModal, setOpenModal] = React.useState(false);
     const [login, setLogin] = React.useState(user.login)
@@ -68,9 +68,12 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
     const [isP2PCheck, setIsP2PCheck] = React.useState(user.methods.includes('P2P'));
     const [isWLXCheck, setIsWLXCheck] = React.useState(user.methods.includes('WLX'));
     const [selectedPayments, setSelectedPayments] = React.useState([]);
-    const [choosenbrands, setChoosenBrands] = React.useState(user.brand?brands.filter(item => user.brands.includes(item.brand)): [])
-    
-    console.log(choosenbrands)
+    const [choosenbrands, setChoosenBrands] = React.useState(user.brand ? brands.filter(item => user.brands.includes(item.brand)) : [])
+    React.useEffect(() => {
+        if (brands) {
+            setChoosenBrands(brands.filter(item => user.brands.includes(item.brand)))
+        }
+    }, [brands])
     React.useEffect(() => {
         setSelectedPayments(prevSelectedPayments => {
             let updatedSelectedPayments = [...prevSelectedPayments];
@@ -106,7 +109,7 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
 
             return updatedSelectedPayments;
         });
-    }, [isPinPayCheck, isP2PCheck, isInserixCheck,isWLXCheck]);
+    }, [isPinPayCheck, isP2PCheck, isInserixCheck, isWLXCheck]);
 
     React.useEffect(() => {
         if (user) {
@@ -241,8 +244,9 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
     const Change = async () => {
         const createdBy = secureLocalStorage.getItem('userId')
         const id = user.id
+        const userBrands = role === 'SuperAdmin' || role === 'Admin' ? choosenbrands : []
         try {
-            const { data } = await axios.patch('http://localhost:5000/editUser', { login, password, brand, role, id, selectedPayments })
+            const { data } = await axios.patch('http://localhost:5000/editUser', { login, password, brand, role, id, selectedPayments, userBrands })
             axios.post('http://localhost:5000/users', { createdBy }).then(res => setUsers(res.data.reverse()))
             return data
         } catch (e) {
@@ -288,12 +292,12 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
             }
         });
     };
-
     return (
         <div className={styles.user}>
             <div className={styles.body}>
                 <h3 className={styles.id}>
-                    <Checkbox
+                    {secureLocalStorage.getItem('role') === 'SuperAdmin' || secureLocalStorage.getItem('role') === 'Admin' 
+                    ? <Checkbox
                         sx={{
                             color: '#b7dce9',
                             '&.Mui-checked': {
@@ -302,7 +306,7 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
                         }}
                         checked={checkbox.includes(user.id)}
                         onChange={() => handleSelect(user.id)}
-                    />
+                    /> : ''}
                 </h3>
                 <h3 className={styles.login}>{user.login}</h3>
                 <h3 className={styles.password}>
@@ -314,54 +318,63 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
                 <div className={styles.methods}>
                     {user.methods.map(el => <h3 key={el}>{el}</h3>)}
                 </div>
-                <div className={styles.methods} style={{width:'130px'}}>
-                <Tooltip title={user.brands.map(el=> <div style={{fontSize:'15px' , fontFamily:"'Nunito',sans-serif"}} key={el}>{el}</div>)} arrow>
-                    <ApartmentIcon />
-                </Tooltip>
+                <div className={styles.methods} style={{ width: '130px' }}>
+                    {
+                        user.brands.length > 0
+                            ? <Tooltip title={user.brands.map(el => <div style={{ fontSize: '15px', fontFamily: "'Nunito',sans-serif" }} key={el}>{el}</div>)} arrow>
+                                <ApartmentIcon />
+                            </Tooltip>
+                            : ''
+                    }
+
                 </div>
             </div>
-            <IconButton
-                aria-label="more"
-                id="long-button"
-                aria-controls={open ? 'long-menu' : undefined}
-                aria-expanded={open ? 'true' : undefined}
-                aria-haspopup="true"
-                onClick={handleClick}
-                sx={{ marginRight: '20px' }}
-            >
-                <MoreVertIcon sx={{ color: 'white' }} />
-            </IconButton>
-            <ThemeProvider theme={theme}>
-                <Menu
-                    id="long-menu"
-                    MenuListProps={{
-                        'aria-labelledby': 'long-button',
-                        sx: { backgroundColor: '#325A96', color: 'white', borderRadius: '8px' }
-                    }}
-                    anchorEl={anchorEl}
-                    open={open}
-                    onClose={handleClose}
-                    anchorOrigin={{
-                        vertical: 'top',
-                        horizontal: 'left'
-                    }}
-                    transformOrigin={{
-                        vertical: 'top',
-                        horizontal: 'right'
-                    }}
-                >
-                    <MenuItem onClick={() => { handleClose(); handleOpen() }}>
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', fontWeight: 'bold', fontFamily: "'Nunito',sans-serif" }}>
-                            <EditIcon />Изменить
-                        </div>
-                    </MenuItem>
-                    <MenuItem onClick={() => { handleClose(); Delete() }} sx={{ color: 'rgb(255, 72, 66)' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', fontWeight: 'bold', fontFamily: "'Nunito',sans-serif" }}>
-                            <DeleteIcon />Удалить
-                        </div>
-                    </MenuItem>
-                </Menu>
-            </ThemeProvider>
+            {secureLocalStorage.getItem('role') === 'SuperAdmin' || secureLocalStorage.getItem('role') === 'Admin' ?
+                <span>
+                    <IconButton
+                        aria-label="more"
+                        id="long-button"
+                        aria-controls={open ? 'long-menu' : undefined}
+                        aria-expanded={open ? 'true' : undefined}
+                        aria-haspopup="true"
+                        onClick={handleClick}
+                        sx={{ marginRight: '20px' }}
+                    >
+                        <MoreVertIcon sx={{ color: 'white' }} />
+                    </IconButton>
+                    <ThemeProvider theme={theme}>
+                        <Menu
+                            id="long-menu"
+                            MenuListProps={{
+                                'aria-labelledby': 'long-button',
+                                sx: { backgroundColor: '#325A96', color: 'white', borderRadius: '8px' }
+                            }}
+                            anchorEl={anchorEl}
+                            open={open}
+                            onClose={handleClose}
+                            anchorOrigin={{
+                                vertical: 'top',
+                                horizontal: 'left'
+                            }}
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right'
+                            }}
+                        >
+                            <MenuItem onClick={() => { handleClose(); handleOpen() }}>
+                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', fontWeight: 'bold', fontFamily: "'Nunito',sans-serif" }}>
+                                    <EditIcon />Изменить
+                                </div>
+                            </MenuItem>
+                            <MenuItem onClick={() => { handleClose(); Delete() }} sx={{ color: 'rgb(255, 72, 66)' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', fontWeight: 'bold', fontFamily: "'Nunito',sans-serif" }}>
+                                    <DeleteIcon />Удалить
+                                </div>
+                            </MenuItem>
+                        </Menu>
+                    </ThemeProvider>
+                </span>
+                : ''}
             <ThemeProvider theme={theme}>
                 <Modal
                     aria-labelledby="transition-modal-title"
@@ -398,11 +411,7 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
                                 <label style={{ color: 'white', width: '100%', fontFamily: "'Nunito',sans-serif" }}>Бренд</label>
                                 <select name='Brand' onChange={e => { setBrand(e.target.value); setBrandError('') }} value={brand} style={{ outline: 'none', padding: '15px 20px', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', width: '100%' }} placeholder='Бренд'>
                                     <option value="">None</option>
-                                    <option value="SafeInvest">SafeInvest</option>
-                                    <option value="VetalInvest">VetalInvest</option>
-                                    <option value="RiseInvest">RiseInvest</option>
-                                    <option value="Revolut">Revolut</option>
-                                    <option value="InfinityInvest">InfinityInvest</option>
+                                    {secureLocalStorage.getItem('brands') ? secureLocalStorage.getItem('brands').map(el => <option key={el} value={el}>{el}</option>) : ''}
                                 </select>
                                 {
                                     brandError && <div style={{ color: 'red', fontSize: '13px', margin: '0', fontFamily: "'Nunito',sans-serif", fontWeight: 'bold' }}>{brandError}</div>
@@ -421,11 +430,11 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
                                     roleError && <div style={{ color: 'red', fontSize: '13px', margin: '0', fontFamily: "'Nunito',sans-serif", fontWeight: 'bold' }}>{roleError}</div>
                                 }
                             </div>
-                            {user.role === 'SuperAdmin'
+                            {(secureLocalStorage.getItem('role') === 'SuperAdmin' && role === 'Admin') || (secureLocalStorage.getItem('role') === 'SuperAdmin' && role === 'SuperAdmin')
                                 ?
                                 <div style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
-                                <label style={{ color: 'white', width: '100%', fontFamily: "'Nunito',sans-serif" }}>Бренды для пользователя</label>
-                                <MultipleSelectChip brands={brands} choosenbrands={choosenbrands} setChoosenBrands={setChoosenBrands} />
+                                    <label style={{ color: 'white', width: '100%', fontFamily: "'Nunito',sans-serif" }}>Бренды для пользователя</label>
+                                    <MultipleSelectChip brands={brands} choosenbrands={choosenbrands} setChoosenBrands={setChoosenBrands} />
                                 </div>
                                 : ''
                             }
@@ -464,7 +473,7 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
                 message={authError}
                 action={action}
             >
-                <Alert severity="error" sx={{fontFamily:"'Nunito' , sans-serif"}}>{authError}</Alert>
+                <Alert severity="error" sx={{ fontFamily: "'Nunito' , sans-serif" }}>{authError}</Alert>
             </Snackbar>
         </div>
     )

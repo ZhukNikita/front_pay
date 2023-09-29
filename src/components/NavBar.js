@@ -16,9 +16,10 @@ export default function NavBar() {
                     <Link to={'/pinpay-transactions'} className={styles.payment} style={{textDecoration:'none'}}>Транзакции Pinpay</Link>
                     <Link to={'/insirex-transactions'} className={styles.payment} style={{textDecoration:'none'}}>Транзакции Inserix</Link>
                     <Link to={'/p2p-transactions'} className={styles.payment} style={{textDecoration:'none'}}>Транзакции P2P</Link>
+                    <Link to={'/wlx-transactions'} className={styles.payment} style={{textDecoration:'none'}}>Транзакции WLX</Link>
                     {/* <Link to={'/transactions'} className={styles.payment} style={{textDecoration:'none'}}>Транзакции</Link> */}
                     <Link to={'/panel'} className={styles.payment} style={{textDecoration:'none'}}>Пользователи</Link>
-                    <Link to={'/methods'} className={styles.payment} style={{textDecoration:'none'}}>Платежные методы</Link>
+                    <Link to={'/methods'} className={styles.payment} style={{textDecoration:'none'}}>Платёжные методы</Link>
                 </div>
             </div>
 

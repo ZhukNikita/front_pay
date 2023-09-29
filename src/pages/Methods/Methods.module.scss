@@ -1,0 +1,55 @@
+@import '../../styles/vars.scss';
+
+.methodsPage {
+    width: 100%;
+    height: 100vh;
+    @include flex(center, start);
+
+    .body {
+        width: 76%;
+        @include flex(center, start);
+        flex-direction: column;
+        padding: 30px;
+        font-family: 'Nunito',sans-serif;
+        color: #ffffff;
+        position: relative;
+        height: 93vh;
+        h1{
+            width: 100%;
+            color:#b7dce9;
+        }
+        .methods {
+            @include flex(center, start);
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 21.44px;
+            width: 100%;
+            margin-bottom: 21.44px;
+
+            a {
+                text-decoration: none;
+                color: white;
+
+            }
+
+            .method {
+                position: relative;
+                z-index: 0;
+                h3 {
+                    font-size: 24px;
+                    font-weight: bold;
+                    text-decoration: none;
+                    color:rgb(6, 27, 100);
+
+                }
+                @include flex(center, center);
+                cursor: pointer;
+                background-color: rgb(87, 156, 212);
+                width: 23%;
+                height: 130px;
+                border-radius: 6px;
+                color:rgb(6, 27, 100);
+            }
+        }
+    }
+}

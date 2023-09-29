@@ -14,8 +14,9 @@ import axios from "axios";
 import secureLocalStorage from 'react-secure-storage';
 import Transactions from './pages/Transactions/Transactions';
 import PinpayTransactions from './pages/PinpayTransactions/PinpayTransactions';
+import Methods from './pages/Methods/Methods';
 import P2PTransactions from './pages/P2PTransations/P2PTransactions';
-
+import WlxTransactions from './pages/WLXTransactions/WlxTransactions'
 
 
 function App() {
@@ -33,12 +34,14 @@ function App() {
             secureLocalStorage.removeItem('methods')
             secureLocalStorage.removeItem('role')
             secureLocalStorage.removeItem('isLogged')
+            secureLocalStorage.removeItem('brands')
             window.location.href = '/login'
           }else{
             setMethods(data.methods? data.methods : [])
             secureLocalStorage.setItem('userId', data.id);
             secureLocalStorage.setItem('methods', data.methods);
             secureLocalStorage.setItem('role', data.role);
+            secureLocalStorage.setItem('brands', data.brands);
           }
         }
       } catch (e) {
@@ -55,7 +58,7 @@ function App() {
         <Route path={'/pinpay'} element={<PinPay />} />
         <Route path={'/'} element={<BrandMenu />} />
         <Route path={'/payments_methods'} element={<PaymentsMethods />} />
-        <Route path={'/methods'} element={<PaymentsMethods />} />
+        <Route path={'/methods'} element={<Methods/>} />
         <Route path={'/p2p'} element={<P2P />} />
         <Route path='*' element={<NoMatch />} />
         <Route path='/failure' element={<Failure />} />
@@ -64,6 +67,7 @@ function App() {
         <Route path='/transactions' element={<Transactions/>} />
         <Route path='/pinpay-transactions' element={<PinpayTransactions/>} />
         <Route path='/p2p-transactions' element={<P2PTransactions/>} />
+        <Route path='/wlx-transactions' element={<WlxTransactions/>} />
         <Route path='/login' element={<Login />} />
       </Routes>
     </div>

@@ -18,8 +18,10 @@ const MenuProps = {
 };
 
 
+
 function getStyles(brand, choosenbrands, theme) {
   return {
+    backgroundColor: 'White',
     fontWeight:
     choosenbrands.indexOf(brand) === -1
         ? theme.typography.fontWeightRegular
@@ -47,6 +49,8 @@ export default function MultipleSelectChip({brands , choosenbrands , setChoosenB
              fontFamily:"'Nunito' , sans-serif",
             '& .MuiOutlinedInput-root': {
               border: 'none', 
+              backgroundColor:'white' ,
+
               '&:hover fieldset': {
                 borderColor: 'transparent',
               },
@@ -59,7 +63,7 @@ export default function MultipleSelectChip({brands , choosenbrands , setChoosenB
           value={choosenbrands}
           onChange={handleChange}
           renderValue={(selected) => (
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.3 , outline:'none'}}>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.3 , outline:'none' }}>
               {selected.map((value) => (
                 <Chip key={value.id} label={value.brand} sx={{fontFamily:"'Nunito' , sans-serif", fontWeight:'bold' }}/>
               ))}
@@ -72,7 +76,7 @@ export default function MultipleSelectChip({brands , choosenbrands , setChoosenB
               key={brand.id}
               value={brand}
               style={getStyles(brand, choosenbrands, theme)}
-              sx={{fontFamily:"'Nunito' , sans-serif"}}
+              sx={{fontFamily:"'Nunito' , sans-serif" , backgroundColor:'white' }}
             >
               {brand.brand}
             </MenuItem>

@@ -12,6 +12,7 @@ import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import MultipleSelectChip from '../pages/Panel/ChipSelect';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
@@ -36,26 +37,28 @@ const style = {
 export default function AddUsers() {
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
-    const [login, setLogin] = React.useState('')
-    const [loginDirty, setLoginDirty] = React.useState(false)
-    const [loginError, setLoginError] = React.useState('')
-    const [brand, setBrand] = React.useState('')
+    const [login, setLogin] = React.useState('');
+    const [loginDirty, setLoginDirty] = React.useState(false);
+    const [loginError, setLoginError] = React.useState('');
+    const [brand, setBrand] = React.useState('');
     const [role, setRole] = React.useState('');
     const [users, setUsers] = React.useState([])
     const [snack, setSnack] = React.useState(false);
     const [snackMessage, setSnackMessage] = React.useState('');
     const [snackType, setSnackType] = React.useState('');
-    const [brandError, setBrandError] = React.useState('')
-    const [roleError, setRoleError] = React.useState('')
+    const [brandError, setBrandError] = React.useState('');
+    const [roleError, setRoleError] = React.useState('');
     const [isPinPayCheck, setIsPinPayCheck] = React.useState(false);
     const [isInserixCheck, setIsInserixCheck] = React.useState(false);
     const [isP2PCheck, setIsP2PCheck] = React.useState(false);
     const [isWLXCheck, setIsWLXCheck] = React.useState(false);
     const [selectedPayments, setSelectedPayments] = React.useState([]);
-    const [openBrandModal, setOpenBrandModal] = React.useState(false)
-    const [newBrand, setNewBrand] = React.useState('')
-    const [brands, setBrands] = React.useState([])
-    const [choosenbrands, setChoosenBrands] = React.useState([])
+    const [openBrandModal, setOpenBrandModal] = React.useState(false);
+    const [openDeleteBrandModal, setOpenDeleteBrandModal] = React.useState(false);
+    const [newBrand, setNewBrand] = React.useState('');
+    const [deleteBrand, setDeleteBrand] = React.useState('');
+    const [brands, setBrands] = React.useState([]);
+    const [choosenbrands, setChoosenBrands] = React.useState([]);
     const handleClose = () => {
         setOpen(false);
         setSelectedPayments([]);
@@ -67,13 +70,18 @@ export default function AddUsers() {
         setRole('')
         setLogin('')
         setBrand('')
-        
+
     };
 
     const handleCloseBrandModal = () => {
         setOpenBrandModal(false);
+        setNewBrand('')
         setBrandError('')
-
+    };
+    const handleCloseDeleteBrandModal = () => {
+        setOpenDeleteBrandModal(false);
+        setDeleteBrand('')
+        setBrandError('')
     };
 
     React.useEffect(() => {
@@ -112,7 +120,7 @@ export default function AddUsers() {
 
             return updatedSelectedPayments;
         });
-    }, [isPinPayCheck, isP2PCheck, isInserixCheck , isWLXCheck]);
+    }, [isPinPayCheck, isP2PCheck, isInserixCheck, isWLXCheck]);
 
     const handleCloseSnack = (event, reason) => {
         if (reason === 'clickaway') {
@@ -170,7 +178,7 @@ export default function AddUsers() {
 
     const Create = async () => {
         const createdBy = secureLocalStorage.getItem('userId')
-        const brandsId = choosenbrands.map(el=> `${el.id}`)
+        const brandsId = choosenbrands.map(el => `${el.id}`)
         try {
             const randomPassword = generateRandomPassword(10);
             const { data } = await axios.post('http://localhost:5000/registration', { login, randomPassword, brand, role, createdBy, selectedPayments, brandsId })
@@ -214,7 +222,31 @@ export default function AddUsers() {
                 handleCloseBrandModal()
             }
         }
-
+    }
+    const DeleteBrand = async () => {
+        let deleteBrandError = '';
+        if (deleteBrand === '') {
+            setBrandError('Введите бренд');
+            deleteBrandError = 'Введите бренд'
+        }
+        if (deleteBrandError === '') {
+            try {
+                const createdBy = secureLocalStorage.getItem('userId')
+                await axios.post('http://localhost:5000/deleteBrand', { deleteBrand, createdBy })
+                await axios.post('http://localhost:5000/getBrands', { createdBy }).then(res => setBrands(res.data))
+                await axios.post('http://localhost:5000/users', { createdBy }).then(res => setUsers(res.data.reverse()))
+                setSnackMessage('Бренд успешно удалён');
+                setSnackType('success');
+                setSnack(true)
+            } catch (e) {
+                console.log(e)
+                setSnack(true)
+                setSnackType('error');
+                setSnackMessage(e.response.data.message.status)
+            } finally {
+                handleCloseDeleteBrandModal()
+            }
+        }
     }
     React.useEffect(() => {
         const createdBy = secureLocalStorage.getItem('userId')
@@ -223,13 +255,13 @@ export default function AddUsers() {
                 await axios.post('http://localhost:5000/users', { createdBy }).then(res => setUsers(res.data.reverse()))
                 await axios.post('http://localhost:5000/getBrands', { createdBy }).then(res => setBrands(res.data))
             } catch (e) {
-                console.log(e)
+
             }
         }
         fetchData()
     }, [])
     React.useEffect(() => {
-        if(role === 'Financier' || role === 'User'){
+        if (role === 'Financier' || role === 'User') {
             setChoosenBrands([])
         }
     }, [role])
@@ -243,11 +275,21 @@ export default function AddUsers() {
                             <button onClick={() => setOpenBrandModal(true)} ><ApartmentIcon />Создать <br />бренд</button>
                             : ''
                     }
-                    <button onClick={handleOpen} ><AddIcon />Добавить <br />пользователя</button>
+                    {
+                        secureLocalStorage.getItem('role') === 'SuperAdmin' ?
+                            <button className={styles.deleteButton} onClick={() => setOpenDeleteBrandModal(true)} ><DeleteOutlineIcon />Удалить <br />бренд</button>
+                            : ''
+                    }
+                    {
+                        secureLocalStorage.getItem('role') === 'SuperAdmin' || secureLocalStorage.getItem('role') === 'Admin' 
+                        ?<button onClick={handleOpen} ><AddIcon />Добавить <br />пользователя</button>
+                        : ''
+                    }
+                    
                 </div>
             </div>
             <div className={styles.table}>
-                <UserList users={users} setUsers={setUsers} brands={brands}/>
+                <UserList users={users} setUsers={setUsers} brands={brands} />
             </div>
             <Modal
                 aria-labelledby="transition-modal-title"
@@ -276,11 +318,7 @@ export default function AddUsers() {
                             <label style={{ color: 'white', width: '100%', fontFamily: "'Nunito',sans-serif" }}>Бренд</label>
                             <select onChange={(e) => { setBrand(e.target.value); setBrandError('') }} style={{ outline: 'none', padding: '15px 20px', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', width: '100%' }} placeholder='Бренд'>
                                 <option value="">None</option>
-                                <option value="SafeInvest">SafeInvest</option>
-                                <option value="VetalInvest">VetalInvest</option>
-                                <option value="RiseInvest">RiseInvest</option>
-                                <option value="Revolut">Revolut</option>
-                                <option value="InfinityInvest">InfinityInvest</option>
+                                {secureLocalStorage.getItem('brands') !== undefined ? secureLocalStorage.getItem('brands').map(el => <option key={el} value={el}>{el}</option>) : ''}
                             </select>
                             {
                                 brandError && <div style={{ color: 'red', fontSize: '13px', margin: '0', fontFamily: "'Nunito',sans-serif", fontWeight: 'bold' }}>{brandError}</div>
@@ -300,7 +338,7 @@ export default function AddUsers() {
                             }
                         </div>
                         {
-                            role === 'Admin' || role === 'SuperAdmin'? 
+                            (secureLocalStorage.getItem('role') === 'SuperAdmin' && role === 'Admin') || (secureLocalStorage.getItem('role') === 'SuperAdmin' && role === 'SuperAdmin') ?
                                 <div style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
                                     <label style={{ color: 'white', width: '100%', fontFamily: "'Nunito',sans-serif" }}>Бренды для пользователя</label>
                                     <MultipleSelectChip brands={brands} choosenbrands={choosenbrands} setChoosenBrands={setChoosenBrands} />
@@ -359,6 +397,38 @@ export default function AddUsers() {
                         <button onClick={AddBrand} style={!brandError && newBrand ?
                             { padding: '15px 20px', color: 'white', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', background: '#38b6ff', cursor: 'pointer' }
                             : { padding: '15px 20px', color: 'white', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', background: 'none', cursor: 'pointer' }}>Создать</button>
+                    </Box>
+                </Fade>
+            </Modal>
+            <Modal
+                aria-labelledby="transition-modal-title"
+                aria-describedby="transition-modal-description"
+                open={openDeleteBrandModal}
+                onClose={handleCloseDeleteBrandModal}
+                closeAfterTransition
+                slots={{ backdrop: Backdrop }}
+                slotProps={{
+                    backdrop: {
+                        timeout: 500,
+                    },
+                }}
+            >
+                <Fade in={openDeleteBrandModal}>
+                    <Box sx={style}>
+                        <h3 style={{ color: 'white', width: '100%', textAlign: 'center', fontFamily: "'Nunito',sans-serif", marginBottom: '0px' }}>Удалить бренд</h3>
+                        <div style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
+                            <label style={{ color: 'white', width: '100%', fontFamily: "'Nunito',sans-serif" }}>Название бренда</label>
+                            <select value={deleteBrand} onChange={(e)=>setDeleteBrand(e.target.value)} style={{ outline: 'none', padding: '15px 20px', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', width: '100%' }}>
+                                <option value=''>None</option>
+                                {brands.map(el=> <option key={el.id} value={el.brand}>{el.brand}</option>)}
+                            </select>
+                            {
+                                brandError && <div style={{ color: 'red', fontSize: '13px', margin: '0', fontFamily: "'Nunito',sans-serif", fontWeight: 'bold' }}>{brandError}</div>
+                            }
+                        </div>
+                        <button onClick={DeleteBrand} style={!brandError && deleteBrand !== '' ?
+                            { padding: '15px 20px', color: 'white', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', background: '#38b6ff', cursor: 'pointer' }
+                            : { padding: '15px 20px', color: 'white', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', background: 'none', cursor: 'pointer' }}>Удалить</button>
                     </Box>
                 </Fade>
             </Modal>

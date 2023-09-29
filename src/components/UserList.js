@@ -41,7 +41,7 @@ const style = {
 const arrowDownStyle = { width: '17px', transition: 'all 0.3s ease', transform: 'rotate(180deg)', cursor: 'pointer' }
 const arrowUpStyle = { width: '17px', transition: 'all 0.3s ease', transform: 'rotate(0deg)', cursor: 'pointer' }
 
-export default function UserList({ users, setUsers,brands }) {
+export default function UserList({ users, setUsers, brands }) {
   const [usersPerPage] = useState(5);
   const [search, setSearch] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -150,7 +150,7 @@ export default function UserList({ users, setUsers,brands }) {
       handleCloseDeleteModal()
     }
   }
-  const AddPayment = async ()=>{
+  const AddPayment = async () => {
     const createdBy = secureLocalStorage.getItem('userId')
     try {
       const { data } = await axios.post('http://localhost:5000/addPayment', { deletePayment, checkbox })
@@ -185,32 +185,41 @@ export default function UserList({ users, setUsers,brands }) {
           onChange={(e) => setSearch(e.target.value)}
         />
         <div className={styles.buttons}>
-          <button onClick={() => {
-            if (checkbox.length === 0) {
-              setSnackError('Не выбран ни один пользователь!')
-              setSnack(true)
-            } else {
-              setDeleteOrAddPayment('add')
-              handleOpenDeleteModal()
-            }
-          }}><AddIcon />Добавить метод</button>
-          <button className={styles.deleteButton} onClick={() => {
-            if (checkbox.length === 0) {
-              setSnackError('Не выбран ни один пользователь!')
-              setSnack(true)
-            } else {
-              setDeleteOrAddPayment('delete')
-              handleOpenDeleteModal()
-            }
-          }}>
-            <DeleteIcon />Удалить метод
-          </button>
+          {
+            secureLocalStorage.getItem('role') === 'SuperAdmin' || secureLocalStorage.getItem('role') === 'Admin'
+              ? <button onClick={() => {
+                if (checkbox.length === 0) {
+                  setSnackError('Не выбран ни один пользователь!')
+                  setSnack(true)
+                } else {
+                  setDeleteOrAddPayment('add')
+                  handleOpenDeleteModal()
+                }
+              }}><AddIcon />Добавить метод</button>
+              : ''
+          }
+          {
+            secureLocalStorage.getItem('role') === 'SuperAdmin' || secureLocalStorage.getItem('role') === 'Admin'
+              ? <button className={styles.deleteButton} onClick={() => {
+                if (checkbox.length === 0) {
+                  setSnackError('Не выбран ни один пользователь!')
+                  setSnack(true)
+                } else {
+                  setDeleteOrAddPayment('delete')
+                  handleOpenDeleteModal()
+                }
+              }}>
+                <DeleteIcon />Удалить метод
+              </button>
+              : ''
+          }
+
         </div>
       </div>
       <div className={styles.header}>
         <h3 className={styles.checkbox}>
           {
-            users.length > 0 ?
+           (users.length > 0 && secureLocalStorage.getItem('role') === 'SuperAdmin') || (users.length > 0 && secureLocalStorage.getItem('role') === 'Admin') ?
               <Checkbox
                 sx={{
                   color: '#b7dce9',
@@ -240,7 +249,7 @@ export default function UserList({ users, setUsers,brands }) {
               : arrowUpStyle}
           />
         </h3>
-        <h3  className={styles.role} >Роль
+        <h3 className={styles.role} >Роль
           <ArrowUpwardIcon
             onClick={() => { roleSort ? setRoleSort(!roleSort) : setRoleSort(true) }}
             sx={roleSort ?
@@ -286,7 +295,7 @@ export default function UserList({ users, setUsers,brands }) {
         <Fade in={openDeleteModal}>
           <Box sx={style}>
             <h3 style={{ color: 'white', width: '100%', textAlign: 'center', fontFamily: "'Nunito',sans-serif", marginBottom: '0px' }}>
-            {deleteOrAddPayment ==='delete'? 'Удаление платёжного метода' : 'Добавление платёжного метода'}
+              {deleteOrAddPayment === 'delete' ? 'Удаление платёжного метода' : 'Добавление платёжного метода'}
             </h3>
             <h4 style={{ color: 'white', fontFamily: "'Nunito' , sans-serif", margin: '0' }}>Выберите платежныe методы</h4>
             <div style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
@@ -302,25 +311,29 @@ export default function UserList({ users, setUsers,brands }) {
               }
             </div>
             {
-              !deletePaymentError && deletePayment ? 
-                <button onClick={deleteOrAddPayment ==='delete'?Delete:AddPayment} 
-              style={{ padding: '15px 20px',
-               fontFamily: '"Nunito"  ,sans-serif',
-               color: 'white',
-               fontSize: '18px',
-               border: '1px solid #38b6ff',
-               borderRadius: '8px',
-               backgroundColor: '#38b6ff',
-               cursor: 'pointer' }}>{deleteOrAddPayment ==='delete'?'Удалить':'Добавить'}</button>
-                : <button onClick={() => setDeletePaymentError('Выберите платежный метод')} 
-                style={{ padding: '15px 20px',
-                 color: 'white',
-                 fontFamily: '"Nunito"  ,sans-serif',
-                 fontSize: '18px',
-                 border: '1px solid #38b6ff',
-                 borderRadius: '8px',
-                 background: 'none',
-                 cursor: 'pointer' }}>{deleteOrAddPayment ==='delete'?'Удалить':'Добавить'}</button>
+              !deletePaymentError && deletePayment ?
+                <button onClick={deleteOrAddPayment === 'delete' ? Delete : AddPayment}
+                  style={{
+                    padding: '15px 20px',
+                    fontFamily: '"Nunito"  ,sans-serif',
+                    color: 'white',
+                    fontSize: '18px',
+                    border: '1px solid #38b6ff',
+                    borderRadius: '8px',
+                    backgroundColor: '#38b6ff',
+                    cursor: 'pointer'
+                  }}>{deleteOrAddPayment === 'delete' ? 'Удалить' : 'Добавить'}</button>
+                : <button onClick={() => setDeletePaymentError('Выберите платежный метод')}
+                  style={{
+                    padding: '15px 20px',
+                    color: 'white',
+                    fontFamily: '"Nunito"  ,sans-serif',
+                    fontSize: '18px',
+                    border: '1px solid #38b6ff',
+                    borderRadius: '8px',
+                    background: 'none',
+                    cursor: 'pointer'
+                  }}>{deleteOrAddPayment === 'delete' ? 'Удалить' : 'Добавить'}</button>
             }
           </Box>
         </Fade>
@@ -333,7 +346,7 @@ export default function UserList({ users, setUsers,brands }) {
           message={snackError}
           action={action}
         >
-          <Alert severity="warning" sx={{fontFamily:"'Nunito' , sans-serif"}}>{snackError}</Alert>
+          <Alert severity="warning" sx={{ fontFamily: "'Nunito' , sans-serif" }}>{snackError}</Alert>
 
         </Snackbar>
       </div>
