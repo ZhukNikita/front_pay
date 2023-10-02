@@ -15,6 +15,10 @@ import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { renderTimeViewClock } from '@mui/x-date-pickers/timeViewRenderers';
 import Transaction from './Transaction';
 import { Pagination } from '@mui/material';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+
+const arrowDownStyle = { width: '17px', transition: 'all 0.3s ease', transform: 'rotate(180deg)', cursor: 'pointer' }
+const arrowUpStyle = { width: '17px', transition: 'all 0.3s ease', transform: 'rotate(0deg)', cursor: 'pointer' }
 
 const style = {
     position: 'absolute',
@@ -50,18 +54,77 @@ export default function P2PTransactionsList() {
     const [users, setUsers] = useState([])
     const [value, setValue] = useState(dayjs(''));
     const [dateError, setDateError] = useState('')
-    const [transactions , setTransactions] = useState([])
-    const [usersPerPage] = useState(5);
+    const [transactions, setTransactions] = useState([])
+    const [transactonsPerPage] = useState(5);
     const [currentPage, setCurrentPage] = useState(1);
-  const [filteredUsers, setFilteredUsers] = useState([]);
+    const [filteredTransactions, setFilteredTransactions] = useState([]);
+    const [dateSort, setDateSort] = useState(null);
+    const [amountSort, setAmountSort] = useState(null);
+    const [loginSort, setLoginSort] = useState(null)
+    useEffect(() => {
+        if (loginSort) {
+            const sortedTransactions = [...transactions].sort((a, b) => a.login.localeCompare(b.login));
+            setTransactions(sortedTransactions);
+            setDateSort(null)
+            setAmountSort(null)
+        }
+        if (loginSort === false) {
+            const sortedTransactions = [...transactions].sort((a, b) => b.login.localeCompare(a.login));
+            setTransactions(sortedTransactions);
+            setDateSort(null)
+            setAmountSort(null)
+        }
+    }, [loginSort]);
+    useEffect(() => {
+        if (amountSort) {
+            const sortedTransactions = [...transactions].sort((a, b) => b.amount - a.amount);
+            setTransactions(sortedTransactions);
+            setDateSort(null)
+            setLoginSort(null)
+        }
+        if (amountSort === false) {
+            const sortedTransactions = [...transactions].sort((a, b) => a.amount - b.amount);
+            setTransactions(sortedTransactions);
+            setDateSort(null)
+            setLoginSort(null)
+        }
+    }, [amountSort]);
+
+    useEffect(() => {
+        if (dateSort) {
+            const sortedTransactions = [...transactions].sort((a, b) => new Date(b.date) - new Date(a.date));
+            setTransactions(sortedTransactions);
+            setAmountSort(null)
+            setLoginSort(null)
+
+        }
+        if (dateSort === false) {
+            const sortedTransactions = [...transactions].sort((a, b) => new Date(a.date) - new Date(b.date));
+            setTransactions(sortedTransactions);
+            setAmountSort(null)
+            setLoginSort(null)
+
+        }
+    }, [dateSort]);
 
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
-    const totalFilteredUsers = filteredUsers.length;
-    const totalPageCount = Math.ceil(totalFilteredUsers / usersPerPage);
-    const indexOfLastUser = currentPage * usersPerPage;
-    const indexOfFirstUser = indexOfLastUser - usersPerPage;
-    const currentUser = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
-    const [usersByBrand , setUsersByBrand] = useState([])
+    const totalFilteredTransactions = filteredTransactions.length;
+
+    useEffect(() => {
+        if (transactions) {
+            const filtered = transactions.filter(
+                (user) => user.login.toLowerCase().includes(search.toLowerCase())
+            );
+            setFilteredTransactions(filtered);
+            setCurrentPage(1);
+        }
+    }, [transactions, search])
+
+    const totalPageCount = Math.ceil(totalFilteredTransactions / transactonsPerPage);
+    const indexOfLastTransaction = currentPage * transactonsPerPage;
+    const indexOfFirstTransaction = indexOfLastTransaction - transactonsPerPage;
+    const currentTransactions = filteredTransactions.slice(indexOfFirstTransaction, indexOfLastTransaction);
+    const [usersByBrand, setUsersByBrand] = useState([])
 
     const handleClose = () => {
         setOpen(false);
@@ -79,12 +142,12 @@ export default function P2PTransactionsList() {
 
     useEffect(() => {
         const createdBy = secureLocalStorage.getItem('userId')
-        const fetchData = async()=>{
+        const fetchData = async () => {
             try {
                 axios.get('http://localhost:5000/p2pGetAll').then(res => setIbans(res.data))
-                axios.post('http://localhost:5000/p2pGetAllTransactions', {createdBy}).then(res => setTransactions(res.data))
+                axios.post('http://localhost:5000/p2pGetAllTransactions', { createdBy }).then(res => setTransactions(res.data))
                 axios.post('http://localhost:5000/users', { createdBy }).then(res => setUsers(res.data.reverse()))
-    
+
             } catch (e) {
                 console.log(e)
             }
@@ -98,6 +161,8 @@ export default function P2PTransactionsList() {
         const date = value.format('DD/MM/YYYY HH:mm:ss')
         try {
             const { data } = await axios.post('http://localhost:5000/p2pCreateTransaction', { login, iban, brand, amount, createdBy, date, status })
+            await axios.post('http://localhost:5000/p2pGetAllTransactions', { createdBy }).then(res => setTransactions(res.data))
+
             return data
         } catch (e) {
             console.log(e)
@@ -125,12 +190,12 @@ export default function P2PTransactionsList() {
             setDateError('Выберите дату!')
         }
     }
-    const ChangeUsersByBrand = (e)=> {
+    const ChangeUsersByBrand = (e) => {
         setBrand(e.target.value);
     }
-    useEffect(()=>{
-        setUsersByBrand(users.filter(el=> el.brand === brand))
-    },[brand])
+    useEffect(() => {
+        setUsersByBrand(users.filter(el => el.brand === brand))
+    }, [brand])
     return (
         <div className={styles.transactionsList}>
             <div className={styles.search}>
@@ -143,33 +208,53 @@ export default function P2PTransactionsList() {
                 <button onClick={handleOpen}><AddIcon />Добавить транзакцию</button>
             </div>
             <div className={styles.header}>
-                <h3 style={{ width: '11vw' }}>Логин</h3>
-                <h3 style={{ width: '140px' }}>Бренд</h3>
-                <h3 style={{ width: '20vw' }}>IBAN</h3>
-                <h3 style={{ width: '7vw' }}>Сумма</h3>
-                <h3 style={{ width: '7vw' }}>Дата</h3>
-                <h3 style={{ width: '8.5vw' }}>Статус</h3>
+                <h3 className={styles.login}>Логин
+                <ArrowUpwardIcon
+                    onClick={() => { loginSort ? setLoginSort(!loginSort) : setLoginSort(true)}}
+                    sx={loginSort ?
+                    arrowDownStyle
+                    : arrowUpStyle}
+                />
+                </h3>
+                <h3 style={{ width: '9.5vw' }}>Бренд</h3>
+                <h3 style={{ width: '16vw' }}>IBAN</h3>
+                <h3 className={styles.amount}>Сумма
+                <ArrowUpwardIcon
+                    onClick={() => { amountSort ? setAmountSort(!amountSort) : setAmountSort(true) }}
+                    sx={amountSort ?
+                    arrowDownStyle
+                    : arrowUpStyle}
+                /></h3>
+                <h3  className={styles.date} style={{gap:'10px'}}>Дата
+                <ArrowUpwardIcon
+                    onClick={() => { dateSort ? setDateSort(!dateSort) : setDateSort(true) }}
+                    sx={dateSort ?
+                    arrowDownStyle
+                    : arrowUpStyle}
+                />
+                </h3>
+                <h3 style={{ width: '8.6vw' }}>Статус</h3>
                 <h3 style={{ width: '7vw' }}>Загрузить чек</h3>
             </div>
             {
-                transactions.map(el=> <Transaction key={el.id} setTransactions={setTransactions} transaction={el}/>)
+                currentTransactions.map(el => <Transaction key={el.id} setTransactions={setTransactions} transaction={el} />)
             }
-                  <div
-                        style={{
-                        width: '100%',
-                        display: 'flex',
-                        justifyContent: 'right',
-                        padding: '10px 0px',
-                        }}
-                    >
-                        <Pagination
-                        count={totalPageCount}
-                        color="primary"
-                        shape="rounded"
-                        page={currentPage}
-                        onChange={(event, page) => paginate(page)}
-                        />
-                    </div>
+            <div
+                style={{
+                    width: '100%',
+                    display: 'flex',
+                    justifyContent: 'right',
+                    padding: '10px 0px',
+                }}
+            >
+                <Pagination
+                    count={totalPageCount}
+                    color="primary"
+                    shape="rounded"
+                    page={currentPage}
+                    onChange={(event, page) => paginate(page)}
+                />
+            </div>
             <Modal
                 aria-labelledby="transition-modal-title"
                 aria-describedby="transition-modal-description"
@@ -200,10 +285,10 @@ export default function P2PTransactionsList() {
                             <div style={{ width: '47%', display: 'flex', flexDirection: 'column', gap: '10px' }}>
                                 <div style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
                                     <label style={{ color: 'white', width: '100%', fontFamily: "'Nunito',sans-serif" }}>Бренд</label>
-                                    <select onChange={(e) => {ChangeUsersByBrand(e); setBrandError('') }} style={{ outline: 'none', padding: '15px 20px', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', width: '100%' }} placeholder='Бренд'>
+                                    <select onChange={(e) => { ChangeUsersByBrand(e); setBrandError('') }} style={{ outline: 'none', padding: '15px 20px', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', width: '100%' }} placeholder='Бренд'>
                                         <option value="">None</option>
                                         <option value="SafeInvest">SafeInvest</option>
-                                        <option value="VetalInvest">VetalInvest</option>
+                                        <option value="VitalInvest">VitalInvest</option>
                                         <option value="RiseInvest">RiseInvest</option>
                                         <option value="Revolut">Revolut</option>
                                         <option value="InfinityInvest">InfinityInvest</option>

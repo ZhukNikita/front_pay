@@ -21,14 +21,14 @@ export default function PaymentsMethods() {
             name: 'PinPay',
             link: `/pinpay?brand=${query.get('brand')}`,
             instruction: ['1. Полный Эквайринг без верефикации', "2. Заполнить реальные данные клиента ( если нет возможности то просто левые реальные данные)", "3. Создавшуюся ссылку скопировать и отправить клиенту", "4. Проверка зачисления через ПСП"],
-            brands: ['SafeInvest', 'VetalInvest', 'InfinityInvest', 'Revolut', 'RiseInvest']
+            brands: ['SafeInvest', 'VitalInvest', 'InfinityInvest', 'Revolut', 'RiseInvest']
         },
         {
             id: 3,
             name: 'P2P',
             link: `/p2p?brand=${query.get('brand')}`,
             instruction: ['1. Включаем ВПН страны где находится клиент', "2. Открываем ссылку, заполняем реальные данные клиента", "3. Выбираем нужный вариант оплаты из 3 више указаных", "4. Отправляем клиенту на заполнение", "5. После успешного пополнения отправляем в Тикет запрос на зачисление в формате: Название платежки 'Inserix', Почта клиента, Сумма и время пополнения, Документы Лида"],
-            brands: ['VetalInvest']
+            brands: ['VitalInvest']
         },
 
         {
@@ -37,7 +37,7 @@ export default function PaymentsMethods() {
             name: 'WLX',
             link:`/wlx`,
             instruction:['P2P на KZ, RU и Молдову'],
-            brands:['VetalInvest']
+            brands:['VitalInvest']
         },
         {
             id: 5,
@@ -50,7 +50,7 @@ export default function PaymentsMethods() {
                 "5.  Выбираем нужный вариант оплаты ( CC LPCS/WLC CC/ ZEN), не прошел один, значит пройдет другой",
                 "6. Отправляем клиенту на заполнение данных карты и оптаты",
                 "7. После успешного пополнения отправляем в Тикет запрос на зачисление в формате: Название платежки 'Inserix', Почта клиента, Сумма и время пополнения, Документы Лида"],
-            brands: ['SafeInvest', 'VetalInvest', 'InfinityInvest', 'Revolut', 'RiseInvest']
+            brands: ['SafeInvest', 'VitalInvest', 'InfinityInvest', 'Revolut', 'RiseInvest']
         }
     ]
 

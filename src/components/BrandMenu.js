@@ -18,7 +18,7 @@ function BrandMenu() {
             <select value={brand} onChange={(e)=> setBrand(e.target.value)}>
                 <option value="0">None</option>
                 <option value="SafeInvest">SafeInvest</option>
-                <option value="VetalInvest">VetalInvest</option>
+                <option value="VitalInvest">VitalInvest</option>
                 <option value="RiseInvest">RiseInvest</option>
                 <option value="Revolut">Revolut</option>
                 <option value="InfinityInvest">InfinityInvest</option>

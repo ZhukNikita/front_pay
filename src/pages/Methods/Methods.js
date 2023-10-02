@@ -19,7 +19,7 @@ export default function Methods() {
             name: 'PinPay',
             link:`/pinpay?brand=${query.get('brand')}`,
             instruction:['1. Полный Эквайринг без верефикации', "2. Заполнить реальные данные клиента ( если нет возможности то просто левые реальные данные)", "3. Создавшуюся ссылку скопировать и отправить клиенту", "4. Проверка зачисления через ПСП"],
-            brands: ['SafeInvest','VetalInvest','InfinityInvest','Revolut','RiseInvest']
+            brands: ['SafeInvest','VitalInvest','InfinityInvest','Revolut','RiseInvest']
         },
         {
             id:3,
@@ -48,7 +48,7 @@ export default function Methods() {
             "5.  Выбираем нужный вариант оплаты ( CC LPCS/WLC CC/ ZEN), не прошел один, значит пройдет другой", 
             "6. Отправляем клиенту на заполнение данных карты и оптаты", 
             "7. После успешного пополнения отправляем в Тикет запрос на зачисление в формате: Название платежки 'Inserix', Почта клиента, Сумма и время пополнения, Документы Лида"],
-            brands: ['SafeInvest','VetalInvest','InfinityInvest','Revolut','RiseInvest']
+            brands: ['SafeInvest','VitalInvest','InfinityInvest','Revolut','RiseInvest']
         }
     ]
 

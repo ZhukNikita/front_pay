@@ -16,6 +16,7 @@ import Transactions from './pages/Transactions/Transactions';
 import PinpayTransactions from './pages/PinpayTransactions/PinpayTransactions';
 import Methods from './pages/Methods/Methods';
 import P2PTransactions from './pages/P2PTransations/P2PTransactions';
+import P2PDeletedTransactions from './pages/P2PTransations/P2PDeletedTransactions';
 import WlxTransactions from './pages/WLXTransactions/WlxTransactions'
 import WLX from './components/WLX'
 
@@ -69,6 +70,7 @@ function App() {
         <Route path='/transactions' element={<Transactions/>} />
         <Route path='/pinpay-transactions' element={<PinpayTransactions/>} />
         <Route path='/p2p-transactions' element={<P2PTransactions/>} />
+        <Route path='/p2p-deleted-transactions' element={<P2PDeletedTransactions/>} />
         <Route path='/wlx-transactions' element={<WlxTransactions/>} />
         <Route path='/login' element={<Login />} />
         <Route path='/wlx' element={<WLX />} />

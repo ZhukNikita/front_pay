@@ -12,5 +12,13 @@
         h1 {
             color: rgb(183, 220, 233);
         }
+        .deletedTransactions{
+            background-color: $cardBC;
+            padding: 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: rgb(183, 220, 233);
+            font-weight: bold;
+        }
     }
 }
