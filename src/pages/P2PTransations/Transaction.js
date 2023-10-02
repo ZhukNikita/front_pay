@@ -108,11 +108,11 @@ export default function Transaction({ transaction , setTransactions }) {
         const createdBy = secureLocalStorage.getItem('userId')
 
         try{
-           await axios.patch(`http://localhost:5000/uploadP2PTransactionCheck/:${id}` , img ,{
+           await axios.patch(`http://156.67.52.151:5000/uploadP2PTransactionCheck/:${id}` , img ,{
                 headers:{
                     'content-type': "mulpipart/form-data"
                 }})
-            await axios.post('http://localhost:5000/p2pGetAllTransactions', {createdBy}).then(res => setTransactions(res.data))
+            await axios.post('http://156.67.52.151:5000/p2pGetAllTransactions', {createdBy}).then(res => setTransactions(res.data))
 
         }catch(e){
             console.log(e)

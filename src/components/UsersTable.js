@@ -35,7 +35,7 @@ export default function UsersTable({users}) {
     // Отправьте запрос на сервер для сохранения изменений в базе данных
     // и получите обновленные данные
     try {
-      const response = await axios.patch('http://localhost:5000/editUser', {
+      const response = await axios.patch('http://156.67.52.151:5000/editUser', {
         field,
         id,
         value,

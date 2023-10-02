@@ -27,7 +27,7 @@ function App() {
     const createdBy = secureLocalStorage.getItem('userId');
     const fetchData = async () => {
       try {
-        const response = await axios.post('http://localhost:5000/getMe', { id });
+        const response = await axios.post('http://156.67.52.151:5000/getMe', { id });
 
         const data = response.data; 
         if (data) {

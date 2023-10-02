@@ -141,8 +141,8 @@ export default function UserList({ users, setUsers, brands }) {
     const createdBy = secureLocalStorage.getItem('userId')
 
     try {
-      const { data } = await axios.post('http://localhost:5000/deletePayment', { deletePayment, checkbox })
-      await axios.post('http://localhost:5000/users', { createdBy }).then(res => setUsers(res.data.reverse()))
+      const { data } = await axios.post('http://156.67.52.151:5000/deletePayment', { deletePayment, checkbox })
+      await axios.post('http://156.67.52.151:5000/users', { createdBy }).then(res => setUsers(res.data.reverse()))
       return data
     } catch (e) {
       console.log(e)
@@ -153,8 +153,8 @@ export default function UserList({ users, setUsers, brands }) {
   const AddPayment = async () => {
     const createdBy = secureLocalStorage.getItem('userId')
     try {
-      const { data } = await axios.post('http://localhost:5000/addPayment', { deletePayment, checkbox })
-      await axios.post('http://localhost:5000/users', { createdBy }).then(res => setUsers(res.data.reverse()))
+      const { data } = await axios.post('http://156.67.52.151:5000/addPayment', { deletePayment, checkbox })
+      await axios.post('http://156.67.52.151:5000/users', { createdBy }).then(res => setUsers(res.data.reverse()))
       return data
     } catch (e) {
       console.log(e)

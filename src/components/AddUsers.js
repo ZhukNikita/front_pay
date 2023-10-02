@@ -181,8 +181,8 @@ export default function AddUsers() {
         const brandsId = choosenbrands.map(el => `${el.id}`)
         try {
             const randomPassword = generateRandomPassword(10);
-            const { data } = await axios.post('http://localhost:5000/registration', { login, randomPassword, brand, role, createdBy, selectedPayments, brandsId })
-            axios.post('http://localhost:5000/users', { createdBy }).then(res => setUsers(res.data.reverse()))
+            const { data } = await axios.post('http://156.67.52.151:5000/registration', { login, randomPassword, brand, role, createdBy, selectedPayments, brandsId })
+            axios.post('http://156.67.52.151:5000/users', { createdBy }).then(res => setUsers(res.data.reverse()))
 
             return data
         } catch (e) {
@@ -208,8 +208,8 @@ export default function AddUsers() {
         if (newBrandError === '') {
             try {
                 const createdBy = secureLocalStorage.getItem('userId')
-                await axios.post('http://localhost:5000/createBrand', { newBrand, createdBy })
-                await axios.post('http://localhost:5000/getBrands', { createdBy }).then(res => setBrands(res.data))
+                await axios.post('http://156.67.52.151:5000/createBrand', { newBrand, createdBy })
+                await axios.post('http://156.67.52.151:5000/getBrands', { createdBy }).then(res => setBrands(res.data))
                 setSnackMessage('Бренд успешно создан');
                 setSnackType('success');
                 setSnack(true)
@@ -232,9 +232,9 @@ export default function AddUsers() {
         if (deleteBrandError === '') {
             try {
                 const createdBy = secureLocalStorage.getItem('userId')
-                await axios.post('http://localhost:5000/deleteBrand', { deleteBrand, createdBy })
-                await axios.post('http://localhost:5000/getBrands', { createdBy }).then(res => setBrands(res.data))
-                await axios.post('http://localhost:5000/users', { createdBy }).then(res => setUsers(res.data.reverse()))
+                await axios.post('http://156.67.52.151:5000/deleteBrand', { deleteBrand, createdBy })
+                await axios.post('http://156.67.52.151:5000/getBrands', { createdBy }).then(res => setBrands(res.data))
+                await axios.post('http://156.67.52.151:5000/users', { createdBy }).then(res => setUsers(res.data.reverse()))
                 setSnackMessage('Бренд успешно удалён');
                 setSnackType('success');
                 setSnack(true)
@@ -252,8 +252,8 @@ export default function AddUsers() {
         const createdBy = secureLocalStorage.getItem('userId')
         const fetchData = async () => {
             try {
-                await axios.post('http://localhost:5000/users', { createdBy }).then(res => setUsers(res.data.reverse()))
-                await axios.post('http://localhost:5000/getBrands', { createdBy }).then(res => setBrands(res.data))
+                await axios.post('http://156.67.52.151:5000/users', { createdBy }).then(res => setUsers(res.data.reverse()))
+                await axios.post('http://156.67.52.151:5000/getBrands', { createdBy }).then(res => setBrands(res.data))
             } catch (e) {
 
             }

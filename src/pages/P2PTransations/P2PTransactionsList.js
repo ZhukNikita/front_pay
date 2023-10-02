@@ -81,9 +81,9 @@ export default function P2PTransactionsList() {
         const createdBy = secureLocalStorage.getItem('userId')
         const fetchData = async()=>{
             try {
-                axios.get('http://localhost:5000/p2pGetAll').then(res => setIbans(res.data))
-                axios.post('http://localhost:5000/p2pGetAllTransactions', {createdBy}).then(res => setTransactions(res.data))
-                axios.post('http://localhost:5000/users', { createdBy }).then(res => setUsers(res.data.reverse()))
+                axios.get('http://156.67.52.151:5000/p2pGetAll').then(res => setIbans(res.data))
+                axios.post('http://156.67.52.151:5000/p2pGetAllTransactions', {createdBy}).then(res => setTransactions(res.data))
+                axios.post('http://156.67.52.151:5000/users', { createdBy }).then(res => setUsers(res.data.reverse()))
     
             } catch (e) {
                 console.log(e)
@@ -97,7 +97,7 @@ export default function P2PTransactionsList() {
         const status = '0'
         const date = value.format('DD/MM/YYYY HH:mm:ss')
         try {
-            const { data } = await axios.post('http://localhost:5000/p2pCreateTransaction', { login, iban, brand, amount, createdBy, date, status })
+            const { data } = await axios.post('http://156.67.52.151:5000/p2pCreateTransaction', { login, iban, brand, amount, createdBy, date, status })
             return data
         } catch (e) {
             console.log(e)

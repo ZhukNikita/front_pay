@@ -226,8 +226,8 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
                 try {
                     const createdBy = secureLocalStorage.getItem('userId')
                     const id = user.id
-                    const { data } = await axios.post('http://localhost:5000/deleteUser', { id, createdBy });
-                    await axios.post('http://localhost:5000/users', { createdBy }).then(res => setUsers(res.data.reverse()))
+                    const { data } = await axios.post('http://156.67.52.151:5000/deleteUser', { id, createdBy });
+                    await axios.post('http://156.67.52.151:5000/users', { createdBy }).then(res => setUsers(res.data.reverse()))
                     Swal.fire(
                         "",
                         'Пользователь успешно удалён!',
@@ -246,8 +246,8 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
         const id = user.id
         const userBrands = role === 'SuperAdmin' || role === 'Admin' ? choosenbrands : []
         try {
-            const { data } = await axios.patch('http://localhost:5000/editUser', { login, password, brand, role, id, selectedPayments, userBrands })
-            axios.post('http://localhost:5000/users', { createdBy }).then(res => setUsers(res.data.reverse()))
+            const { data } = await axios.patch('http://156.67.52.151:5000/editUser', { login, password, brand, role, id, selectedPayments, userBrands })
+            axios.post('http://156.67.52.151:5000/users', { createdBy }).then(res => setUsers(res.data.reverse()))
             return data
         } catch (e) {
             console.log(e)
