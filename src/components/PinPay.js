@@ -184,7 +184,7 @@ function PinPay() {
   return (
     <div className={styles.App}>
           <div className={styles.Card}>
-            <Link to={'/'} style={{color:'white' , fontWeight:'bold' , fontFamily:'"Montserrat" , sans-serif' , position:'absolute' , top:'20px' , right:'20px'}}>На главную</Link>
+            <Link to={'/payments_methods'} style={{color:'white' , fontWeight:'bold' , fontFamily:'"Montserrat" , sans-serif' , position:'absolute' , top:'20px' , right:'20px'}}>На главную</Link>
 
                 <img className={styles.Logo} src={logo}/>
                 <div className={styles.wrapper}>

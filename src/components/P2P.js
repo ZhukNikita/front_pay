@@ -4,6 +4,8 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import Clipboard from 'react-clipboard.js';
+import secureLocalStorage from 'react-secure-storage';
+import { Navigate } from 'react-router-dom';
 
 export default function P2P() {
   const [url, setUrl] = useState('');
@@ -86,8 +88,10 @@ export default function P2P() {
       setUrl('')
     }
   }, [seconds]);
-
-
+  const methods = secureLocalStorage.getItem('methods')
+  if(!methods.includes('P2P')){
+    return <Navigate to="/login"/>
+  }
   return (
     <div className={styles.body}>
       <h1>P2P</h1>

@@ -32,6 +32,7 @@
     }
     .logo{
         @include flex(center,center);
+        flex-direction: column;
             width: 80%;
             img{
                 width: 40%;

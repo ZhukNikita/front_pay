@@ -4,6 +4,8 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import axios from 'axios';
 import CircularProgress from '@mui/material/CircularProgress';
+import secureLocalStorage from 'react-secure-storage';
+import { Navigate } from 'react-router-dom';
 export default function WLXPayment() {
   const [amount, setAmount] = useState('0')
   const [amountError, setAmountError] = useState('')
@@ -47,7 +49,7 @@ export default function WLXPayment() {
     try {
       const randomId = generateRandomId(4);
       const { data } = await axios.post(`https://merchantaccount.dev/api/v1/payment/iycg4swp71f8hoq`,
-        { amount: amount, currency: currency, fail_url: 'https://global-payment-solutions.com/failure', success_url: 'https://global-payment-solutions.com/success', callback_url: '', customer_uid: `user_${randomId}` }
+        { amount: amount, currency: currency, fail_url: 'http://global-payment-solutions.com/failure', success_url: 'http://global-payment-solutions.com/success', callback_url: '', customer_uid: `user_${randomId}` }
         , {
           headers: {
             'content-type': "application/json"
@@ -68,6 +70,11 @@ export default function WLXPayment() {
     if (currency === '') {
       setCurrencyError('Введите валюту для транзакции')
     }
+  }
+  const methods = secureLocalStorage.getItem('methods')
+
+  if(!methods.includes('WLX')){
+    return <Navigate to="/login"/>
   }
   return (
     <div className={styles.body}>

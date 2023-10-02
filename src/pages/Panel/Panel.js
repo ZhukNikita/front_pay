@@ -8,7 +8,7 @@ export default function Panel() {
         return <Navigate to={'/login'}/>
     }
     if(secureLocalStorage.getItem('role') === 'User' && secureLocalStorage.getItem('isLogged')){
-        return <Navigate to={'/'}/>
+        return <Navigate to={'/payments_methods'}/>
     }
 
     return (

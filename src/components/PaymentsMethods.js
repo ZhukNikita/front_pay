@@ -19,18 +19,17 @@ export default function PaymentsMethods() {
         {
             id: 1,
             name: 'PinPay',
-            link: `/pinpay?brand=${query.get('brand')}`,
+            link: `/pinpay?brand=${secureLocalStorage.getItem('userBrand')}`,
             instruction: ['1. Полный Эквайринг без верефикации', "2. Заполнить реальные данные клиента ( если нет возможности то просто левые реальные данные)", "3. Создавшуюся ссылку скопировать и отправить клиенту", "4. Проверка зачисления через ПСП"],
             brands: ['SafeInvest', 'VetalInvest', 'InfinityInvest', 'Revolut', 'RiseInvest']
         },
         {
             id: 3,
             name: 'P2P',
-            link: `/p2p?brand=${query.get('brand')}`,
+            link: `/p2p?brand=${secureLocalStorage.getItem('userBrand')}`,
             instruction: ['1. Включаем ВПН страны где находится клиент', "2. Открываем ссылку, заполняем реальные данные клиента", "3. Выбираем нужный вариант оплаты из 3 више указаных", "4. Отправляем клиенту на заполнение", "5. После успешного пополнения отправляем в Тикет запрос на зачисление в формате: Название платежки 'Inserix', Почта клиента, Сумма и время пополнения, Документы Лида"],
             brands: ['VetalInvest']
         },
-
         {
             id:4,
 
@@ -72,17 +71,22 @@ export default function PaymentsMethods() {
     //     fetchData()
     // },[])
     const getMethods = () => {
-        const brand = query.get('brand')
-        const arr = methods.filter(el => el.brands.includes(brand))
+        const arr = methods.filter(el => userMethods.includes(el.name))
         return arr
     }
     return (
         <div className={styles.body}>
-            <button className={styles.logout} onClick={()=>{secureLocalStorage.removeItem('isLogged') ; secureLocalStorage.removeItem('role') ; secureLocalStorage.removeItem('methods') ; secureLocalStorage.removeItem('userId') ; window.location.href = '/login'}}>Вийти</button>
+            <button className={styles.logout}
+             onClick={()=>{secureLocalStorage.removeItem('isLogged') ;
+              secureLocalStorage.removeItem('role') ;
+               secureLocalStorage.removeItem('methods') ;
+                secureLocalStorage.removeItem('userId') ;
+                secureLocalStorage.removeItem('brands') ;
+                secureLocalStorage.removeItem('userBrand') ;
+                 window.location.href = '/login'}}>Вийти</button>
 
             <div className={styles.logo}>
                 <img src={Logo} alt='logo'/>
-            <Link to={'/'} style={{ color: 'white', fontWeight: 'bold', fontFamily: '"Montserrat" , sans-serif', position: 'absolute', top: '20px', right: '20px' }}>На главную</Link>
             <h2>Пожалуйста выберите метод платежа</h2>
             <div className={styles.methods}>
                 {getMethods() ? getMethods().map(el => <Method key={el.id} name={el.name} link={el.link} instruction={el.instruction} />) : ''}

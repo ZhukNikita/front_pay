@@ -37,6 +37,7 @@ function App() {
             secureLocalStorage.removeItem('role')
             secureLocalStorage.removeItem('isLogged')
             secureLocalStorage.removeItem('brands')
+            secureLocalStorage.removeItem('userBrand')
             window.location.href = '/login'
           }else{
             setMethods(data.methods? data.methods : [])
@@ -44,6 +45,7 @@ function App() {
             secureLocalStorage.setItem('methods', data.methods);
             secureLocalStorage.setItem('role', data.role);
             secureLocalStorage.setItem('brands', data.brands);
+            secureLocalStorage.setItem('userBrand' , data.brand)
           }
         }
       } catch (e) {
@@ -66,10 +68,10 @@ function App() {
         <Route path='/failure' element={<Failure />} />
         <Route path='/success' element={<Success />} />
         <Route path='/panel' element={<Panel />} />
-        <Route path='/transactions' element={<Transactions/>} />
+        {/* <Route path='/transactions' element={<Transactions/>} />
         <Route path='/pinpay-transactions' element={<PinpayTransactions/>} />
         <Route path='/p2p-transactions' element={<P2PTransactions/>} />
-        <Route path='/wlx-transactions' element={<WlxTransactions/>} />
+        <Route path='/wlx-transactions' element={<WlxTransactions/>} /> */}
         <Route path='/login' element={<Login />} />
         <Route path='/wlx' element={<WLX />} />
       </Routes>
