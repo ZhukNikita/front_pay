@@ -19,6 +19,7 @@ import P2PTransactions from './pages/P2PTransations/P2PTransactions';
 import P2PDeletedTransactions from './pages/P2PTransations/P2PDeletedTransactions';
 import WlxTransactions from './pages/WLXTransactions/WlxTransactions'
 import WLX from './components/WLX'
+import Statistics from './pages/Statistics/Statistics';
 
 function App() {
   const [methods , setMethods] = useState([])
@@ -73,6 +74,7 @@ function App() {
         <Route path='/p2p-deleted-transactions' element={<P2PDeletedTransactions/>} />
         <Route path='/wlx-transactions' element={<WlxTransactions/>} />
         <Route path='/login' element={<Login />} />
+        <Route path='/statistics' element={<Statistics />} />
         <Route path='/wlx' element={<WLX />} />
       </Routes>
     </div>

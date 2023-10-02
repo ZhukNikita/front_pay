@@ -1,0 +1,8 @@
+@import '../../styles/vars.scss';
+
+.body{
+    width: 100%;
+    min-height: 100vh;
+    @include flex(center,start);
+    flex-direction: row;
+}

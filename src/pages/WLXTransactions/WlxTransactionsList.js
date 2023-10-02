@@ -16,6 +16,7 @@ export default function WlxTransactionsList() {
     const [currentPage, setCurrentPage] = useState(1);
     const [dateSort, setDateSort] = useState(null);
     const [amountSort, setAmountSort] = useState(null);
+
     useEffect(() => {
         if (amountSort) {
             const sortedTransactions = [...transactions].sort((a, b) => b.entered_amount - a.entered_amount);
@@ -41,7 +42,9 @@ export default function WlxTransactionsList() {
             setAmountSort(null)
         }
     }, [dateSort]);
-
+    let tempArr = transactions.filter(el=> el.status === 'success' && el.currency === 'RUB')
+    const totalSentAmount = tempArr.reduce((sum, obj) => sum + obj.sent_amount, 0);
+    console.log(totalSentAmount)
     const totalFilteredTransactions = transactions.length;
     const totalPageCount = Math.ceil(totalFilteredTransactions / transactionsPerPage);
     const indexOfLastTransactions = currentPage * transactionsPerPage;

@@ -2,26 +2,29 @@ import * as React from 'react';
 
 import { PieChart, pieArcLabelClasses , pieArcClasses} from '@mui/x-charts/PieChart';
 
-const data = [
-  { label: 'Group A', value: 333, color: '#325A96' },
-  { label: 'Group B', value: 333, color: 'rgb(122, 12, 56)' },
-  { label: 'Group C', value: 333, color: 'rgb(34, 154, 22)' },
-];
 
-const sizing = {
-  margin: { right: 5 },
-  width: 200,
-  height: 200,
-  legend: { hidden: true },
-};
-const TOTAL = data.map((item) => item.value).reduce((a, b) => a + b, 0);
 
-const getArcLabel = (params) => {
-  const percent = params.value / TOTAL;
-  return `${(percent * 100).toFixed(0)}%`;
-};
-
-export default function PieChartWithCustomizedLabel() {
+export default function PieChartWithCustomizedLabel({value}) {
+  if(!value){
+    return <div>Loading</div>
+  }
+  const data = [
+    { label: 'Group B', value: value[2], color: 'rgba(255, 72, 66, 0.66)' },
+    { label: 'Group C', value: value[0], color: 'rgb(34, 154, 22)' },
+  ];
+  
+  const sizing = {
+    margin: { right: 5 },
+    width: 200,
+    height: 200,
+    legend: { hidden: true },
+  };
+  const TOTAL = data.map((item) => item.value).reduce((a, b) => a + b, 0);
+  
+  const getArcLabel = (params) => {
+    const percent = params.value / TOTAL;
+    return `${(percent * 100).toFixed(0)}%`;
+  };
   return (
     <PieChart
       series={[
@@ -37,8 +40,10 @@ export default function PieChartWithCustomizedLabel() {
       ]}
       sx={{
         [`& .${pieArcLabelClasses.root}`]: {
-          fill: 'white',
+          fill: 'black',
           fontSize: 14,
+          fontFamily:"'Nunito',sans-serif",
+          fontWeight:'bold'
         },
         [`& .${pieArcClasses.root}`]: {
             stroke:'none',

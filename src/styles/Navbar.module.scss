@@ -9,7 +9,6 @@
     .content{
     @include flex(center,start);
     flex-direction: column;
-
         h2{
             color: rgb(183, 220, 233);
             font-family: 'Nunito', sans-serif;
