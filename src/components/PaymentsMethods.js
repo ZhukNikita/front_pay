@@ -4,6 +4,8 @@ import { useLocation, Link } from "react-router-dom";
 import Logo from '../img/GPLogo.png'
 import Method from './Method';
 import axios from 'axios';
+import secureLocalStorage from 'react-secure-storage'
+import {Navigate} from 'react-router-dom'
 
 export default function PaymentsMethods() {
     function useQuery() {

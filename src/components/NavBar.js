@@ -23,7 +23,13 @@ export default function NavBar() {
                 </div>
             </div>
 
-            <button className={styles.logout} onClick={()=>{secureLocalStorage.removeItem('isLogged') ; secureLocalStorage.removeItem('role') ; secureLocalStorage.removeItem('userId') ; window.location.href = 'http://localhost:3000/login'}}>Вийти</button>
+            <button className={styles.logout} 
+            onClick={()=>{secureLocalStorage.removeItem('isLogged') ;
+             secureLocalStorage.removeItem('role') ;
+              secureLocalStorage.removeItem('userId') ;
+              secureLocalStorage.removeItem('brands') ;
+              secureLocalStorage.removeItem('methods') ;
+               window.location.href = 'http://localhost:3000/login'}}>Вийти</button>
         </div>
     )
 }

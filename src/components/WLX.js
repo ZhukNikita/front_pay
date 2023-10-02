@@ -3,13 +3,13 @@ import React, { useState } from "react";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import axios from 'axios';
-
+import CircularProgress from '@mui/material/CircularProgress';
 export default function WLXPayment() {
   const [amount, setAmount] = useState('0')
   const [amountError, setAmountError] = useState('')
   const [currency, setCurrency] = useState('')
   const [currencyError, setCurrencyError] = useState('')
-
+  const [isLoading , setIsLoading] = useState(false)
   const handleInputChange = (e) => {
     const inputValue = e.target.value;
     const numericValue = inputValue.replace(/\D/g, '');
@@ -43,6 +43,7 @@ export default function WLXPayment() {
 }
 
   const CreateTransaction = async () => {
+    setIsLoading(true)
     try {
       const randomId = generateRandomId(4);
       const { data } = await axios.post(`https://merchantaccount.dev/api/v1/payment/iycg4swp71f8hoq`,
@@ -53,6 +54,7 @@ export default function WLXPayment() {
           }
         })
       if (data.url) {
+        setIsLoading(false)
         window.location.href = data.url;
       }
     } catch (e) {
@@ -101,7 +103,7 @@ export default function WLXPayment() {
         </div>
         {
           amount !== '0' && currency !== '' && currencyError === '' && amountError === ''
-            ? <button onClick={CreateTransaction} className={styles.transactionButton}>Создать <br /> транзакцию</button>
+            ? <button onClick={CreateTransaction} className={styles.transactionButton}>{isLoading? <CircularProgress sx={{color:'white' }} /> : <span>Создать <br/> транзакцию</span>}</button>
             : <button onClick={Check} className={styles.transactionButtonDisable}>Создать <br /> транзакцию</button>
         }
       </div>

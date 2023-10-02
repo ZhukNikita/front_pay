@@ -1,5 +1,4 @@
 import styles from '../../styles/P2P.module.scss'
-import styles from '../styles/P2P.module.scss'
 import {Link} from 'react-router-dom'
 
 export default function NoMatch(){

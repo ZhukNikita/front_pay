@@ -1,7 +1,6 @@
 import './App.css';
 import PinPay from './components/PinPay'
 import BrandMenu from './components/BrandMenu'
-<<<<<<< HEAD
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import PaymentsMethods from './components/PaymentsMethods';
 import P2P from './components/P2P';
@@ -18,16 +17,18 @@ import PinpayTransactions from './pages/PinpayTransactions/PinpayTransactions';
 import Methods from './pages/Methods/Methods';
 import P2PTransactions from './pages/P2PTransations/P2PTransactions';
 import WlxTransactions from './pages/WLXTransactions/WlxTransactions'
-
+import WLX from './components/WLX'
 
 function App() {
   const [methods , setMethods] = useState([])
   const {pathname} = useLocation()
   useEffect(() => {
     const id = secureLocalStorage.getItem('userId');
+    const createdBy = secureLocalStorage.getItem('userId');
     const fetchData = async () => {
       try {
         const response = await axios.post('http://localhost:5000/getMe', { id });
+
         const data = response.data; 
         if (data) {
           if(data.id === null){ 
@@ -70,30 +71,7 @@ function App() {
         <Route path='/p2p-transactions' element={<P2PTransactions/>} />
         <Route path='/wlx-transactions' element={<WlxTransactions/>} />
         <Route path='/login' element={<Login />} />
-=======
-import {Routes, Route} from 'react-router-dom'
-import PaymentsMethods from './components/PaymentsMethods';
-import P2P from './components/P2P';
-import NoMatch from './components/NoMatch';
-import Failure from './components/Failure';
-import Success from './components/Success';
-import WLXPayment from "./components/WLX";
-
-function App() {
-
- 
-  return (
-    <div className="App">
-      <Routes>
-        <Route path={'/pinpay'} element={<PinPay/>}/>
-        <Route path={'/wlx'} element={<WLXPayment/>}/>
-        <Route path={'/'} element={<BrandMenu/>}/>
-        <Route path={'/payments_methods'} element={<PaymentsMethods/>}/>
-        <Route path={'/p2p'} element={<P2P/>}/>
-        <Route path='*' element={<NoMatch/>}/>
-        <Route path='/failure' element={<Failure/>}/>
-        <Route path='/success' element={<Success/>}/>
->>>>>>> wlx
+        <Route path='/wlx' element={<WLX />} />
       </Routes>
     </div>
   );
