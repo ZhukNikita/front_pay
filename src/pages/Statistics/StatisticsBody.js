@@ -30,7 +30,7 @@ export default function StatisticsBody(){
             <div className={styles.wlx}>
                 <h1>Статистика WLX</h1>
                 <div>
-                    <TransactionsChart value={[successValue.length , pendingValue.length , failedValue.length]}/>
+                    <TransactionsChart value={[successValue.length , pendingValue.length , failedValue.length]} title={['Успешно',"Не успешно"]}/>
                 </div>
             </div>
         </div>

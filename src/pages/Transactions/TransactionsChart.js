@@ -4,13 +4,13 @@ import { PieChart, pieArcLabelClasses , pieArcClasses} from '@mui/x-charts/PieCh
 
 
 
-export default function PieChartWithCustomizedLabel({value}) {
+export default function PieChartWithCustomizedLabel({value,title}) {
   if(!value){
     return <div>Loading</div>
   }
   const data = [
-    { label: 'Group B', value: value[2], color: 'rgba(255, 72, 66, 0.66)' },
-    { label: 'Group C', value: value[0], color: 'rgb(34, 154, 22)' },
+    { label: title[1], value: value[2], color: 'rgba(255, 72, 66, 0.66)' },
+    { label: title[0], value: value[0], color: 'rgb(34, 154, 22)' },
   ];
   
   const sizing = {
