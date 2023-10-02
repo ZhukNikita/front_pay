@@ -2,9 +2,9 @@
 
 .body{
     width: 400px;
-    background-color: $cardBC;
+    // background-color: $cardBC;
     border-radius: 6px;
-    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.35);
+    // box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.35);
     @include flex(center,start);
     flex-direction: column;
     padding: 20px;

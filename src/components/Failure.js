@@ -1,7 +1,7 @@
 import Swal from 'sweetalert2';
 import { useLocation} from 'react-router-dom'
 
-export default function(){
+export default function Failure(){
     const { pathname } = useLocation();
 
     if(pathname.includes('failure')){

@@ -8,6 +8,7 @@ import MenuItem from '@mui/material/MenuItem';
 import styles from '../styles/PinPay.module.scss'
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import secureLocalStorage from 'react-secure-storage';
 function PinPay() {
   const navigate = useNavigate()
 
@@ -178,10 +179,12 @@ function PinPay() {
     }
   },[])
 
+
+
   return (
     <div className={styles.App}>
           <div className={styles.Card}>
-            <Link to={'/'} style={{color:'white' , fontWeight:'bold' , fontFamily:'"Montserrat" , sans-serif' , position:'absolute' , top:'20px' , right:'20px'}}>На главную</Link>
+            <Link to={'/payments_methods'} style={{color:'white' , fontWeight:'bold' , fontFamily:'"Montserrat" , sans-serif' , position:'absolute' , top:'20px' , right:'20px'}}>На главную</Link>
 
                 <img className={styles.Logo} src={logo}/>
                 <div className={styles.wrapper}>

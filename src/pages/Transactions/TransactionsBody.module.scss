@@ -1,0 +1,51 @@
+@import '../../styles/vars.scss';
+
+.body {
+    padding: 30px;
+    width: 76%;
+    height: 93vh;
+    font-family: 'Nunito', sans-serif;
+
+    .header {
+        @include flex(center, space-between);
+
+        h1 {
+            color: rgb(183, 220, 233);
+        }
+    }
+
+    .chart {
+        @include flex(center, center);
+        flex-direction: column;
+        background-color: rgb(183, 220, 233);
+        width: 220px;
+        padding: 0 20px;
+        border-radius: 12px;
+
+        h3 {
+            width: 100%;
+            text-align: left;
+            margin-bottom: 7px;
+            color: #05152c;
+        }
+
+        .descriptions {
+            padding: 10px;
+            @include flex(start, center);
+            flex-direction: column;
+            width: calc(100% + 20px);
+            border-top: 1px solid rgba(145, 158, 171, 0.24);
+
+            .description {
+                @include flex(center, start);
+                gap: 10px;
+                width: 100%;
+
+                h4 {
+                    color: #05152c;
+                    margin: 0;
+                }
+            }
+        }
+    }
+}
