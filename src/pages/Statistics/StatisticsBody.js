@@ -3,7 +3,6 @@ import TransactionsChart from '../Transactions/TransactionsChart'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import { Oval } from 'react-loader-spinner';
-import { VictoryBar, VictoryChart } from 'victory';
 
 export default function StatisticsBody() {
     const [transactions, setTransactions] = useState([])
@@ -72,7 +71,7 @@ export default function StatisticsBody() {
                                     strokeWidthSecondary={2}
                                 />
                             </div>
-                            : <TransactionsChart value={[successValue.length, pendingValue.length, failedValue.length]} title={['Успешно', "Не успешно"]} />}
+                            : <TransactionsChart value={[successValue.length, pendingValue.length, failedValue.length]} title={['Успешно', "Не успешно"]} totalTransactions={transactions.length} />}
 
                         <div className={styles.descriptions}>
                             <div className={styles.description}>

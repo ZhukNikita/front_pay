@@ -38,7 +38,7 @@ const style = {
     width: "550px"
 };
 
-export default function P2PTransactionsList() {
+export default function P2PTransactionsList({ibans ,setIbans}) {
     const [search, setSearch] = useState('')
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
@@ -46,7 +46,6 @@ export default function P2PTransactionsList() {
     const [brandError, setBrandError] = useState('')
     const [login, setLogin] = useState('')
     const [loginError, setLoginError] = useState('')
-    const [ibans, setIbans] = useState([])
     const [iban, setIban] = useState('')
     const [amount, setAmount] = useState('')
     const [amountError, setAmountError] = useState('')

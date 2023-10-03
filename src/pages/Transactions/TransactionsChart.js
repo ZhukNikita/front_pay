@@ -1,10 +1,11 @@
 import * as React from 'react';
 
 import { PieChart, pieArcLabelClasses , pieArcClasses} from '@mui/x-charts/PieChart';
+import { useDrawingArea } from '@mui/x-charts/hooks';
+import { styled } from '@mui/material/styles';
 
 
-
-export default function PieChartWithCustomizedLabel({value,title}) {
+export default function PieChartWithCustomizedLabel({value,title,totalTransactions}) {
   const data = [
     { label: title[1], value: value[2], color: 'rgb(255 45 38 / 76%)' , fill:'black' },
     { label: title[0], value: value[0], color: 'rgb(34, 154, 22)', fill:'white' },
@@ -25,6 +26,20 @@ export default function PieChartWithCustomizedLabel({value,title}) {
     }
     return `${(percent * 100).toFixed(0)}%`;
   };
+  const StyledText = styled('text')(({ theme }) => ({
+    fill: '#b7dce9',
+    textAnchor: 'middle',
+    dominantBaseline: 'central',
+    fontSize: 20,
+  }));
+  function PieCenterLabel({ children }) {
+    const { width, height, left, top } = useDrawingArea();
+    return (
+      <StyledText x={left + width / 2} y={top + height / 2}>
+        {children}
+      </StyledText>
+    );
+  }
   return (
     <PieChart
       series={[
@@ -35,7 +50,8 @@ export default function PieChartWithCustomizedLabel({value,title}) {
           innerRadius: 40,
           paddingAngle: 5,
           cornerRadius: 12,
-          startAngle: -90,
+          startAngle: 0,
+          endAngle: 360
         },
       ]}
       sx={{
@@ -49,14 +65,18 @@ export default function PieChartWithCustomizedLabel({value,title}) {
           },
           '&:nth-of-type(2)': {
             fill: '#2edf1e',
+            
           },
         },
         [`& .${pieArcClasses.root}`]: {
             stroke:'none',
+            transition:'all 0.5s ease',
         },
         
       }}
       {...sizing}
-    />
+    >
+      <PieCenterLabel>{totalTransactions}</PieCenterLabel>
+    </PieChart>
   );
 }

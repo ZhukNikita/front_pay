@@ -12,13 +12,32 @@
         h1 {
             color: rgb(183, 220, 233);
         }
-        .deletedTransactions{
-            background-color: $cardBC;
-            padding: 20px;
-            border-radius: 8px;
-            text-decoration: none;
-            color: rgb(183, 220, 233);
-            font-weight: bold;
+        
+        .buttons{
+            @include flex(center, center);
+            gap: 20px;
+            button{
+                @include flex(center, center);
+                gap: 10px;
+                background-color: $cardBC;
+                color: rgb(183, 220, 233);
+                border: none;
+                padding: 16.5px;
+                border-radius: 8px;
+                font-weight: bold;
+                font-family: 'Nunito',sans-serif;
+                font-size: 16px;
+                cursor: pointer;
+            }
+            .deletedTransactions{
+                background-color: $cardBC;
+                padding: 20px;
+                border-radius: 8px;
+                text-decoration: none;
+                color: rgb(183, 220, 233);
+                font-weight: bold;
+            }
         }
     }
+
 }

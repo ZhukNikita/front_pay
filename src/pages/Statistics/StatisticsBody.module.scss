@@ -10,14 +10,13 @@
         color: rgb(183, 220, 233);
 
         .wlxChart {
-            @include flex(start, space-between);
-
+            @include flex(start, start);
+            gap: 30px;
             .card {
-                width: 300px;
+                width: 360px;
                 background-color: rgb(112 ,172, 219);
-                height: 220px;
                 border-radius: 10px;
-
+                padding-bottom: 10px;
                 .cardCircle {
                     margin: auto auto 24px;
                     display: flex;
@@ -39,6 +38,14 @@
                     width: 100%;
                     @include flex(center,start);
                     flex-direction: column;
+                    text-align: center;
+                    h2{
+                        font-size: 1.4vw;
+                    }
+                    h3{
+                        font-size: 1.1vw;
+                        width: 90%;
+                    }
                     h2 , h3{
                         color:rgb(6, 27, 100);
                         margin: 0;
