@@ -5,12 +5,9 @@ import { PieChart, pieArcLabelClasses , pieArcClasses} from '@mui/x-charts/PieCh
 
 
 export default function PieChartWithCustomizedLabel({value,title}) {
-  if(!value){
-    return <div>Loading</div>
-  }
   const data = [
-    { label: title[1], value: value[2], color: 'rgba(255, 72, 66, 0.66)' },
-    { label: title[0], value: value[0], color: 'rgb(34, 154, 22)' },
+    { label: title[1], value: value[2], color: 'rgb(255 45 38 / 76%)' , fill:'black' },
+    { label: title[0], value: value[0], color: 'rgb(34, 154, 22)', fill:'white' },
   ];
   
   const sizing = {
@@ -23,31 +20,41 @@ export default function PieChartWithCustomizedLabel({value,title}) {
   
   const getArcLabel = (params) => {
     const percent = params.value / TOTAL;
+    if(isNaN(percent.toFixed(0))){
+      return ''
+    }
     return `${(percent * 100).toFixed(0)}%`;
   };
   return (
     <PieChart
       series={[
         {
-          outerRadius: 80,
+          outerRadius: 100,
           data,
-          arcLabel: getArcLabel,
-          innerRadius: 30,
+          arcLabel: getArcLabel ,
+          innerRadius: 40,
           paddingAngle: 5,
-          cornerRadius: 5,
+          cornerRadius: 12,
           startAngle: -90,
         },
       ]}
       sx={{
         [`& .${pieArcLabelClasses.root}`]: {
-          fill: 'black',
+
           fontSize: 14,
           fontFamily:"'Nunito',sans-serif",
-          fontWeight:'bold'
+          fontWeight:'bold',
+          '&:nth-of-type(1)': {
+            fill: '#ffbac3',
+          },
+          '&:nth-of-type(2)': {
+            fill: '#2edf1e',
+          },
         },
         [`& .${pieArcClasses.root}`]: {
             stroke:'none',
         },
+        
       }}
       {...sizing}
     />

@@ -5,7 +5,83 @@
     width: 76%;
     height: 93vh;
     font-family: 'Nunito', sans-serif;
-    .wlx{
+
+    .wlx {
         color: rgb(183, 220, 233);
+
+        .wlxChart {
+            @include flex(start, space-between);
+
+            .card {
+                width: 300px;
+                background-color: rgb(112 ,172, 219);
+                height: 220px;
+                border-radius: 10px;
+
+                .cardCircle {
+                    margin: auto auto 24px;
+                    display: flex;
+                    border-radius: 50%;
+                    -webkit-box-align: center;
+                    align-items: center;
+                    width: 64px;
+                    height: 64px;
+                    -webkit-box-pack: center;
+                    justify-content: center;
+                    color: rgb(16, 57, 150);
+                    background-image: linear-gradient(135deg, rgba(138, 173, 253, 0) 0%, rgba(3, 45, 137, 0.42) 100%);
+                    font-family: 'Nunito',sans-serif;
+                    font-weight: bold;
+                    margin-top: 10px;
+                    font-size: 20px;
+                }
+                .cardBody{
+                    width: 100%;
+                    @include flex(center,start);
+                    flex-direction: column;
+                    h2 , h3{
+                        color:rgb(6, 27, 100);
+                        margin: 0;
+                    }
+                }
+            }
+
+            .wlxPie {
+                padding: 20px;
+                border-radius: 10px;
+                @include flex(center, start);
+                flex-direction: column;
+                background-color: $cardBC;
+                width: 215px;
+                height: 300px;
+
+                h3 {
+                    width: 100%;
+                    margin-top: 0;
+                    margin-bottom: 10px;
+                }
+
+                .descriptions {
+                    margin-top: 10px;
+                    padding: 10px 10px 0 10px;
+                    @include flex(start, center);
+                    flex-direction: column;
+                    width: calc(100% + 20px);
+                    border-top: 1px solid rgba(145, 158, 171, 0.24);
+
+                    .description {
+                        @include flex(center, start);
+                        gap: 10px;
+                        width: 100%;
+
+                        h4 {
+                            color: #b7dce9;
+                            margin: 0;
+                        }
+                    }
+                }
+            }
+        }
+
     }
 }

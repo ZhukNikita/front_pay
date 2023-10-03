@@ -42,9 +42,7 @@ export default function WlxTransactionsList() {
             setAmountSort(null)
         }
     }, [dateSort]);
-    let tempArr = transactions.filter(el=> el.status === 'success' && el.currency === 'RUB')
-    const totalSentAmount = tempArr.reduce((sum, obj) => sum + obj.sent_amount, 0);
-    console.log(totalSentAmount)
+
     const totalFilteredTransactions = transactions.length;
     const totalPageCount = Math.ceil(totalFilteredTransactions / transactionsPerPage);
     const indexOfLastTransactions = currentPage * transactionsPerPage;
