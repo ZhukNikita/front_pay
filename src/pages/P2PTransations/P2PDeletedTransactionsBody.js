@@ -9,11 +9,14 @@ export default function P2PTransactionsBody() {
         <div className={styles.body}>
             <div className={styles.header}>
                 <h1>Удалённые транзакции P2P</h1>
+                <div className={styles.buttons}>
                 {
                     secureLocalStorage.getItem('role') === 'SuperAdmin'?
                     <Link to={'/p2p-transactions'} className={styles.deletedTransactions}>Созданные транзакции</Link>
                     : <></>
                 }
+                </div>
+
             </div>
             <P2PDeletedTransactionsList/>
         </div>

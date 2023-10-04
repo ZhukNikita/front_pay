@@ -71,7 +71,7 @@ export default function StatisticsBody() {
                                     strokeWidthSecondary={2}
                                 />
                             </div>
-                            : <TransactionsChart value={[successValue.length, pendingValue.length, failedValue.length]} title={['Успешно', "Не успешно"]} totalTransactions={transactions.length} />}
+                            : <TransactionsChart value={[successValue.length,  failedValue.length]} title={['Успешно', "Отклонено"]} totalTransactions={transactions.length} />}
 
                         <div className={styles.descriptions}>
                             <div className={styles.description}>

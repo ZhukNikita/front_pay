@@ -7,7 +7,7 @@ import { styled } from '@mui/material/styles';
 
 export default function PieChartWithCustomizedLabel({value,title,totalTransactions}) {
   const data = [
-    { label: title[1], value: value[2], color: 'rgb(255 45 38 / 76%)' , fill:'black' },
+    { label: title[1], value: value[1], color: 'rgb(255 45 38 / 76%)' , fill:'black' },
     { label: title[0], value: value[0], color: 'rgb(34, 154, 22)', fill:'white' },
   ];
   
@@ -48,10 +48,10 @@ export default function PieChartWithCustomizedLabel({value,title,totalTransactio
           data,
           arcLabel: getArcLabel ,
           innerRadius: 40,
-          paddingAngle: 5,
           cornerRadius: 12,
           startAngle: 0,
-          endAngle: 360
+          endAngle: 360,
+          paddingAngle:  5
         },
       ]}
       sx={{

@@ -38,7 +38,7 @@ export default function P2PTransactionsBody() {
     const [openDelete, setOpenDelete] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleOpenDelete = () => setOpenDelete(true);
-    const [iban, setIban] = useState('')
+    const [iban1, setIban] = useState('')
     const [ibanToDelete, setIbanToDelete] = useState('')
     const [ibanError, setIbanError] = useState('')
     const [ibanErrorToDelete, setIbanErrorToDelete] = useState('')
@@ -70,7 +70,7 @@ export default function P2PTransactionsBody() {
         }
     }
     const Check = () => {
-        if(!iban){
+        if(!iban1){
             setIbanError('Введите IBAN')
         }
         if(!recipient){
@@ -93,6 +93,7 @@ export default function P2PTransactionsBody() {
     };
     const Create = async() => {
         const createdBy = secureLocalStorage.getItem('userId')
+        const iban = iban1.replace(/\s/g, "")
         try{
            const {data} = await axios.post('http://localhost:5000/createIban' , {iban,recipient,bank, bic , createdBy})
             await axios.get('http://localhost:5000/p2pGetAll').then(res => setIbans(res.data))
@@ -193,7 +194,7 @@ export default function P2PTransactionsBody() {
                     </div>
                     <div>
                         {
-                            iban && bic && recipient && bank
+                            iban1 && bic && recipient && bank
                                 ? <button
                                     onClick={Create}
                                     style={{
