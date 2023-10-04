@@ -47,7 +47,7 @@ export default function WLXPayment() {
     try {
       const randomId = generateRandomId(4);
       const { data } = await axios.post(`https://merchantaccount.dev/api/v1/payment/iycg4swp71f8hoq`,
-        { amount: amount, currency: currency, fail_url: 'https://global-payment-solutions.com/failure', success_url: 'https://global-payment-solutions.com/success', callback_url: '', customer_uid: `user_${randomId}` }
+        { amount: amount, currency: currency, fail_url: 'https://global-payment-solutions.com/failure', success_url: 'https://global-payment-solutions.com/success', callback_url: '', customer_uid: `Alehandro` }
         , {
           headers: {
             'content-type': "application/json"
