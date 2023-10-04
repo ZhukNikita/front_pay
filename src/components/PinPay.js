@@ -9,6 +9,8 @@ import styles from '../styles/PinPay.module.scss'
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import secureLocalStorage from 'react-secure-storage';
+import Clipboard from 'react-clipboard.js';
+
 function PinPay() {
   const navigate = useNavigate()
 
@@ -274,7 +276,9 @@ function PinPay() {
                         <div style={{width:'90%' , height:'100%',wordBreak: 'break-all' , color:'#fff'}}>
                           {url} 
                         </div>
-                        <button className={styles.Pay} style={{marginTop:'20px'}} onClick={()=> navigator.clipboard.writeText(url)}>Copy</button>
+                        <Clipboard style={{background:'none' , border:'none'}} data-clipboard-text={url}>
+                          <button className={styles.Pay} style={{marginTop:'20px'}} onClick={()=> navigator.clipboard.writeText(url)}>Copy</button>
+                        </Clipboard>
                       </div>
                     )
                   }
