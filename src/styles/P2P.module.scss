@@ -3,9 +3,9 @@
 
 .body {
     width: 600px;
-    height: 700px;
+    min-height: 100vh;
     border-radius: 6px;
-    @include flex(center, start);
+    @include flex(center, center);
     flex-direction: column;
     padding: 20px;
     font-family: $font;

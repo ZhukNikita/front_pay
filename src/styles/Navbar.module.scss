@@ -6,6 +6,7 @@
     @include flex(center,space-between);
     flex-direction: column;
     padding: 30px;
+    position: fixed;
     .content{
     @include flex(center,start);
     flex-direction: column;

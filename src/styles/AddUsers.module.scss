@@ -5,6 +5,8 @@
     width: 76%;
     height: 93vh;
     font-family: 'Nunito', sans-serif;
+    margin-left: 20%;
+
     .header{
         @include flex(center,space-between);
         h1{

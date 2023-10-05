@@ -3,6 +3,6 @@
 .body{
     width: 100%;
     min-height: 100vh;
-    @include flex(center,start);
+    @include flex(start,start);
     flex-direction: row;
 }
