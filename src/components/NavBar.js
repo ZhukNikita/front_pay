@@ -30,7 +30,7 @@ export default function NavBar() {
               secureLocalStorage.removeItem('userId') ;
               secureLocalStorage.removeItem('brands') ;
               secureLocalStorage.removeItem('methods') ;
-               window.location.href = 'http://localhost:3000/login'}}>Вийти</button>
+               window.location.href = '/login'}}>Вийти</button>
         </div>
     )
 }

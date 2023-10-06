@@ -2,7 +2,6 @@ import styles from '../styles/UsersList.module.scss'
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Swal from 'sweetalert2';
-import axios from 'axios';
 import secureLocalStorage from 'react-secure-storage';
 import * as React from 'react';
 import IconButton from '@mui/material/IconButton';
@@ -24,6 +23,7 @@ import Checkbox from '@mui/material/Checkbox';
 import Tooltip from '@mui/material/Tooltip';
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import MultipleSelectChip from '../pages/Panel/ChipSelect';
+import $api from '../axios';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -51,7 +51,7 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
     const [passViss, setIsPassViss] = useState(false);
     const [openModal, setOpenModal] = React.useState(false);
     const [login, setLogin] = React.useState(user.login)
-    const [password, setPassword] = React.useState(atob(user.password))
+    const [password, setPassword] = React.useState(user.password? atob(user.password) : '********')
     const [loginDirty, setLoginDirty] = React.useState(false)
     const [passwordDirty, setPasswordDirty] = React.useState(false)
     const [loginError, setLoginError] = React.useState('')
@@ -125,7 +125,7 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
             setBrand(user.brand)
             setRole(user.role)
             setLogin(user.login)
-            setPassword(atob(user.password))
+            setPassword(user.password?atob(user.password): '*******')
         }
 
     }, [user]);
@@ -135,7 +135,7 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
     const handleModalClose = () => {
         setOpenModal(false)
         setLogin(user.login)
-        setPassword(atob(user.password))
+        setPassword(user.password?atob(user.password): '*******')
         setBrand(user.brand)
         setRole(user.role)
     };
@@ -225,9 +225,11 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
             if (result.isConfirmed) {
                 try {
                     const createdBy = secureLocalStorage.getItem('userId')
+                    const userToken = secureLocalStorage.getItem('userToken')
+
                     const id = user.id
-                    const { data } = await axios.post('http://localhost:5000/deleteUser', { id, createdBy });
-                    await axios.post('http://localhost:5000/users', { createdBy }).then(res => setUsers(res.data.reverse()))
+                    const { data } = await $api.post('/deleteUser', { id, createdBy });
+                    await $api.post('/users', { userToken }).then(res => setUsers(res.data.reverse()))
                     Swal.fire(
                         "",
                         'Пользователь успешно удалён!',
@@ -242,12 +244,12 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
         })
     }
     const Change = async () => {
-        const createdBy = secureLocalStorage.getItem('userId')
+        const userToken = secureLocalStorage.getItem('userToken')
         const id = user.id
         const userBrands = role === 'SuperAdmin' || role === 'Admin' ? choosenbrands : []
         try {
-            const { data } = await axios.patch('http://localhost:5000/editUser', { login, password, brand, role, id, selectedPayments, userBrands })
-            axios.post('http://localhost:5000/users', { createdBy }).then(res => setUsers(res.data.reverse()))
+            const { data } = await $api.patch('/editUser', { login, password, brand, role, id, selectedPayments, userBrands, userToken })
+            $api.post('/users', { userToken }).then(res => setUsers(res.data.reverse()))
             return data
         } catch (e) {
             console.log(e)
@@ -310,7 +312,7 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
                 </h3>
                 <h3 className={styles.login}>{user.login}</h3>
                 <h3 className={styles.password}>
-                    {passViss ? atob(user.password) : atob(user.password).replace(/./g, '*')}
+                    {passViss && user.password ? atob(user.password) : '*******'}
                     {passViss ? <VisibilityOffIcon sx={{ cursor: 'pointer' }} onClick={() => setIsPassViss(false)} /> : <VisibilityIcon sx={{ cursor: 'pointer' }} onClick={() => setIsPassViss(true)} />}
                 </h3>
                 <h3 className={styles.brand}>{user.brand}</h3>

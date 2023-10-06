@@ -1,13 +1,12 @@
 import styles from './PinpayTransactionsList.module.scss'
-import {useState,useEffect} from 'react'
-import axios from 'axios'
+import { useState, useEffect } from 'react'
 import { Pagination } from '@mui/material';
 import LinearProgress from '@mui/material/LinearProgress';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import Transaction from './Transaction';
 const arrowDownStyle = { width: '17px', transition: 'all 0.3s ease', transform: 'rotate(180deg)', cursor: 'pointer' }
 const arrowUpStyle = { width: '17px', transition: 'all 0.3s ease', transform: 'rotate(0deg)', cursor: 'pointer' }
-export default function PinpayTransactionsList({transactions,isLoading ,setTransactions}) {
+export default function PinpayTransactionsList({ transactions, isLoading, setTransactions }) {
 
     const [search, setSearch] = useState('')
 
@@ -69,7 +68,7 @@ export default function PinpayTransactionsList({transactions,isLoading ,setTrans
     const currentTransactions = transactions.slice(indexOfFirstTransactions, indexOfLastTransactions);
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-    return(
+    return (
         <div className={styles.transactionsList}>
             <div className={styles.search}>
                 <input
@@ -79,67 +78,69 @@ export default function PinpayTransactionsList({transactions,isLoading ,setTrans
                     onChange={(e) => setSearch(e.target.value)}
                 />
                 {
-                    isLoading && (<LinearProgress sx={{width:'75%' }}color='inherit' />)
+                    isLoading && (<LinearProgress sx={{ width: '75%' }} color='inherit' />)
                 }
             </div>
             <div className={styles.header}>
                 <h3 className={styles.date}>Дата
-                <ArrowUpwardIcon
-                    onClick={() => { dateSort ? setDateSort(!dateSort) : setDateSort(true) }}
-                    sx={dateSort ?
-                    arrowDownStyle
-                    : arrowUpStyle}
-                />
+                    <ArrowUpwardIcon
+                        onClick={() => { dateSort ? setDateSort(!dateSort) : setDateSort(true) }}
+                        sx={dateSort ?
+                            arrowDownStyle
+                            : arrowUpStyle}
+                    />
                 </h3>
                 <h3 style={{ width: '9vw' }}>ID Транзакции</h3>
                 <h3 style={{ width: '13.5vw' }}>Email</h3>
-                <h3 style={{ width: '7vw' }}>Валюта</h3>
-                <h3 style={{ width: '10vw' }}>Бренд</h3>
-                <h3 className={styles.amount}><span style={{width:'70%'}}>Введённая сумма</span>
-                <ArrowUpwardIcon
-                    onClick={() => { amountSort ? setAmountSort(!amountSort) : setAmountSort(true) }}
-                    sx={amountSort ?
-                    arrowDownStyle
-                    : arrowUpStyle}
-                />
+                <h3 style={{ width: '6vw' }}>Валюта</h3>
+                <h3 style={{ width: '7vw' }}>Бренд</h3>
+                <h3 className={styles.amount}><span style={{ width: '70%' }}>Введённая сумма</span>
+                    <ArrowUpwardIcon
+                        onClick={() => { amountSort ? setAmountSort(!amountSort) : setAmountSort(true) }}
+                        sx={amountSort ?
+                            arrowDownStyle
+                            : arrowUpStyle}
+                    />
                 </h3>
                 <h3 style={{ width: '10vw' }}>Номер карты</h3>
-                <h3 style={{ width: '7vw' }}>Статус</h3>
-                <ArrowUpwardIcon
-                    onClick={() => { statusSort ? setStatusSort(!statusSort) : setStatusSort(true) }}
-                    sx={statusSort ?
-                    arrowDownStyle
-                    : arrowUpStyle}
-                />
+                <h3 className={styles.status}>Статус
+                    <ArrowUpwardIcon
+                        onClick={() => { statusSort ? setStatusSort(!statusSort) : setStatusSort(true) }}
+                        sx={statusSort ?
+                            arrowDownStyle
+                            : arrowUpStyle}
+                    /></h3>
+
             </div>
             {
-                currentTransactions.map(el=> <Transaction key={el.payment_id} setTransactions={setTransactions} transaction={el}/>)
+                currentTransactions.map(el => <Transaction key={el.payment_id} setTransactions={setTransactions} transaction={el} />)
             }
-                  <div
-                        style={{
-                        width: '97%',
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems:'center',
-                        padding: '10px 10px 10px 10px',
-                        margin:'0 auto',
-                        }}
-                    >
-                        <span style={{color:'white'}}>Всего транзакций: {transactions.length}</span>
-                        <Pagination
-                        count={totalPageCount}
-                        color="primary"
-                        shape="rounded"
-                        page={currentPage}
-                        onChange={(event, page) => paginate(page)}
-                        sx={{fontFamily:"'Nunito',sans-serif",
-                        '.MuiPaginationItem-root' : {
-                            fontFamily:"'Nunito',sans-serif",
-                            fontWeight:'bold'
+            <div
+                style={{
+                    width: '97%',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    padding: '10px 10px 10px 10px',
+                    margin: '0 auto',
+                }}
+            >
+                <span style={{ color: 'white' }}>Всего транзакций: {transactions.length}</span>
+                <Pagination
+                    count={totalPageCount}
+                    color="primary"
+                    shape="rounded"
+                    page={currentPage}
+                    onChange={(event, page) => paginate(page)}
+                    sx={{
+                        fontFamily: "'Nunito',sans-serif",
+                        '.MuiPaginationItem-root': {
+                            fontFamily: "'Nunito',sans-serif",
+                            fontWeight: 'bold'
                         }
                     }}
-                        />
-                    </div>
+                />
+            </div>
         </div>
     )
 }

@@ -1,14 +1,11 @@
 import React from 'react';
 import styles from './P2PTransactionsList.module.scss';
-import axios from 'axios';
-import secureLocalStorage from 'react-secure-storage';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import RestoreIcon from '@mui/icons-material/Restore';
-import Swal from 'sweetalert2';
 import Tooltip from '@mui/material/Tooltip';
 
 
@@ -57,8 +54,8 @@ export default function DeletedTransaction({ transaction, setTransactions }) {
         //         try {
         //             const id = transaction.id
         //             const createdBy = secureLocalStorage.getItem('userId')
-        //             const { data } = await axios.post('http://localhost:5000/p2pDeleteTransaction', { id, createdBy })
-        //             axios.post('http://localhost:5000/p2pGetAllTransactions', { createdBy }).then(res => setTransactions(res.data))
+        //             const { data } = await $api.post('/p2pDeleteTransaction', { id, createdBy })
+        //             $api.post('/p2pGetAllTransactions', { createdBy }).then(res => setTransactions(res.data))
         //             Swal.fire(
         //                 "",
         //                 'Транзакция успешно удалена!',

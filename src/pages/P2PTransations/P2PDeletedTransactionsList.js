@@ -1,10 +1,10 @@
 import styles from './P2PTransactionsList.module.scss'
 import { useEffect, useState } from 'react'
-import axios from 'axios';
 import secureLocalStorage from 'react-secure-storage';
 import DeletedTransaction from './DeletedTransaction';
 import { Pagination } from '@mui/material';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import $api from '../../axios';
 
 const arrowDownStyle = { width: '17px', transition: 'all 0.3s ease', transform: 'rotate(180deg)', cursor: 'pointer' }
 const arrowUpStyle = { width: '17px', transition: 'all 0.3s ease', transform: 'rotate(0deg)', cursor: 'pointer' }
@@ -121,7 +121,7 @@ export default function P2PDeletedTransactionsList() {
         const createdBy = secureLocalStorage.getItem('userId')
         const fetchData = async()=>{
             try {
-                axios.post('http://localhost:5000/p2pGetAllDeletedTransactions', {createdBy}).then(res => setTransactions(res.data))
+                $api.post('/p2pGetAllDeletedTransactions', {createdBy}).then(res => setTransactions(res.data))
     
             } catch (e) {
                 console.log(e)

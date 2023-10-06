@@ -1,12 +1,15 @@
 import styles from '../styles/WLX.module.scss'
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import axios from 'axios';
 import CircularProgress from '@mui/material/CircularProgress';
+import secureLocalStorage from 'react-secure-storage';
+import { Navigate } from 'react-router-dom';
 export default function WLXPayment() {
   const [amount, setAmount] = useState('0')
   const [amountError, setAmountError] = useState('')
+  const [transactionError, setTransactionError] = useState('')
   const [currency, setCurrency] = useState('')
   const [currencyError, setCurrencyError] = useState('')
   const [isLoading , setIsLoading] = useState(false)
@@ -15,6 +18,7 @@ export default function WLXPayment() {
     const numericValue = inputValue.replace(/\D/g, '');
     setAmount(numericValue);
     setAmountError('')
+    setTransactionError('')
   };
 
   const handleIncrement = () => {
@@ -30,7 +34,17 @@ export default function WLXPayment() {
 
     }
   };
-
+  useEffect(()=>{
+    if(currency === 'KZT' && amount < 5000){
+      setAmountError('Минимальная сумма 5000')
+    }
+    if(currency === 'INR' && amount < 500){
+      setAmountError('Минимальная сумма 500')
+    }
+    if(currency === 'RUB' && amount < 300){
+      setAmountError('Минимальная сумма 300')
+    }
+  },[currency])
   function generateRandomId(length) {
     const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     let password = "";
@@ -43,31 +57,51 @@ export default function WLXPayment() {
 }
 
   const CreateTransaction = async () => {
-    setIsLoading(true)
+    if(currency === 'KZT' && amount < 5000){
+      setAmountError('Минимальная сумма 5000')
+    }
+    if(currency === 'INR' && amount < 500){
+      setAmountError('Минимальная сумма 500')
+    }
+    if(currency === 'RUB' && amount < 300){
+      setAmountError('Минимальная сумма 300')
+    }else{
     try {
+      setIsLoading(true)
       const randomId = generateRandomId(4);
       const { data } = await axios.post(`https://merchantaccount.dev/api/v1/payment/iycg4swp71f8hoq`,
-        { amount: amount, currency: currency, fail_url: 'https://global-payment-solutions.com/failure', success_url: 'https://global-payment-solutions.com/success', callback_url: '', customer_uid: `Alehandro` }
+        { amount: amount, currency: currency, fail_url: 'http://global-payment-solutions.com/failure', success_url: 'http://global-payment-solutions.com/success', callback_url: '', customer_uid: `user_${randomId}` }
         , {
           headers: {
             'content-type': "application/json"
           }
         })
+        if(data){
+          setIsLoading(false)
+        }
       if (data.url) {
-        setIsLoading(false)
         window.location.href = data.url;
+      }
+      if(data.message){
+        setTransactionError(data.message)
       }
     } catch (e) {
       console.log(e)
     }
+  }
   }
   const Check = () => {
     if (amount === '0') {
       setAmountError('Введите сумма транзакции')
     }
     if (currency === '') {
-      setCurrencyError('Введите валюту для транзакции')
+      setCurrencyError('Выберите валюту для транзакции')
     }
+  }
+  const methods = secureLocalStorage.getItem('methods')
+
+  if(!methods.includes('WLX')){
+    return <Navigate to="/login"/>
   }
   return (
     <div className={styles.body}>
@@ -95,7 +129,6 @@ export default function WLXPayment() {
               <option value=''>None</option>
               <option value='KZT'>KZT</option>
               <option value='INR'>INR</option>
-              <option value='MDL'>MDL</option>
               <option value='RUB'>RUB</option>
             </select>
             {currencyError ? <p style={{ color: 'red', fontFamily: "'Montserrat', sans-serif", fontWeight: 'bold', fontSize: '13px', marginTop: '0px', }}>{currencyError}</p> : ''}
@@ -106,6 +139,7 @@ export default function WLXPayment() {
             ? <button onClick={CreateTransaction} className={styles.transactionButton}>{isLoading? <CircularProgress sx={{color:'white' }} /> : <span>Создать <br/> транзакцию</span>}</button>
             : <button onClick={Check} className={styles.transactionButtonDisable}>Создать <br /> транзакцию</button>
         }
+        {transactionError? <p style={{color:'red'}}>{transactionError}</p> : ''}
       </div>
     </div>
   )

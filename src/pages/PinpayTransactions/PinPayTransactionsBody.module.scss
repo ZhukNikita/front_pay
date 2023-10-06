@@ -89,5 +89,42 @@
             }
 
         }
+        .pinpayPie{
+            padding: 20px;
+            border-radius: 10px;
+            @include flex(center, start);
+            flex-direction: column;
+            background-color: $cardBC;
+            width: 225px;
+            height: 300px;
+
+            h2 {
+                width: 100%;
+                margin-top: 0;
+                margin-bottom: 10px;
+                color: #b7dce9;
+
+            }
+
+            .descriptions {
+                margin-top: 10px;
+                padding: 10px 10px 0 10px;
+                @include flex(start, center);
+                flex-direction: column;
+                width: calc(100% + 20px);
+                border-top: 1px solid rgba(145, 158, 171, 0.24);
+
+                .description {
+                    @include flex(center, start);
+                    gap: 10px;
+                    width: 100%;
+
+                    h4 {
+                        color: #b7dce9;
+                        margin: 0;
+                    }
+                }
+            }
+        }
     }
 }

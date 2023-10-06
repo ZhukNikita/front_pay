@@ -3,14 +3,22 @@ import Logo from '../img/GPLogo.png'
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import {useState} from 'react'
-import {Link} from 'react-router-dom'
+import {Link, Navigate} from 'react-router-dom'
+import secureLocalStorage from 'react-secure-storage';
 
 function BrandMenu() {
     const [brand , setBrand] = useState('0');
 
+    if(secureLocalStorage.getItem('isLogged') === null){
+        return <Navigate to={'/login'}/>
+    }
+    if(secureLocalStorage.getItem('isLogged') !== null){
+        return <Navigate to={'/payments_methods'}/>
+
+    }
   return (
     <div className={styles.body}>
-        <div className={styles.logo}>
+        {/* <div className={styles.logo}>
             <img src={Logo}/>
         </div>
         <h1>Выберите бренд</h1>
@@ -33,7 +41,7 @@ function BrandMenu() {
                 <div className={styles.buttonDisable}>
                     <Link to={`/`}>Перейти к методам платежа</Link>
                 </div>
-        }
+        } */}
     </div>
   );
 }

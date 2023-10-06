@@ -10,7 +10,6 @@ import Success from './components/Success';
 import Panel from './pages/Panel/Panel.js';
 import Login from './pages/Login/Login.js';
 import { useEffect, useState } from 'react';
-import axios from "axios";
 import secureLocalStorage from 'react-secure-storage';
 import Transactions from './pages/Transactions/Transactions';
 import PinpayTransactions from './pages/PinpayTransactions/PinpayTransactions';
@@ -18,8 +17,10 @@ import Methods from './pages/Methods/Methods';
 import P2PTransactions from './pages/P2PTransations/P2PTransactions';
 import P2PDeletedTransactions from './pages/P2PTransations/P2PDeletedTransactions';
 import WlxTransactions from './pages/WLXTransactions/WlxTransactions'
+import InsirexTransactions from './pages/InsirexTransactions/InsirexTransactions'
 import WLX from './components/WLX'
 import Statistics from './pages/Statistics/Statistics';
+import $api from "./axios";
 
 function App() {
   const [methods , setMethods] = useState([])
@@ -29,7 +30,7 @@ function App() {
     const createdBy = secureLocalStorage.getItem('userId');
     const fetchData = async () => {
       try {
-        const response = await axios.post('http://localhost:5000/getMe', { id });
+        const response = await $api.post('/getMe', { id });
 
         const data = response.data; 
         if (data) {
@@ -39,16 +40,28 @@ function App() {
             secureLocalStorage.removeItem('role')
             secureLocalStorage.removeItem('isLogged')
             secureLocalStorage.removeItem('brands')
-            window.location.href = '/login'
+            secureLocalStorage.removeItem('userBrand')
+            secureLocalStorage.removeItem('userToken')
+            // window.location.href = '/login'
           }else{
             setMethods(data.methods? data.methods : [])
             secureLocalStorage.setItem('userId', data.id);
             secureLocalStorage.setItem('methods', data.methods);
             secureLocalStorage.setItem('role', data.role);
             secureLocalStorage.setItem('brands', data.brands);
+            secureLocalStorage.setItem('userBrand' , data.brand)
+            secureLocalStorage.setItem('userToken' , data.user_token)
           }
         }
       } catch (e) {
+        secureLocalStorage.removeItem('userId')
+        secureLocalStorage.removeItem('methods')
+        secureLocalStorage.removeItem('role')
+        secureLocalStorage.removeItem('isLogged')
+        secureLocalStorage.removeItem('brands')
+        secureLocalStorage.removeItem('userBrand')
+        secureLocalStorage.removeItem('userToken')
+        // window.location.href = '/login'
         console.log(e.response.data.message);
       }
     };
@@ -73,6 +86,8 @@ function App() {
         <Route path='/p2p-transactions' element={<P2PTransactions/>} />
         <Route path='/p2p-deleted-transactions' element={<P2PDeletedTransactions/>} />
         <Route path='/wlx-transactions' element={<WlxTransactions/>} />
+        <Route path='/insirex-transactions' element={<InsirexTransactions/>} />
+        
         <Route path='/login' element={<Login />} />
         <Route path='/statistics' element={<Statistics />} />
         <Route path='/wlx' element={<WLX />} />

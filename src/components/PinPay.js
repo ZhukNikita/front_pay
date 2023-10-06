@@ -9,6 +9,8 @@ import styles from '../styles/PinPay.module.scss'
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import secureLocalStorage from 'react-secure-storage';
+import Clipboard from 'react-clipboard.js';
+
 function PinPay() {
   const navigate = useNavigate()
 
@@ -165,7 +167,7 @@ function PinPay() {
     && newAddressError === ''
     && newPostalError === '') {
       const orderId = Date.now();
-      const redirectUrl = `https://secure.pinpaygate.com/hpp?project=d35b093a07504465828751fec90e3696&price=${(+amount).toFixed(2)}&user_name=${holderName.replace(/ /g, "+")}&user_contact_email=${email}&user_phone=${phone}&result_url=https%3A%2F%2Fexample.com%2Fresult&description=${query.get('brand')}&user_country=${country.toUpperCase()}&user_city=${city.replace(/ /g, "+")}&user_state=${state.replace(/ /g, "+")}&user_address=${address.replace(/ /g, "+")}&user_postal_code=${postalCode.replace(/ /g, "+")}&order_id=${orderId}&currency=EUR&success_url=https://global-payments.net/success&failure_url=https://global-payments.net/failure&locale=en`;
+      const redirectUrl = `https://secure.pinpaygate.com/hpp?project=d35b093a07504465828751fec90e3696&price=${(+amount).toFixed(2)}&user_name=${holderName.replace(/ /g, "+")}&user_contact_email=${email}&user_phone=${phone}&result_url=https%3A%2F%2Fexample.com%2Fresult&description=${query.get('brand')}&user_country=${country.toUpperCase()}&user_city=${city.replace(/ /g, "+")}&user_state=${state.replace(/ /g, "+")}&user_address=${address.replace(/ /g, "+")}&user_postal_code=${postalCode.replace(/ /g, "+")}&order_id=${orderId}&currency=EUR&success_url=http://global-payment-solutions.com/success&failure_url=http://global-payment-solutions.com/failure&locale=en`;
       setUrl(redirectUrl)
       // window.location.href = redirectUrl;
     } else {
@@ -184,7 +186,7 @@ function PinPay() {
   return (
     <div className={styles.App}>
           <div className={styles.Card}>
-            <Link to={'/'} style={{color:'white' , fontWeight:'bold' , fontFamily:'"Montserrat" , sans-serif' , position:'absolute' , top:'20px' , right:'20px'}}>На главную</Link>
+            <Link to={'/payments_methods'} style={{color:'white' , fontWeight:'bold' , fontFamily:'"Montserrat" , sans-serif' , position:'absolute' , top:'20px' , right:'20px'}}>На главную</Link>
 
                 <img className={styles.Logo} src={logo}/>
                 <div className={styles.wrapper}>
@@ -274,7 +276,9 @@ function PinPay() {
                         <div style={{width:'90%' , height:'100%',wordBreak: 'break-all' , color:'#fff'}}>
                           {url} 
                         </div>
-                        <button className={styles.Pay} style={{marginTop:'20px'}} onClick={()=> navigator.clipboard.writeText(url)}>Copy</button>
+                        <Clipboard style={{background:'none' , border:'none'}} data-clipboard-text={url}>
+                          <button className={styles.Pay} style={{marginTop:'20px'}} onClick={()=> navigator.clipboard.writeText(url)}>Copy</button>
+                        </Clipboard>
                       </div>
                     )
                   }

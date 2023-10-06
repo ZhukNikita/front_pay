@@ -10,12 +10,12 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import secureLocalStorage from 'react-secure-storage';
-import axios from 'axios';
 import Snackbar from '@mui/material/Snackbar';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import MuiAlert from '@mui/material/Alert';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import $api from '../axios';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -138,11 +138,10 @@ export default function UserList({ users, setUsers, brands }) {
     }
   };
   const Delete = async () => {
-    const createdBy = secureLocalStorage.getItem('userId')
-
+    const userToken = secureLocalStorage.getItem('userToken')
     try {
-      const { data } = await axios.post('http://localhost:5000/deletePayment', { deletePayment, checkbox })
-      await axios.post('http://localhost:5000/users', { createdBy }).then(res => setUsers(res.data.reverse()))
+      const { data } = await $api.post('/deletePayment', { deletePayment, checkbox })
+      await $api.post('/users', { userToken }).then(res => setUsers(res.data.reverse()))
       return data
     } catch (e) {
       console.log(e)
@@ -153,8 +152,8 @@ export default function UserList({ users, setUsers, brands }) {
   const AddPayment = async () => {
     const createdBy = secureLocalStorage.getItem('userId')
     try {
-      const { data } = await axios.post('http://localhost:5000/addPayment', { deletePayment, checkbox })
-      await axios.post('http://localhost:5000/users', { createdBy }).then(res => setUsers(res.data.reverse()))
+      const { data } = await $api.post('/addPayment', { deletePayment, checkbox })
+      await $api.post('/users', { createdBy }).then(res => setUsers(res.data.reverse()))
       return data
     } catch (e) {
       console.log(e)

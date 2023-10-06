@@ -1,10 +1,10 @@
+import styles from './InsirexTransactions.module.scss'
+import InsirexTransactionsBody from './InsirexTransactionsBody'
 import NavBar from '../../components/NavBar'
-import styles from './WlxTransactions.module.scss'
-import WlxTransactionBody from './WlxTransactionsBody'
 import secureLocalStorage from 'react-secure-storage'
 import { Navigate } from 'react-router-dom'
 
-export default function WLXTransactions() {
+export default function InsirexTransactions() {
     if(!secureLocalStorage.getItem('isLogged')){
         return <Navigate to={'/login'}/>
     }
@@ -14,8 +14,7 @@ export default function WLXTransactions() {
     return(
         <div className={styles.body}>
             <NavBar/>
-            <WlxTransactionBody/>
+            <InsirexTransactionsBody/>
         </div>
     )
 }
-

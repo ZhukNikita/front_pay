@@ -17,7 +17,6 @@ export default function Failure(){
             }, 100)
           },
           willClose: () => {
-            // window.location.href = 'http://localhost:3000'
             clearInterval(timerInterval)
           }
         }).then((result) => {

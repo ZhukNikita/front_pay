@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import { DataGrid} from '@mui/x-data-grid';
-import axios from 'axios';
+import $api from '../axios';
 
 const columns = [
   { field: 'id', headerName: 'ID', width: 70 },
@@ -35,7 +35,7 @@ export default function UsersTable({users}) {
     // Отправьте запрос на сервер для сохранения изменений в базе данных
     // и получите обновленные данные
     try {
-      const response = await axios.patch('http://localhost:5000/editUser', {
+      const response = await $api.patch('/editUser', {
         field,
         id,
         value,

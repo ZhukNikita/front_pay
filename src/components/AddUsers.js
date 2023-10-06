@@ -6,13 +6,13 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import secureLocalStorage from 'react-secure-storage';
-import axios from 'axios';
 import UserList from './UserList';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import MultipleSelectChip from '../pages/Panel/ChipSelect';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import $api from "../axios";
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
@@ -175,14 +175,15 @@ export default function AddUsers() {
         }
         return password;
     }
-
     const Create = async () => {
         const createdBy = secureLocalStorage.getItem('userId')
         const brandsId = choosenbrands.map(el => `${el.id}`)
+        const userToken = secureLocalStorage.getItem('userToken')
+        
         try {
             const randomPassword = generateRandomPassword(10);
-            const { data } = await axios.post('http://localhost:5000/registration', { login, randomPassword, brand, role, createdBy, selectedPayments, brandsId })
-            axios.post('http://localhost:5000/users', { createdBy }).then(res => setUsers(res.data.reverse()))
+            const { data } = await $api.post('/registration', { login, randomPassword, brand, role, createdBy, selectedPayments, brandsId })
+            $api.post('/users', { userToken }).then(res => setUsers(res.data.reverse()))
 
             return data
         } catch (e) {
@@ -208,8 +209,8 @@ export default function AddUsers() {
         if (newBrandError === '') {
             try {
                 const createdBy = secureLocalStorage.getItem('userId')
-                await axios.post('http://localhost:5000/createBrand', { newBrand, createdBy })
-                await axios.post('http://localhost:5000/getBrands', { createdBy }).then(res => setBrands(res.data))
+                await $api.post('/createBrand', { newBrand, createdBy })
+                await $api.post('/getBrands', { createdBy }).then(res => setBrands(res.data))
                 setSnackMessage('Бренд успешно создан');
                 setSnackType('success');
                 setSnack(true)
@@ -231,10 +232,11 @@ export default function AddUsers() {
         }
         if (deleteBrandError === '') {
             try {
+        const userToken = secureLocalStorage.getItem('userToken')
                 const createdBy = secureLocalStorage.getItem('userId')
-                await axios.post('http://localhost:5000/deleteBrand', { deleteBrand, createdBy })
-                await axios.post('http://localhost:5000/getBrands', { createdBy }).then(res => setBrands(res.data))
-                await axios.post('http://localhost:5000/users', { createdBy }).then(res => setUsers(res.data.reverse()))
+                await $api.post('/deleteBrand', { deleteBrand, createdBy })
+                await $api.post('/getBrands', { createdBy }).then(res => setBrands(res.data))
+                await $api.post('/users', { userToken }).then(res => setUsers(res.data.reverse()))
                 setSnackMessage('Бренд успешно удалён');
                 setSnackType('success');
                 setSnack(true)
@@ -250,10 +252,11 @@ export default function AddUsers() {
     }
     React.useEffect(() => {
         const createdBy = secureLocalStorage.getItem('userId')
+        const userToken = secureLocalStorage.getItem('userToken')
         const fetchData = async () => {
             try {
-                await axios.post('http://localhost:5000/users', { createdBy }).then(res => setUsers(res.data.reverse()))
-                await axios.post('http://localhost:5000/getBrands', { createdBy }).then(res => setBrands(res.data))
+                await $api.post('/users', { userToken }).then(res => setUsers(res.data.reverse()))
+                await $api.post('/getBrands', { createdBy }).then(res => setBrands(res.data))
             } catch (e) {
 
             }

@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import styles from '../styles/P2P.module.scss';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import axios from 'axios';
 import Swal from 'sweetalert2';
 import Clipboard from 'react-clipboard.js';
+import secureLocalStorage from 'react-secure-storage';
+import { Navigate } from 'react-router-dom';
+import $api from '../axios';
 
 export default function P2P() {
   const [url, setUrl] = useState('');
@@ -57,8 +59,8 @@ export default function P2P() {
   }, []);
   useEffect(() => {
     if (seconds === 180) {
-      axios
-        .get('http://156.67.52.151:5000/p2p')
+      $api
+        .get('/p2p')
         .then((response) => {
           setUrl(response.data.IBAN);
           setRecipient(response.data.Recipient);
@@ -86,8 +88,10 @@ export default function P2P() {
       setUrl('')
     }
   }, [seconds]);
-
-
+  const methods = secureLocalStorage.getItem('methods')
+  if(!methods.includes('P2P')){
+    return <Navigate to="/login"/>
+  }
   return (
     <div className={styles.body}>
       <h1>P2P</h1>

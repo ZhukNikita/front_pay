@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import styles from './P2PTransactionsList.module.scss';
+import styles from './InsirexTransactionsList.module.scss';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
@@ -13,9 +13,9 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Swal from 'sweetalert2';
-import Tooltip from '@mui/material/Tooltip';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CancelIcon from '@mui/icons-material/Cancel';
 import $api from '../../axios';
-
 const style = {
     position: 'absolute',
     top: '50%',
@@ -136,7 +136,7 @@ export default function Transaction({ transaction, setTransactions }) {
                     const id = transaction.id
                     const createdBy = secureLocalStorage.getItem('userId')
                     const { data } = await $api.post('/p2pDeleteTransaction', { id, createdBy })
-                    await $api.post('/p2pGetAllTransactions', { createdBy }).then(res => setTransactions(res.data))
+                    $api.post('/p2pGetAllTransactions', { createdBy }).then(res => setTransactions(res.data))
                     Swal.fire(
                         "",
                         'Транзакция успешно удалена!',
@@ -165,11 +165,11 @@ export default function Transaction({ transaction, setTransactions }) {
 
 
         try{
-           await $api.patch(`/uploadP2PTransactionCheck/:${id}` , img ,{
+           await $api.patch(`/uploadInsirexTransactionCheck/:${id}` , img ,{
                 headers:{
                     'content-type': "mulpipart/form-data"
                 }})
-            await $api.post('/p2pGetAllTransactions', {createdBy}).then(res => setTransactions(res.data))
+            await $api.post('/insirexGetAllTransactions', {createdBy}).then(res => setTransactions(res.data))
 
         } catch (e) {
             console.log(e)
@@ -177,41 +177,53 @@ export default function Transaction({ transaction, setTransactions }) {
         handleClose();
     };
 
+    function getStatus(status){
+        if(status === '1'){
+            return (<div className={styles.statusTrue}><CheckCircleIcon/> Подтверждено</div>)
+        }if(status === '0'){
+            return (<div className={styles.status}><CancelIcon/> Не подтверждено</div>)
+        }else{
+            return status
+        }
+    }
     return (
         <div className={styles.transaction} style={{ position: 'relative' }}>
             <div className={styles.body}>
+                <h3 className={styles.date} style={{width:'7vw'}}>{formattedDate}</h3>
                 <h3 className={styles.login}>{transaction.login}</h3>
                 <h3 className={styles.brand}>{transaction.brand}</h3>
-                <h3 className={styles.iban}>                
-                    <Tooltip title={<span style={{fontFamily:"'Nunito',sans-serif" , fontSize:'14px'}}>{transaction.IBAN}</span>} arrow>
-                        <span>
-                        {transaction.IBAN.slice(0,8) + '*************' + transaction.IBAN.slice(-4)}
-                        </span>
-                    </Tooltip>
+                <h3 className={styles.fullName}> {transaction.FullName}             
                 </h3>
                 <h3 className={styles.amount}>{transaction.amount}</h3>
-                <h3 className={styles.amount}>{formattedDate}</h3>
-                <h3 className={transaction.Status === '0' ? styles.status : styles.statusTrue}>
-                    {transaction.Status === '0' ? <div>Не подтверждено</div> : <div>Подтверждено</div>}
+                <h3>
+                    {getStatus(transaction.Status)}
                 </h3>
-                <input
-                    ref={fileInputRef}
-                    type='file'
-                    style={{ display: 'none' }}
-                    onChange={addImg}
-                    accept="image/png, image/gif, image/jpeg"
-                    name='file'
-                />
-                <UploadFileIcon
-                    sx={{ width: '7vw', display: 'flex', alignItems: 'center', cursor: 'pointer' }}
-                    onClick={handleUploadIconClick}
-                />
-                <FileUploadModal
-                    selectedFile={selectedFile}
-                    open={open}
-                    handleClose={handleClose}
-                    handleUpload={handleUpload}
-                />
+                {
+                    transaction.Status === '1'?
+                    '':<div>
+                         <input
+                
+                ref={fileInputRef}
+                type='file'
+                style={{ display: 'none' }}
+                onChange={addImg}
+                accept="image/png, image/gif, image/jpeg"
+                name='file'
+            />
+            <UploadFileIcon
+                sx={{ width: '7vw', display: 'flex', alignItems: 'center', cursor: 'pointer' }}
+                onClick={handleUploadIconClick}
+            />
+            <FileUploadModal
+                selectedFile={selectedFile}
+                open={open}
+                handleClose={handleClose}
+                handleUpload={handleUpload}
+            />
+                    </div>
+
+                }
+                
                 <span style={{ position: 'absolute', right: '0px' }}>
                     <IconButton
                         aria-label="more"

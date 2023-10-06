@@ -1,19 +1,13 @@
 import styles from '../styles/PaymentsMethods.module.scss'
-import React, { useEffect } from "react";
-import { useLocation, Link } from "react-router-dom";
+import React from "react";
+import { useLocation } from "react-router-dom";
 import Logo from '../img/GPLogo.png'
 import Method from './Method';
-import axios from 'axios';
 import secureLocalStorage from 'react-secure-storage'
 import {Navigate} from 'react-router-dom'
 
 export default function PaymentsMethods() {
-    function useQuery() {
-        const { search } = useLocation();
 
-        return React.useMemo(() => new URLSearchParams(search), [search]);
-    }
-    let query = useQuery();
 
     const methods = [
         {
@@ -58,18 +52,6 @@ export default function PaymentsMethods() {
     if(!secureLocalStorage.getItem('isLogged')){
         return <Navigate to={'/login'}/>
     }
-    // useEffect(()=>{
-    //     const fetchData = async ()=> {
-    //         try{
-    //             const {data} = await axios.get(`https://merchantaccount.dev/create-transaction/iycg4swp71f8hoq?uuid=885e17e7-60f7-4470-bf54-c1ee435bb9ed`)
-    //             console.log(data)
-    //         }
-    //         catch(e){
-    //             console.log(e)
-    //         }
-    //     }
-    //     fetchData()
-    // },[])
     const getMethods = () => {
         const arr = methods.filter(el => userMethods.includes(el.name))
         return arr

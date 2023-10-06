@@ -8,10 +8,10 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import WarningIcon from '@mui/icons-material/Warning';
 import AddIcon from '@mui/icons-material/Add';
-import axios from 'axios'
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import $api from '../../axios'
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
@@ -95,8 +95,8 @@ export default function P2PTransactionsBody() {
         const createdBy = secureLocalStorage.getItem('userId')
         const iban = iban1.replace(/\s/g, "")
         try{
-           const {data} = await axios.post('http://localhost:5000/createIban' , {iban,recipient,bank, bic , createdBy})
-            await axios.get('http://localhost:5000/p2pGetAll').then(res => setIbans(res.data))
+           const {data} = await $api.post('/createIban' , {iban,recipient,bank, bic , createdBy})
+            await $api.get('/p2pGetAll').then(res => setIbans(res.data))
             setSnack(true)
             setSnackType('success')
             setSnackMessage('IBAN успешно создан')
@@ -114,8 +114,8 @@ export default function P2PTransactionsBody() {
     const Delete = async() => {
         const createdBy = secureLocalStorage.getItem('userId')
         try{
-           const {data} = await axios.post('http://localhost:5000/deleteIban' , {ibanToDelete, createdBy})
-            await axios.get('http://localhost:5000/p2pGetAll').then(res => setIbans(res.data))
+           const {data} = await $api.post('/deleteIban' , {ibanToDelete, createdBy})
+            await $api.get('/p2pGetAll').then(res => setIbans(res.data))
             setSnack(true)
             setSnackType('success')
             setSnackMessage('IBAN успешно удалён')

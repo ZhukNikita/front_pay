@@ -1,10 +1,9 @@
 import styles from '../../styles/Login.module.scss'
 import Logo from '../../img/GPLogo.png'
-import loginImg from '../../img/login.png'
 import { useState } from 'react'
 import axios from "axios";
 import secureLocalStorage from "react-secure-storage";
-import { Routes, redirect, Route, useLocation, Navigate } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 import InfoIcon from "@mui/icons-material/Info";
 export default function Login() {
     const [login, setLogin] = useState('')
@@ -64,7 +63,8 @@ export default function Login() {
                 secureLocalStorage.setItem('isLogged', true);
                 secureLocalStorage.setItem('userId', data.id);
                 secureLocalStorage.setItem('methods', data.methods);
-                console.log(data.id)
+                secureLocalStorage.setItem('userBrand', data.brand);
+                secureLocalStorage.setItem('userToken', data.user_token);
                 if (data.role === 'SuperAdmin' || secureLocalStorage.getItem('role') === 'Admin'  || secureLocalStorage.getItem('role') === 'Financier') {
                     window.location.href = '/panel'
                 } else {
