@@ -114,9 +114,8 @@ export default function Transaction({transaction}) {
             handleOpen();
         }
     };
-    console.log(selectedFile)
     const handleUpload = async () => {
-        const id = transaction.payment_id.slice(0,13)
+        const id = transaction.payment_id
     
         const img = new FormData();
         selectedFile.forEach((file, index) => {
@@ -124,9 +123,9 @@ export default function Transaction({transaction}) {
         });
     
         try{
-            await $api.patch(`/uploadPinpayCheck/:${id}`, img, {
+            await $api.patch(`/uploadPinpayCheck/:${id}?login=${secureLocalStorage.getItem('userLogin')}`, img, {
                 headers: {
-                    'content-type': 'multipart/form-data',
+                    'content-type': 'mulpipart/form-data',
                 },
             });
             handleClose();
@@ -137,7 +136,7 @@ export default function Transaction({transaction}) {
     };
     return(
         <div className={styles.transaction}>
-            <div className={styles.body}>
+            <Link to={`/transaction/${transaction.payment_id}?brand=${transaction.raw_request.description}&email=${transaction.raw_request.user_contact_email}`} className={styles.body}>
             <h3 style={{ width: '7vw' }}>{formattedDate}</h3>
                 <h3 style={{ width: '9vw' }}>{transaction.payment_id.slice(0,13)}</h3>
                 <h3 style={{ width: '13.5vw'}}><p style={{width:'85%' , height:'40px' , wordBreak: 'break-word'}}>{transaction.raw_request.user_contact_email}</p></h3>
@@ -148,6 +147,9 @@ export default function Transaction({transaction}) {
                 <h3 style={{ width: '7vw' }}>
                     {getStatus(transaction.transaction_status)}
                 </h3>
+                </Link>
+
+                {/* <Link to={`https://merchantaccount.dev/edit-input-data/${transaction.uuid}`} style={{fontSize:'14px',fontWeight:'bold',backgroundColor:'#233e68', padding:'10px', borderRadius:'8px', color:'white',textDecoration:'none' , width:'70px' , display:'flex',justifyContent:'center' , textAlign:'center' , marginLeft:'3vw'}}>Загрузка данных</Link> */}
                 <input
                     ref={fileInputRef}
                     type='file'
@@ -158,7 +160,7 @@ export default function Transaction({transaction}) {
                     multiple
                 />
                 <UploadFileIcon
-                    sx={{ width: '7vw', display: 'flex', alignItems: 'center', cursor: 'pointer' }}
+                    sx={{ width: '7vw', display: 'flex', alignItems: 'center', cursor: 'pointer' , zIndex:0 }}
                     onClick={handleUploadIconClick}
                 />
                 <FileUploadModal
@@ -167,9 +169,7 @@ export default function Transaction({transaction}) {
                     handleClose={handleClose}
                     handleUpload={handleUpload}
                 />
-                {/* <Link to={`https://merchantaccount.dev/edit-input-data/${transaction.uuid}`} style={{fontSize:'14px',fontWeight:'bold',backgroundColor:'#233e68', padding:'10px', borderRadius:'8px', color:'white',textDecoration:'none' , width:'70px' , display:'flex',justifyContent:'center' , textAlign:'center' , marginLeft:'3vw'}}>Загрузка данных</Link> */}
             </div>
-        </div>
     )
 }
 //pending

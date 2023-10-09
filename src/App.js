@@ -21,6 +21,7 @@ import InsirexTransactions from './pages/InsirexTransactions/InsirexTransactions
 import WLX from './components/WLX'
 import Statistics from './pages/Statistics/Statistics';
 import $api from "./axios";
+import FullTransactionInfo from './pages/PinpayTransactions/FullTransactionInfo';
 
 function App() {
   const [methods , setMethods] = useState([])
@@ -42,6 +43,8 @@ function App() {
             secureLocalStorage.removeItem('brands')
             secureLocalStorage.removeItem('userBrand')
             secureLocalStorage.removeItem('userToken')
+            secureLocalStorage.removeItem('userLogin')
+
             // window.location.href = '/login'
           }else{
             setMethods(data.methods? data.methods : [])
@@ -51,6 +54,8 @@ function App() {
             secureLocalStorage.setItem('brands', data.brands);
             secureLocalStorage.setItem('userBrand' , data.brand)
             secureLocalStorage.setItem('userToken' , data.user_token)
+            secureLocalStorage.setItem('userLogin' , data.login)
+            
           }
         }
       } catch (e) {
@@ -61,6 +66,7 @@ function App() {
         secureLocalStorage.removeItem('brands')
         secureLocalStorage.removeItem('userBrand')
         secureLocalStorage.removeItem('userToken')
+        secureLocalStorage.removeItem('userLogin')
         // window.location.href = '/login'
         console.log(e.response.data.message);
       }
@@ -83,6 +89,7 @@ function App() {
         <Route path='/panel' element={<Panel />} />
         <Route path='/transactions' element={<Transactions/>} />
         <Route path='/pinpay-transactions' element={<PinpayTransactions/>} />
+        <Route path='/transaction/:id' element={<FullTransactionInfo/>} />
         <Route path='/p2p-transactions' element={<P2PTransactions/>} />
         <Route path='/p2p-deleted-transactions' element={<P2PDeletedTransactions/>} />
         <Route path='/wlx-transactions' element={<WlxTransactions/>} />

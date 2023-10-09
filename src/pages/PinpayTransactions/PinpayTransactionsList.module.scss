@@ -81,6 +81,8 @@
             @include flex(center, start);
             flex-direction: row;
             height: 90px;
+            text-decoration: none;
+            color: white;
             h3{
                 .pending{
                     @include flex(center,center);
