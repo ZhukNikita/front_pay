@@ -16,6 +16,7 @@ import Swal from 'sweetalert2';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 import $api from '../../axios';
+import { Link } from 'react-router-dom';
 const style = {
     position: 'absolute',
     top: '50%',
@@ -189,6 +190,7 @@ export default function Transaction({ transaction, setTransactions }) {
     return (
         <div className={styles.transaction} style={{ position: 'relative' }}>
             <div className={styles.body}>
+                <Link className={styles.body} to={`/insirex-transaction/${transaction.id}?brand=${''}`}>
                 <h3 className={styles.date} style={{width:'7vw'}}>{formattedDate}</h3>
                 <h3 className={styles.login}>{transaction.login}</h3>
                 <h3 className={styles.brand}>{transaction.brand}</h3>
@@ -223,7 +225,8 @@ export default function Transaction({ transaction, setTransactions }) {
                     </div>
 
                 }
-                
+                </Link>
+
                 <span style={{ position: 'absolute', right: '0px' }}>
                     <IconButton
                         aria-label="more"

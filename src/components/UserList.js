@@ -302,7 +302,7 @@ export default function UserList({ users, setUsers, brands }) {
               <select onChange={(e) => { setDeletePayments(e.target.value); setDeletePaymentError('') }} style={{ outline: 'none', padding: '15px 20px', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', width: '100%' }} placeholder='Бренд'>
                 <option value="">None</option>
                 <option value="1">PinPay</option>
-                <option value="2">Inserix</option>
+                <option value="2">Insirex</option>
                 <option value="3">P2P</option>
                 <option value="4">WLX</option>
               </select>

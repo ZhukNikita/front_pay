@@ -9,7 +9,7 @@ import Failure from './components/Failure';
 import Success from './components/Success';
 import Panel from './pages/Panel/Panel.js';
 import Login from './pages/Login/Login.js';
-import { useEffect, useState } from 'react';
+import React , { useEffect, useState } from 'react';
 import secureLocalStorage from 'react-secure-storage';
 import Transactions from './pages/Transactions/Transactions';
 import PinpayTransactions from './pages/PinpayTransactions/PinpayTransactions';
@@ -22,10 +22,25 @@ import WLX from './components/WLX'
 import Statistics from './pages/Statistics/Statistics';
 import $api from "./axios";
 import FullTransactionInfo from './pages/PinpayTransactions/FullTransactionInfo';
-
+import FullInsirexTransactionInfo from './pages/InsirexTransactions/FullInfoTransaction.js';
+import MuiAlert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
+const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 function App() {
   const [methods , setMethods] = useState([])
   const {pathname} = useLocation()
+  const [snack, setSnack] = useState(false);
+  const [snackType, setSnackType] = useState('');
+  const [snackMessage, setSnackMessage] = useState('');
+  const handleCloseSnack = (event, reason) => {
+    if (reason === 'clickaway') {
+        return;
+    }
+    setSnackMessage('')
+    setSnack(false);
+};
   useEffect(() => {
     const id = secureLocalStorage.getItem('userId');
     const createdBy = secureLocalStorage.getItem('userId');
@@ -89,16 +104,24 @@ function App() {
         <Route path='/panel' element={<Panel />} />
         <Route path='/transactions' element={<Transactions/>} />
         <Route path='/pinpay-transactions' element={<PinpayTransactions/>} />
-        <Route path='/transaction/:id' element={<FullTransactionInfo/>} />
+        <Route path='/transaction/:id' element={<FullTransactionInfo setSnack={setSnack} setSnackMessage={setSnackMessage} setSnackType={setSnackType}/>} />
+        <Route path='/insirex-transaction/:id' element={<FullInsirexTransactionInfo setSnack={setSnack} setSnackMessage={setSnackMessage} setSnackType={setSnackType}/>} />
         <Route path='/p2p-transactions' element={<P2PTransactions/>} />
         <Route path='/p2p-deleted-transactions' element={<P2PDeletedTransactions/>} />
         <Route path='/wlx-transactions' element={<WlxTransactions/>} />
         <Route path='/insirex-transactions' element={<InsirexTransactions/>} />
-        
         <Route path='/login' element={<Login />} />
         <Route path='/statistics' element={<Statistics />} />
         <Route path='/wlx' element={<WLX />} />
       </Routes>
+      <Snackbar
+          open={snack}
+          autoHideDuration={2000}
+          onClose={handleCloseSnack}
+          message={snackMessage}
+      >
+          <Alert severity={snackType}>{snackMessage}</Alert>
+      </Snackbar>
     </div>
   );
 }

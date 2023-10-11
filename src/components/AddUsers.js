@@ -49,7 +49,7 @@ export default function AddUsers() {
     const [brandError, setBrandError] = React.useState('');
     const [roleError, setRoleError] = React.useState('');
     const [isPinPayCheck, setIsPinPayCheck] = React.useState(false);
-    const [isInserixCheck, setIsInserixCheck] = React.useState(false);
+    const [isInsirexCheck, setIsInsirexCheck] = React.useState(false);
     const [isP2PCheck, setIsP2PCheck] = React.useState(false);
     const [isWLXCheck, setIsWLXCheck] = React.useState(false);
     const [selectedPayments, setSelectedPayments] = React.useState([]);
@@ -64,7 +64,7 @@ export default function AddUsers() {
         setSelectedPayments([]);
         setIsP2PCheck(false);
         setIsWLXCheck(false);
-        setIsInserixCheck(false);
+        setIsInsirexCheck(false);
         setIsPinPayCheck(false)
         setChoosenBrands([])
         setRole('')
@@ -110,7 +110,7 @@ export default function AddUsers() {
             } else {
                 updatedSelectedPayments = updatedSelectedPayments.filter(el => el !== '4');
             }
-            if (isInserixCheck === true) {
+            if (isInsirexCheck === true) {
                 if (!selectedPayments.includes('2')) {
                     updatedSelectedPayments.push('2');
                 }
@@ -120,7 +120,7 @@ export default function AddUsers() {
 
             return updatedSelectedPayments;
         });
-    }, [isPinPayCheck, isP2PCheck, isInserixCheck, isWLXCheck]);
+    }, [isPinPayCheck, isP2PCheck, isInsirexCheck, isWLXCheck]);
 
     const handleCloseSnack = (event, reason) => {
         if (reason === 'clickaway') {
@@ -355,8 +355,8 @@ export default function AddUsers() {
                                 <span>PinPay</span>
                             </label>
                             <label className="lns-checkbox" >
-                                <input type="checkbox" value={isInserixCheck} onChange={(e) => setIsInserixCheck(e.target.checked)} />
-                                <span>Inserix</span>
+                                <input type="checkbox" value={isInsirexCheck} onChange={(e) => setIsInsirexCheck(e.target.checked)} />
+                                <span>Insirex</span>
                             </label>
                             <label className="lns-checkbox">
                                 <input type="checkbox" value={isP2PCheck} onChange={(e) => setIsP2PCheck(e.target.checked)} />

@@ -64,7 +64,7 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
     const [roleError, setRoleError] = React.useState('')
     const [paymentsError, setPaymentsError] = React.useState('')
     const [isPinPayCheck, setIsPinPayCheck] = React.useState(user.methods.includes('PinPay'));
-    const [isInserixCheck, setIsInserixCheck] = React.useState(user.methods.includes('Inserix'));
+    const [isInsirexCheck, setIsInsirexCheck] = React.useState(user.methods.includes('Insirex'));
     const [isP2PCheck, setIsP2PCheck] = React.useState(user.methods.includes('P2P'));
     const [isWLXCheck, setIsWLXCheck] = React.useState(user.methods.includes('WLX'));
     const [selectedPayments, setSelectedPayments] = React.useState([]);
@@ -99,7 +99,7 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
             } else {
                 updatedSelectedPayments = updatedSelectedPayments.filter(el => el !== '4');
             }
-            if (isInserixCheck === true) {
+            if (isInsirexCheck === true) {
                 if (!selectedPayments.includes('2')) {
                     updatedSelectedPayments.push('2');
                 }
@@ -109,15 +109,15 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
 
             return updatedSelectedPayments;
         });
-    }, [isPinPayCheck, isP2PCheck, isInserixCheck, isWLXCheck]);
+    }, [isPinPayCheck, isP2PCheck, isInsirexCheck, isWLXCheck]);
 
     React.useEffect(() => {
         if (user) {
             if (!user.methods.includes('PinPay')) {
                 setIsPinPayCheck(false)
             }
-            if (!user.methods.includes('Inserix')) {
-                setIsInserixCheck(false)
+            if (!user.methods.includes('Insirex')) {
+                setIsInsirexCheck(false)
             }
             if (!user.methods.includes('P2P')) {
                 setIsP2PCheck(false)
@@ -447,8 +447,8 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
                                     <span>PinPay</span>
                                 </label>
                                 <label className="lns-checkbox">
-                                    <input type="checkbox" name='Inserix' checked={isInserixCheck} onChange={(e) => setIsInserixCheck(e.target.checked)} />
-                                    <span>Inserix</span>
+                                    <input type="checkbox" name='Insirex' checked={isInsirexCheck} onChange={(e) => setIsInsirexCheck(e.target.checked)} />
+                                    <span>Insirex</span>
                                 </label>
                                 <label className="lns-checkbox">
                                     <input type="checkbox" name='P2P' checked={isP2PCheck} onChange={(e) => setIsP2PCheck(e.target.checked)} />

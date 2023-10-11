@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import styles from './FullTransactionInfo.module.scss'
 import { useParams } from 'react-router-dom';
 import $api, { API_URL } from '../../axios';
@@ -8,14 +8,13 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import InfoIcon from "@mui/icons-material/Info";
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
-import { useLocation } from 'react-router-dom';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import Backdrop from '@mui/material/Backdrop';
 import Fade from '@mui/material/Fade';
 import secureLocalStorage from 'react-secure-storage';
 import LinearProgress from '@mui/material/LinearProgress';
-import PinpayImgRow from './PinpayImgRow';
-
+import InsirexImgRow from './InsirexImgRow';
+import Checkbox from '@mui/material/Checkbox';
 const style = {
     position: 'absolute',
     top: '50%',
@@ -88,7 +87,7 @@ function FileUploadModal({ selectedFile, openPreview, handleClose, handleUpload 
 }
 
 
-export default function FullTransactionInfo({ setSnack, setSnackMessage, setSnackType }) {
+export default function FullInsirexTransactionInfo({ setSnack, setSnackMessage, setSnackType }) {
     const [transaction, setTransaction] = useState()
     const [imgs, setImgs] = useState([])
     const [fullImg, setFullImg] = useState('')
@@ -96,26 +95,26 @@ export default function FullTransactionInfo({ setSnack, setSnackMessage, setSnac
     const [info, setInfo] = useState(false);
     const [open, setOpen] = useState(false);
     const [openPreview, setOpenPreview] = useState(false);
-    const [isMenuOpen, setIsMenuOpen] = useState(false)
     const [selectedFile, setSelectedFile] = useState(null);
     const fileInputRef = useRef(null);
     const [isLoading, setIsLoading] = useState(false)
-    const handleOpen = () => setOpen(true);
+    const [isMenuOpen, setIsMenuOpen] = useState(false)
     const [rowId, setRowId] = useState(null)
+    const handleOpen = () => setOpen(true);
     const handleOpenPreview = () => setOpenPreview(true);
     const handleClose = () => { setOpen(false); setFullImg('') };
     const handleClosePreview = () => { setOpenPreview(false); setFullImg(''); setSelectedFile(null) };
-    function useQuery() {
-        const { search } = useLocation();
-        return useMemo(() => new URLSearchParams(search), [search]);
-    }
+    const [checked, setChecked] = useState(false);
 
-    let query = useQuery();
+    const handleChange = (event) => {
+        setChecked(event.target.checked);
+    };
     const handleUploadIconClick = () => {
         if (fileInputRef.current) {
             fileInputRef.current.click();
         }
     };
+
 
     const addImg = (event) => {
         const files = event.target.files;
@@ -127,11 +126,10 @@ export default function FullTransactionInfo({ setSnack, setSnackMessage, setSnac
     };
 
     useEffect(() => {
-        const payment_id = id
         setIsLoading(true)
         try {
-            $api.post('/getOneTransation', { payment_id }).then(res => setTransaction(res.data))
-            $api.post('/getImgsPinPayTransation', { id }).then(res => setImgs(res.data))
+            $api.post('/getOneInsirexTransaction', { id }).then(res => setTransaction(res.data))
+            $api.post('/getImgsInsirexTransation', { id }).then(res => setImgs(res.data))
             if (transaction) {
                 setIsLoading(false)
             }
@@ -151,10 +149,10 @@ export default function FullTransactionInfo({ setSnack, setSnackMessage, setSnac
     }
 
     function getStatus(status) {
-        if (status === 'completed') {
-            return (<div className={styles.success}><CheckCircleIcon /> {status}</div>)
-        } if (status === 'failed') {
-            return (<div className={styles.rejected}><CancelIcon /> {status}</div>)
+        if (status === '1') {
+            return (<div className={styles.success}><CheckCircleIcon /> Успешно</div>)
+        } if (status === '0') {
+            return (<div className={styles.rejected}><CancelIcon /> Отклонено</div>)
         } else {
             return status
         }
@@ -165,8 +163,11 @@ export default function FullTransactionInfo({ setSnack, setSnackMessage, setSnac
         const formattedDate = `${date.getDate().toString().padStart(2, '0')}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getFullYear()} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
         return formattedDate
     }
+
+
+
     const handleUpload = async () => {
-        const id = transaction.payment_id
+        const id = transaction.id
 
         const img = new FormData();
         selectedFile.forEach((file, index) => {
@@ -174,12 +175,12 @@ export default function FullTransactionInfo({ setSnack, setSnackMessage, setSnac
         });
 
         try {
-            await $api.patch(`/uploadPinpayCheck/:${id}?login=${secureLocalStorage.getItem('userLogin')}&payment_method=PinPay`, img, {
+            await $api.patch(`/uploadInsirexTransactionCheck/:${id}?login=${secureLocalStorage.getItem('userLogin')}&payment_method=Insirex`, img, {
                 headers: {
                     'content-type': 'mulpipart/form-data',
                 },
             });
-            await $api.post('/getImgsPinPayTransation', { id }).then(res => setImgs(res.data))
+            await $api.post('/getImgsInsirexTransation', { id }).then(res => setImgs(res.data))
             setSnackMessage('Фото успешно загружено');
             setSnackType('success');
             setSnack(true)
@@ -188,43 +189,76 @@ export default function FullTransactionInfo({ setSnack, setSnackMessage, setSnac
             console.log(e)
         }
     };
+    const EditStatus = async ()=>{
+        const id = transaction.id
+        setChecked(!checked)
+        console.log(!checked)
+        
+        try{
+            const {data} = await $api.patch('/editInsirexStatus' , {id,checked})
+            return data
+        }catch(e){
+            console.log(e)
+        }
+    }
+
     return (
-        <div className={styles.body}  onClick={() => isMenuOpen ? setIsMenuOpen(false) : ''}>
+        <div className={styles.body} onClick={() => isMenuOpen ? setIsMenuOpen(false) : ''}>
             <NavBar />
             <div className={styles.content}>
                 <div className={styles.transactionBody}>
                     <div className={styles.header}>
                         <h1>Транзакция #
                             <span style={{ fontSize: '16px', backgroundColor: '#153769', padding: '7px', borderRadius: '8px' }}>
-                                {transaction.payment_id}
+                                {transaction.id}
                             </span>
                         </h1>
-                        {getStatus(transaction.transaction_status)}
+                        <div className={styles.status}>
+                            {getStatus(transaction.Status)}
+                            <button className={styles.verify} style={checked?{}:{color:'#25487c' , background:'none',border:'1px solid #25487c'}} onClick={()=>{EditStatus()}}>
+                                <Checkbox checked={checked}
+                                    disabled color="success"
+                                    sx={checked?{
+                                        padding:'0px',
+                                        color: '#2edf1e',
+                                        '&.Mui-checked': {
+                                            color: '#2edf1e',
+                                        },
+                                        
+                                    }:{
+                                        padding:'0px',
+                                        color: '#25487c',
+                                        '&.Mui-checked': {
+                                            color: '#25487c',
+                                        },
+                                        
+                                    }} />Подтверждено</button>
+                        </div>
                     </div>
                     <div className={styles.section}>
                         <div className={styles.section1}>
                             <div className={styles.amount}>
                                 <h2>Сумма: </h2>
-                                <span style={transaction.transaction_status === 'completed' ? { fontSize: '24px', color: "#2edf1e" } : { fontSize: '24px', color: "rgb(255 ,0, 34)" }}>
+                                <span style={transaction.Status === '1' ? { fontSize: '24px', color: "#2edf1e" } : { fontSize: '24px', color: "rgb(255 ,0, 34)" }}>
                                     {transaction.amount}€
                                 </span>
                             </div>
                             <div className={styles.date}>
-                                <h2>Дата:</h2> <span>{getFormattedDate(transaction.create_date)}</span>
+                                <h2>Дата:</h2> <span>{getFormattedDate(transaction.date)}</span>
                             </div>
                             <div className={styles.date}>
-                                <h2>Бренд:</h2> <span>{query.get('brand')}</span>
+                                <h2>Бренд:</h2> <span>{transaction.brand}</span>
                             </div>
                         </div>
                         <div className={styles.section2}>
                             <div className={styles.currency}>
-                                <h2>Валюта:</h2> <span style={{ fontSize: '24px' }}>{transaction.currency}</span>
+                                <h2>Проведено:</h2> <span style={{ fontSize: '24px' }}>{transaction.login}</span>
                             </div>
                             <div className={styles.card}>
-                                <h2>Номер карты:</h2> <span>{transaction.card_pan}</span>
+                                <h2>Создано:</h2> <span>{transaction.createdBy}</span>
                             </div>
                             <div className={styles.card}>
-                                <h2>Email:</h2> <span>{query.get('email')}</span>
+                                <h2>Полное имя:</h2> <span>{transaction.FullName}</span>
                             </div>
                         </div>
                         <div className={styles.section3}>
@@ -251,6 +285,7 @@ export default function FullTransactionInfo({ setSnack, setSnackMessage, setSnac
                                         openPreview={openPreview}
                                         handleClose={handleClosePreview}
                                         handleUpload={handleUpload}
+
                                     />
                                 </h2>
                                 <div className={styles.imgList}>
@@ -266,14 +301,16 @@ export default function FullTransactionInfo({ setSnack, setSnackMessage, setSnac
                                     </div>
 
                                     {imgs.map(el =>
-                                        <PinpayImgRow key={el.id}
+                                        <InsirexImgRow
+                                            key={el.id}
                                             el={el}
                                             handleOpen={handleOpen}
-                                            rowId={rowId}
-                                            setRowId={setRowId}
                                             setFullImg={setFullImg}
                                             setImgs={setImgs}
-                                            transaction={transaction} />
+                                            transaction={transaction}
+                                            rowId={rowId}
+                                            setRowId={setRowId} />
+
                                     )}
 
                                 </div>
@@ -289,6 +326,7 @@ export default function FullTransactionInfo({ setSnack, setSnackMessage, setSnac
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
+                    <div><button>X</button></div>
                     <img src={`${API_URL}/${fullImg}`} width='100%' alt='full' />
                 </Box>
             </Modal>
