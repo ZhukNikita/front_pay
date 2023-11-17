@@ -84,8 +84,16 @@ export default function Login() {
             return <Navigate to={'/payments_methods'} />
         }
     }
+    const handleKeyPress = (event) => {
+        if(event.key === 'Enter' && !passwordError && !loginError && login && password){
+          Login()
+        }
+        if(event.key === 'Enter' && passwordError && loginError && !login && !password){
+            Check()
+        }
+      }
     return (
-        <div className={styles.login}>
+        <div className={styles.login} onKeyPress={handleKeyPress}>
             <div className={styles.leftSide}>
                 <img className={styles.logo} src={Logo} alt='logo' />
                 <h2>С возвращением!</h2>

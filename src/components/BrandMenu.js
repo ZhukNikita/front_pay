@@ -12,8 +12,12 @@ function BrandMenu() {
     if(secureLocalStorage.getItem('isLogged') === null){
         return <Navigate to={'/login'}/>
     }
-    if(secureLocalStorage.getItem('isLogged') !== null){
+    if(secureLocalStorage.getItem('isLogged') !== null && secureLocalStorage.getItem('role') === 'User'){
         return <Navigate to={'/payments_methods'}/>
+
+    }
+    if(secureLocalStorage.getItem('isLogged') !== null && (secureLocalStorage.getItem('role') === 'SuperAdmin' || secureLocalStorage.getItem('role') === 'Admin'|| secureLocalStorage.getItem('role') === 'Financier')){
+        return <Navigate to={'/panel'}/>
 
     }
   return (

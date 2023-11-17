@@ -49,6 +49,20 @@ export default function Methods() {
             "6. Отправляем клиенту на заполнение данных карты и оптаты", 
             "7. После успешного пополнения отправляем в Тикет запрос на зачисление в формате: Название платежки 'Insirex', Почта клиента, Сумма и время пополнения, Документы Лида"],
             brands: ['SafeInvest','VitalInvest','InfinityInvest','Revolut','RiseInvest']
+        },
+        {
+            id:6,
+            name: 'AdvCash',
+            link:'/advcash' ,
+            instruction:[],
+            brands: ['SafeInvest']
+        },
+        {
+            id:7,
+            name: 'shp.ee',
+            link:'/shp' ,
+            instruction:[],
+            brands: ['SafeInvest']
         }
     ]
 

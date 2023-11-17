@@ -1,0 +1,41 @@
+@import './vars.scss';
+@import 'vars.scss';
+
+
+.body {
+    background-color: $cardBC;
+    width: 600px;
+    min-height: 30vh;
+    border-radius: 6px;
+    @include flex(center, center);
+    flex-direction: column;
+    padding: 20px;
+    font-family: $font;
+    color: #ffffff;
+    text-align: center;
+    input{
+        width: 30%;
+        height: 50px;
+        padding: 8px;
+        outline: none;
+        font-family: "Nunito" , sans-serif;
+        border-radius: 8px;
+        border: none;
+        font-size: 16px;
+    }
+    button{
+        margin-top: 30px;
+        background: none;
+        border: 1px solid black;
+        padding: 10px;
+        border-radius: 6px;
+        font-family: "Nunito" , sans-serif;
+        font-size: 16px;
+        
+    }
+    h1 {
+        margin-bottom: 0;
+    }
+
+
+}

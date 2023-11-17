@@ -1,0 +1,159 @@
+@import '../../styles/vars.scss';
+
+.transactionsList {
+    width: 100%;
+    background-color: $cardBC;
+    border-radius: 12px;
+    font-family: 'Nunito', sans-serif;
+    color: aliceblue;
+    padding-top: 15px;
+    .search {
+        margin-left: 15px;
+        margin-bottom: 15px;
+        @include flex(center,space-between);
+        gap: 50px;
+        input {
+            padding: 15px;
+            border: 1px solid #233e68;
+            background: none;
+            font-family: 'Nunito', sans-serif;
+            color: #b7dce9;
+            border-radius: 12px;
+            outline: none;
+            font-size: 16px
+        }
+
+        input::placeholder {
+            color: #b7dce9;
+        }
+        button{
+            @include flex(center,center);
+            gap: 6px;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 12px;
+            background-color: #233e68;
+            color: rgb(183, 220, 233);
+            font-family: 'Nunito', sans-serif;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 15px;
+        }
+        button:hover{
+            background-color: #25487c;
+        }
+    }
+
+    .header {
+        width: calc(100% - 20px);
+        height: 80px;
+        background-color: #233e68;
+        @include flex(center, start);
+        padding-left: 20px;
+        font-size: 0.85vw;
+        .amount {
+            width: 8vw;
+            @include flex(center,start);
+            gap: 10px;
+        }
+        .date{
+            width: 7vw;
+            @include flex(center,start); 
+            gap: 10px;
+        }
+    }
+
+    .transaction {
+        width: calc(100% - 20px);
+        height: 90px;
+        @include flex(center, space-between);
+        flex-direction: row;
+        padding-left: 20px;
+        border-bottom: 1px solid #233e68;
+
+        .body {
+            @include flex(center, start);
+            flex-direction: row;
+            height: 90px;
+            text-decoration: none;
+            color: #b7dce9;
+            h3{
+                .pending{
+                    @include flex(center,center);
+                    gap: 5px;
+                    background-color: wheat;
+                    border-radius: 6px;
+                    color:rgb(122, 79, 1);
+                    padding: 3px 0px;
+                    width: 85%;
+                }
+                .success{
+                    @include flex(center,center);
+                    gap: 5px;
+                    background-color: rgba(84, 214, 44, 0.36);
+                    color: rgb(46, 223, 30);
+                    padding: 3px 0px;
+                    width: 85%;
+                    border-radius: 6px;
+
+                }
+                .rejected{
+                    @include flex(center,center);
+                    gap: 5px;
+                    background-color: rgba(255, 72, 66, 0.66);
+                    color: rgb(73, 14, 22);
+                    padding: 3px 0px;
+                    width: 85%;
+                    border-radius: 6px;
+                }
+            }
+        }
+
+        h3 {
+            font-size: 0.95vw;
+
+        }
+
+        .login {
+            width: 11vw;
+            color: #b7dce9;
+        }
+
+        .fullName{
+            width: 12vw;
+            color: #b7dce9;
+        }
+
+        .brand {
+            width: 9.5vw;
+            color: #b7dce9;
+        }
+        .amount{
+            width: 8vw;
+            color: #b7dce9;
+        }
+        .status{
+            width: 9.5vw;
+            font-size: 13px;
+            @include flex(center,center);
+            gap: 5px;
+            padding: 5px;
+            border-radius: 6px;
+            background-color: rgba(255, 72, 66, 0.66);
+            color: rgb(73, 14, 22);
+            font-weight: bold;
+        }
+        .statusTrue{
+            width: 9.5vw;
+            font-size: 13px;
+                @include flex(center,center);
+            gap: 5px;
+
+               padding: 5px;
+               border-radius: 6px;
+               background-color: rgba(84, 214, 44, 0.36);
+               color: rgb(46, 223, 30);
+        }
+    }
+}

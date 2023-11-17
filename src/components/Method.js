@@ -29,7 +29,10 @@ export default function Method({link,name,instruction}) {
         <Link to={link} className={styles.method}>
             <h3>{name}</h3>
         </Link>
-        <HelpIcon onClick={handleOpen} sx={{position:'absolute',color:'#fff', zIndex:'3', top:'6px' , right:'8px'}}/>
+        {
+            instruction.length>0?<HelpIcon onClick={handleOpen} sx={{position:'absolute',color:'#fff', zIndex:'3', top:'6px' , right:'8px'}}/>:''
+        }
+        
         <Modal
                 open={open}
                 onClose={handleClose}

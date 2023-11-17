@@ -13,9 +13,8 @@ import Backdrop from '@mui/material/Backdrop';
 import Fade from '@mui/material/Fade';
 import secureLocalStorage from 'react-secure-storage';
 import LinearProgress from '@mui/material/LinearProgress';
-import InsirexImgRow from './InsirexImgRow';
+import AdvCashImgRow from './AdvCashImgRow.js';
 import Checkbox from '@mui/material/Checkbox';
-import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 const style = {
     position: 'absolute',
     top: '50%',
@@ -297,7 +296,7 @@ export default function FullInsirexTransactionInfo({ setSnack, setSnackMessage, 
                                     </div>
 
                                     {imgs.map(el =>
-                                        <InsirexImgRow
+                                        <AdvCashImgRow
                                             key={el.id}
                                             el={el}
                                             handleOpen={handleOpen}
@@ -322,7 +321,7 @@ export default function FullInsirexTransactionInfo({ setSnack, setSnackMessage, 
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
-                    <div style={{display:'flex' , justifyContent:'right' , width:'100%'}}><button style={{borderRadius:'4px',border:'none', backgroundColor:'#a3c8ff' , display:'flex' , alignItems:'center' , justifyContent:'center' , color:''}} onClick={handleClose}><CloseRoundedIcon/></button></div>
+                    <div><button>X</button></div>
                     <img src={`${API_URL}/${fullImg}`} width='100%' alt='full' />
                 </Box>
             </Modal>

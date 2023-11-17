@@ -67,8 +67,10 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
     const [isInsirexCheck, setIsInsirexCheck] = React.useState(user.methods.includes('Insirex'));
     const [isP2PCheck, setIsP2PCheck] = React.useState(user.methods.includes('P2P'));
     const [isWLXCheck, setIsWLXCheck] = React.useState(user.methods.includes('WLX'));
+    const [isAdvCashCheck, setIsAdvCashCheck] = React.useState(user.methods.includes('AdvCash'));
+    const [isStripeCheck, setIsStripeCheck] = React.useState(user.methods.includes('shp.ee'));
     const [selectedPayments, setSelectedPayments] = React.useState([]);
-    const [choosenbrands, setChoosenBrands] = React.useState(user.brand ? brands.filter(item => user.brands.includes(item.brand)) : [])
+    const [choosenbrands, setChoosenBrands] = React.useState(user.brand && brands ? brands.filter(item => user.brands.includes(item.brand)) : [])
     React.useEffect(() => {
         if (brands) {
             setChoosenBrands(brands.filter(item => user.brands.includes(item.brand)))
@@ -85,14 +87,26 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
             } else {
                 updatedSelectedPayments = updatedSelectedPayments.filter(el => el !== '1');
             }
+            if (isStripeCheck === true) {
+                if (!selectedPayments.includes('6')) {
+                    updatedSelectedPayments.push('6');
+                }
+            } else {
+                updatedSelectedPayments = updatedSelectedPayments.filter(el => el !== '6');
+            }
             if (isP2PCheck === true) {
                 if (!selectedPayments.includes('3')) {
                     updatedSelectedPayments.push('3');
                 }
             } else {
                 updatedSelectedPayments = updatedSelectedPayments.filter(el => el !== '3');
-            }
-            if (isWLXCheck === true) {
+            }if (isAdvCashCheck === true) {
+                if (!selectedPayments.includes('5')) {
+                    updatedSelectedPayments.push('5');
+                }
+            } else {
+                updatedSelectedPayments = updatedSelectedPayments.filter(el => el !== '5');
+            }if (isWLXCheck === true) {
                 if (!selectedPayments.includes('4')) {
                     updatedSelectedPayments.push('4');
                 }
@@ -109,18 +123,39 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
 
             return updatedSelectedPayments;
         });
-    }, [isPinPayCheck, isP2PCheck, isInsirexCheck, isWLXCheck]);
+    }, [isPinPayCheck, isP2PCheck, isInsirexCheck, isWLXCheck, isAdvCashCheck , isStripeCheck]);
 
     React.useEffect(() => {
         if (user) {
             if (!user.methods.includes('PinPay')) {
                 setIsPinPayCheck(false)
+            }else{
+                setIsPinPayCheck(true)
+            }
+            if (!user.methods.includes('shp.ee')) {
+                setIsStripeCheck(false)
+            }else{
+                setIsStripeCheck(true)
             }
             if (!user.methods.includes('Insirex')) {
                 setIsInsirexCheck(false)
+            }else{
+                setIsInsirexCheck(true)
             }
             if (!user.methods.includes('P2P')) {
                 setIsP2PCheck(false)
+            }else{
+                setIsP2PCheck(true)
+            }
+            if (!user.methods.includes('AdvCash')) {
+                setIsAdvCashCheck(false)
+            }else{
+                setIsAdvCashCheck(true)
+            }
+            if (!user.methods.includes('WLX')) {
+                setIsWLXCheck(false)
+            }else{
+                setIsWLXCheck(true)
             }
             setBrand(user.brand)
             setRole(user.role)
@@ -132,7 +167,9 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
 
     const handleOpen = () => setOpenModal(true);
 
-    const handleModalClose = () => {
+    const handleModalClose = async () => {
+        const userToken = secureLocalStorage.getItem('userToken')
+        await $api.post('/users', { userToken }).then(res => setUsers(res.data.reverse()))
         setOpenModal(false)
         setLogin(user.login)
         setPassword(user.password?atob(user.password): '*******')
@@ -259,7 +296,6 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
             handleModalClose()
         }
     }
-
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
@@ -315,7 +351,11 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
                     {passViss && user.password ? atob(user.password) : '*******'}
                     {passViss ? <VisibilityOffIcon sx={{ cursor: 'pointer' }} onClick={() => setIsPassViss(false)} /> : <VisibilityIcon sx={{ cursor: 'pointer' }} onClick={() => setIsPassViss(true)} />}
                 </h3>
-                <h3 className={styles.brand}>{user.brand}</h3>
+                <h3 className={styles.brand}>{brands.length > 0 && brands.filter(el=> el.brand === user.brand).length > 0? user.brand :  
+                    <Tooltip title={<span style={{fontSize: '15px', fontFamily: "'Nunito',sans-serif"}}>Данный бренд удалён</span>}>
+                        <span style={{color:'red'}}>{user.brand}</span>
+                    </Tooltip>}
+                    </h3>
                 <h3 className={styles.role}>{user.role}</h3>
                 <div className={styles.methods}>
                     {user.methods.map(el => <h3 key={el}>{el}</h3>)}
@@ -413,7 +453,7 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
                                 <label style={{ color: 'white', width: '100%', fontFamily: "'Nunito',sans-serif" }}>Бренд</label>
                                 <select name='Brand' onChange={e => { setBrand(e.target.value); setBrandError('') }} value={brand} style={{ outline: 'none', padding: '15px 20px', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', width: '100%' }} placeholder='Бренд'>
                                     <option value="">None</option>
-                                    {Array.isArray(secureLocalStorage.getItem('brands'))? secureLocalStorage.getItem('brands').map(el => <option key={el} value={el}>{el}</option>) : ''}
+                                    {brands.map(el => <option key={el.id} value={el.brand}>{el.brand}</option>)}
                                 </select>
                                 {
                                     brandError && <div style={{ color: 'red', fontSize: '13px', margin: '0', fontFamily: "'Nunito',sans-serif", fontWeight: 'bold' }}>{brandError}</div>
@@ -457,6 +497,14 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
                                 <label className="lns-checkbox">
                                     <input type="checkbox" name='WLX' checked={isWLXCheck} onChange={(e) => setIsWLXCheck(e.target.checked)} />
                                     <span>WLX</span>
+                                </label>
+                                <label className="lns-checkbox">
+                                    <input type="checkbox" name='AdvCash' checked={isAdvCashCheck} onChange={(e) => setIsAdvCashCheck(e.target.checked)} />
+                                    <span>AdvCash</span>
+                                </label>
+                                <label className="lns-checkbox">
+                                    <input type="checkbox" name='shp.ee' checked={isStripeCheck} onChange={(e) => setIsStripeCheck(e.target.checked)} />
+                                    <span>shp.ee</span>
                                 </label>
                             </div>
 

@@ -21,7 +21,7 @@ const MenuProps = {
 
 function getStyles(brand, choosenbrands, theme) {
   return {
-    backgroundColor: 'White',
+    backgroundColor: choosenbrands.includes(brand)? 'lightgrey' : 'white',
     fontWeight:
     choosenbrands.indexOf(brand) === -1
         ? theme.typography.fontWeightRegular

@@ -333,6 +333,7 @@ export default function AddUsers() {
                                 <option value="">None</option>
                                 {secureLocalStorage.getItem('role') === 'SuperAdmin' ? <option value="SuperAdmin">SuperAdmin</option> : ''}
                                 <option value="Admin">Админ</option>
+                                <option value="SuperFinancier">Главный финансист</option>
                                 <option value="Financier">Финансист</option>
                                 <option value="User">Пользователь</option>
                             </select>
@@ -421,10 +422,13 @@ export default function AddUsers() {
                         <h3 style={{ color: 'white', width: '100%', textAlign: 'center', fontFamily: "'Nunito',sans-serif", marginBottom: '0px' }}>Удалить бренд</h3>
                         <div style={{ width: '100%', display: 'flex', flexDirection: 'column' }}>
                             <label style={{ color: 'white', width: '100%', fontFamily: "'Nunito',sans-serif" }}>Название бренда</label>
-                            <select value={deleteBrand} onChange={(e)=>setDeleteBrand(e.target.value)} style={{ outline: 'none', padding: '15px 20px', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', width: '100%' }}>
-                                <option value=''>None</option>
-                                {brands.map(el=> <option key={el.id} value={el.brand}>{el.brand}</option>)}
-                            </select>
+                            {brands?
+                                                       <select value={deleteBrand} onChange={(e)=>setDeleteBrand(e.target.value)} style={{ outline: 'none', padding: '15px 20px', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', width: '100%' }}>
+                                                       <option value=''>None</option>
+                                                       {brands.map(el=> <option key={el.id} value={el.brand}>{el.brand}</option>)}
+                                                   </select>:'' 
+                        }
+
                             {
                                 brandError && <div style={{ color: 'red', fontSize: '13px', margin: '0', fontFamily: "'Nunito',sans-serif", fontWeight: 'bold' }}>{brandError}</div>
                             }

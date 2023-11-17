@@ -25,6 +25,10 @@ import FullTransactionInfo from './pages/PinpayTransactions/FullTransactionInfo'
 import FullInsirexTransactionInfo from './pages/InsirexTransactions/FullInfoTransaction.js';
 import MuiAlert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
+import AdvCash from './components/AdvCash';
+import Stripe from './components/Stripe.js';
+import AdvCashTransactions from './pages/AdvCashTransactions/AdvCashTransactions.js';
+import Transaction from './pages/ShpTransactions/Transaction.js';
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
@@ -95,6 +99,7 @@ function App() {
       <Routes>
         <Route path={'/pinpay'} element={<PinPay />} />
         <Route path={'/'} element={<BrandMenu />} />
+        <Route path={'/shp-transactions'} element={<Transaction />} />
         <Route path={'/payments_methods'} element={<PaymentsMethods />} />
         <Route path={'/methods'} element={<Methods/>} />
         <Route path={'/p2p'} element={<P2P />} />
@@ -110,17 +115,20 @@ function App() {
         <Route path='/p2p-deleted-transactions' element={<P2PDeletedTransactions/>} />
         <Route path='/wlx-transactions' element={<WlxTransactions/>} />
         <Route path='/insirex-transactions' element={<InsirexTransactions/>} />
+        <Route path='/advcash-transactions' element={<AdvCashTransactions/>} />
         <Route path='/login' element={<Login />} />
         <Route path='/statistics' element={<Statistics />} />
         <Route path='/wlx' element={<WLX />} />
+        <Route path='/advcash' element={<AdvCash />} />
+        <Route path='/shp' element={<Stripe />} />
       </Routes>
       <Snackbar
           open={snack}
-          autoHideDuration={2000}
+          autoHideDuration={4000}
           onClose={handleCloseSnack}
           message={snackMessage}
       >
-          <Alert severity={snackType}>{snackMessage}</Alert>
+          <Alert severity={snackType} sx={{fontFamily:"'Nunito',sans-serif" , fontSize:'15px'}}>{snackMessage}</Alert>
       </Snackbar>
     </div>
   );

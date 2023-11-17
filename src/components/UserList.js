@@ -44,7 +44,7 @@ const arrowUpStyle = { width: '17px', transition: 'all 0.3s ease', transform: 'r
 export default function UserList({ users, setUsers, brands }) {
   const [usersPerPage] = useState(5);
   const [search, setSearch] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(secureLocalStorage.getItem('pagination')?secureLocalStorage.getItem('pagination') : 1);
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [checkbox, setCheckbox] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
@@ -127,7 +127,7 @@ export default function UserList({ users, setUsers, brands }) {
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
   const currentUser = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
 
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const paginate = (pageNumber) => {setCurrentPage(pageNumber); secureLocalStorage.setItem('pagination' , pageNumber)};
   const handleSelectAll = () => {
     setSelectAll(!selectAll);
     if (!selectAll) {
@@ -150,10 +150,10 @@ export default function UserList({ users, setUsers, brands }) {
     }
   }
   const AddPayment = async () => {
-    const createdBy = secureLocalStorage.getItem('userId')
+    const userToken = secureLocalStorage.getItem('userToken')
     try {
       const { data } = await $api.post('/addPayment', { deletePayment, checkbox })
-      await $api.post('/users', { createdBy }).then(res => setUsers(res.data.reverse()))
+      await $api.post('/users', { userToken }).then(res => setUsers(res.data.reverse()))
       return data
     } catch (e) {
       console.log(e)
@@ -305,6 +305,8 @@ export default function UserList({ users, setUsers, brands }) {
                 <option value="2">Insirex</option>
                 <option value="3">P2P</option>
                 <option value="4">WLX</option>
+                <option value="5">AdvCash</option>
+                <option value="6">shp.ee</option>
               </select>
               {
                 deletePaymentError && <div style={{ color: 'red', fontSize: '13px', margin: '0', fontFamily: "'Nunito',sans-serif", fontWeight: 'bold' }}>{deletePaymentError}</div>

@@ -1,4 +1,4 @@
-import styles from './InsirexTransactionsList.module.scss'
+import styles from './AdvCashTransactionsList.module.scss'
 import {useState,useEffect} from 'react'
 import Transaction from './Transaction';
 import { Pagination } from '@mui/material';
@@ -37,7 +37,7 @@ const style = {
     backgroundColor: '#233e68',
     width: "550px"
 };
-export default function InsirexTransactionsList({transactions,setTransactions}) {
+export default function AdvCashTransactionsList({transactions,setTransactions}) {
     const [search, setSearch] = useState('')
     const [isLoading, setIsLoading] = useState(false)
     const [transactionsPerPage] = useState(6);

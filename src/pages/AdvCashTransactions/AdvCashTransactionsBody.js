@@ -1,5 +1,5 @@
-import InsirexTransactionsList from "./InsirexTransactionsList"
-import styles from './InsirexTransactionsBody.module.scss'
+import AdvCashTransactionsList from "./AdvCashTransactionsList"
+import styles from './AdvCashTransactionsBody.module.scss'
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import $api from "../../axios";
@@ -27,7 +27,7 @@ const StyledDatePickerInput = styled(DatePicker)({
         color: 'rgb(183, 220, 233)',
     },
 });
-export default function InsirexTransactionsBody(params) {
+export default function AdvCashTransactionsBody(params) {
     const [transactions, setTransactions] = useState([])
     const [isLoading, setIsLoading] = useState(false)
     const [brands, setBrands] = useState([])
@@ -91,11 +91,11 @@ export default function InsirexTransactionsBody(params) {
     return (
         <div className={styles.body}>
             <div className={styles.header}>
-                <h1>Транзакции Insirex</h1>
+                <h1>Транзакции AdvCash</h1>
             </div>
-            <InsirexTransactionsList transactions={transactions} setTransactions={setTransactions}/>
+            <AdvCashTransactionsList transactions={transactions} setTransactions={setTransactions}/>
             <div className={styles.pinpayStats}>
-                <h1>Статистика Insirex</h1>
+                <h1>Статистика AdvCash</h1>
                 <div style={{ display: 'flex', gap: '20px' }}>
                     <div className={styles.allStats}>
                         <div className={styles.statsHeader}>
@@ -140,7 +140,7 @@ export default function InsirexTransactionsBody(params) {
 
                     </div>
                     <div className={styles.pinpayPie}>
-                        <h2>Транзакции Insirex</h2>
+                        <h2>Транзакции AdvCash</h2>
                         {isLoading ?
                             <div style={{ height: '189px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                 <Oval

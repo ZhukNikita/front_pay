@@ -15,7 +15,7 @@
             font-family: 'Nunito', sans-serif;
         }
         .logo{
-            width: 85%;
+            width: 72%;
             filter: brightness(10) , ;
             filter: contrast(70%);
         }
@@ -26,16 +26,18 @@
             flex-direction: column;
             gap: 25px;
             .payment{
-                @include flex(center,center);
+                @include flex(center,start);
                 color: rgb(183, 220, 233);
                 font-size: 1.2vw;
                 font-family: 'Nunito', sans-serif;
                 font-weight: 700;
-                width: 91%;
+                width: 85%;
                 height: 60px;
                 border-radius: 12px;
                 background-color: $cardBC;
                 transition: all 0.3s ease;
+                gap: 10px;
+                padding: 0 15px;
                 cursor: pointer;
             }
             .payment:hover{

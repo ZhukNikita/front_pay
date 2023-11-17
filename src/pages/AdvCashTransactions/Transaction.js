@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import styles from './InsirexTransactionsList.module.scss';
+import styles from './AdvCashTransactionsList.module.scss';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
