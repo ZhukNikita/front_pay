@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import {Link, Navigate} from 'react-router-dom';
 import secureLocalStorage from 'react-secure-storage';
 import styles from '../styles/Stripe.module.scss';
 import $api from '../axios'
@@ -14,7 +14,7 @@ export default function Stripe() {
     const [url, setUrl] = useState('')
     const [error, setError] = useState('')
     const [isLoading, setIsLoading] = useState(false)
-    if (!secureLocalStorage.getItem('isLogged') || !secureLocalStorage.getItem('methods').includes('AdvCash')) {
+    if (!secureLocalStorage.getItem('isLogged') || !secureLocalStorage.getItem('methods').includes('shp.ee')) {
         return <Navigate to={'/payments_methods'} />
     }
     const generatePaymentLink = async () => {
@@ -68,6 +68,9 @@ export default function Stripe() {
                 }
             </div>
             <div className={styles.body}>
+                <Link to={'/payments_methods'}>
+                    На главную
+                </Link>
                 <h1 style={{ marginTop: '0' }}>SHP.EE</h1>
                 <div className={styles.input}>
                     <label>Сумма</label>

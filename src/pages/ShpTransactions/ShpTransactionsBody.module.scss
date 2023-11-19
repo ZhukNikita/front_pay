@@ -1,0 +1,130 @@
+@import '../../styles/vars.scss';
+
+.body {
+    padding: 30px;
+    width: 76%;
+    font-family: 'Nunito', sans-serif;
+    margin-left: 20%;
+
+    .header {
+        @include flex(center, space-between);
+
+        h1 {
+            color: rgb(183, 220, 233);
+        }
+    }
+
+    .shpStats {
+        height: 500px;
+
+        h1 {
+            color: #b7dce9;
+        }
+
+        .allStats {
+            background-color: $cardBC;
+            border-radius: 10px;
+            @include flex(center, space-between);
+            flex-direction: column;
+            padding: 20px;
+            width: 380px;
+            gap: 20px;
+            .datePickers{
+                @include flex(center, space-between);
+                gap: 10px;
+            }
+            .statsHeader {
+                @include flex(center, space-between);
+                width: 100%;
+                position: relative;
+                .statsFilter{
+                    @include flex(start,center);
+                    flex-direction: column;
+                    position: absolute;
+                    background-color: $cardBC;
+                    gap: 10px;
+                    padding: 12px;
+                    top: 0px;
+                    right: -210px;
+                    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.45);
+                    border-radius: 6px;
+                    p{
+                        width: 100%;
+                        padding: 3px;
+                        border-radius: 4px;
+                        cursor: pointer;
+                        color: #b7dce9;
+                        margin: 0;
+                    }
+                    p:hover{
+                        background-color: #224579;
+                    }
+                }
+                h2 {
+                    margin: 0;
+                    color: #b7dce9;
+
+                }
+            }
+
+            .listStats {
+                @include flex(center, start);
+                flex-direction: column;
+                gap: 30px;
+                width: 100%;
+                height: 100%;
+
+                .brandStats {
+                    @include flex(center, space-between);
+
+                    width: 100%;
+
+                    .brandName {
+                        @include flex(center, start);
+                        gap: 10px;
+                        font-weight: bold;
+                        color: white
+                    }
+                }
+            }
+
+        }
+        .shpPie{
+            padding: 20px;
+            border-radius: 10px;
+            @include flex(center, start);
+            flex-direction: column;
+            background-color: $cardBC;
+            width: 225px;
+            height: 300px;
+
+            h2 {
+                width: 100%;
+                margin-top: 0;
+                margin-bottom: 10px;
+                color: #b7dce9;
+
+            }
+
+            .descriptions {
+                margin-top: 10px;
+                padding: 10px 10px 0 10px;
+                @include flex(start, center);
+                flex-direction: column;
+                width: calc(100% + 20px);
+                border-top: 1px solid rgba(145, 158, 171, 0.24);
+
+                .description {
+                    @include flex(center, start);
+                    gap: 10px;
+                    width: 100%;
+
+                    h4 {
+                        color: #b7dce9;
+                        margin: 0;
+                    }
+                }
+            }
+        }
+    }
+}

@@ -57,7 +57,7 @@ export default function Login() {
     }
     const Login = async () => {
         try {
-            const { data } = await axios.post('http://localhost:5000/login', { login, password });
+            const { data } = await axios.post('http://156.67.52.151:5000/login', { login, password });
             if (data) {
                 secureLocalStorage.setItem('role', data.role);
                 secureLocalStorage.setItem('isLogged', true);

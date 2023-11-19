@@ -62,7 +62,7 @@ export default function PaymentsMethods() {
     ]
 
     const userMethods = secureLocalStorage.getItem('methods')
-
+    console.log(userMethods)
     if(!secureLocalStorage.getItem('isLogged')){
         return <Navigate to={'/login'}/>
     }
