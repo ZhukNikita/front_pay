@@ -8,12 +8,14 @@ import stripe from '../img/stripe.png'
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import Clipboard from 'react-clipboard.js';
 import { Oval } from 'react-loader-spinner';
+import {decode as base64_decode, encode as base64_encode} from 'base-64';
 export default function Stripe() {
     const [amount, setAmount] = useState('')
     const [currency, setCurrency] = useState('usd')
     const [url, setUrl] = useState('')
     const [error, setError] = useState('')
     const [isLoading, setIsLoading] = useState(false)
+
     if (!secureLocalStorage.getItem('isLogged') || !secureLocalStorage.getItem('methods').includes('shp.ee')) {
         return <Navigate to={'/payments_methods'} />
     }
@@ -23,11 +25,13 @@ export default function Stripe() {
             setIsLoading(true)
             if (amount && currency) {
                 const brand = secureLocalStorage.getItem('userBrand')
-                const { data } = await $api.post('/createLink', { amount: amount * 100, currency: currency, image: safeInvest, brand })
-                if (data) {
-                    setUrl(data)
+                const encodedAmount = base64_encode(amount);
+                const encodedCurrency = base64_encode(currency);
+                const encodedBrand = base64_encode(brand);
+                console.log(base64_decode(encodedAmount))
+                // const { data } = await $api.post('/createLink', { amount: amount * 100, currency: currency, image: safeInvest, brand })
+                    setUrl(`https://safelinks.work/pay/${encodedAmount}/${encodedCurrency}/${encodedBrand}`)
                     setIsLoading(false)
-                }
             }
             else {
                 setIsLoading(false)
@@ -68,7 +72,7 @@ export default function Stripe() {
                 }
             </div>
             <div className={styles.body}>
-                <Link to={'/payments_methods'}>
+                <Link to={'/'}>
                     На главную
                 </Link>
                 <h1 style={{ marginTop: '0' }}>SHP.EE</h1>

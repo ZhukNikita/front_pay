@@ -43,7 +43,7 @@ export default function ShpTransactionsBody() {
         const { data } = await $api.get('/getShpTransactions')
         if (data.data) {
           console.log(data.data);
-          setTransactions(data.data.reverse())
+          setTransactions(data.data)
           setIsLoading(false)
         }
       }

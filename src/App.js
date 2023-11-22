@@ -1,4 +1,5 @@
 import './App.css';
+import AllTransactions from './pages/AllTransactions/AllTransactions.js';
 import PinPay from './components/PinPay'
 import BrandMenu from './components/BrandMenu'
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
@@ -14,6 +15,7 @@ import secureLocalStorage from 'react-secure-storage';
 import Transactions from './pages/Transactions/Transactions';
 import PinpayTransactions from './pages/PinpayTransactions/PinpayTransactions';
 import Methods from './pages/Methods/Methods';
+import {Test} from './components/Test.js'
 import P2PTransactions from './pages/P2PTransations/P2PTransactions';
 import P2PDeletedTransactions from './pages/P2PTransations/P2PDeletedTransactions';
 import WlxTransactions from './pages/WLXTransactions/WlxTransactions'
@@ -100,7 +102,7 @@ function App() {
       <Routes>
         <Route path={'/pinpay'} element={<PinPay />} />
         <Route path={'/'} element={<BrandMenu />} />
-        {/*<Route path={'/shp-transactions'} element={<ShpTransactions />} />*/}
+        {/* <Route path={'/shp-transactions'} element={<ShpTransactions />} /> */}
         <Route path={'/payments_methods'} element={<PaymentsMethods />} />
         <Route path={'/methods'} element={<Methods/>} />
         <Route path={'/p2p'} element={<P2P />} />
@@ -108,10 +110,12 @@ function App() {
         <Route path='/failure' element={<Failure />} />
         <Route path='/success' element={<Success />} />
         <Route path='/panel' element={<Panel />} />
-        <Route path='/transactions' element={<Transactions/>} />
+        {/* <Route path='/test' element={<Test />} /> */}
+        {/* <Route path='/transactions' element={<Transactions/>} /> */}
+        <Route path='/transactions' element={<AllTransactions/>} />
         {/*<Route path='/pinpay-transactions' element={<PinpayTransactions/>} />*/}
         <Route path='/transaction/:id' element={<FullTransactionInfo setSnack={setSnack} setSnackMessage={setSnackMessage} setSnackType={setSnackType}/>} />
-        {/*<Route path='/shp-transaction/:id' element={<FullShpTransactionInfo setSnack={setSnack} setSnackMessage={setSnackMessage} setSnackType={setSnackType}/>} />*/}
+        {/* <Route path='/shp-transaction/:id' element={<FullShpTransactionInfo setSnack={setSnack} setSnackMessage={setSnackMessage} setSnackType={setSnackType}/>} /> */}
         {/*<Route path='/insirex-transaction/:id' element={<FullInsirexTransactionInfo setSnack={setSnack} setSnackMessage={setSnackMessage} setSnackType={setSnackType}/>} />*/}
         {/*<Route path='/p2p-transactions' element={<P2PTransactions/>} />*/}
         {/*<Route path='/p2p-deleted-transactions' element={<P2PDeletedTransactions/>} />*/}
