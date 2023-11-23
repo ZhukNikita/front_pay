@@ -91,17 +91,20 @@ export default function Transaction({transaction}) {
     const handleClose = () => {setOpen(false);setSelectedFile([])};
     const fileInputRef = useRef(null);
 
-    function getStatus(status){
-        if(status === 'processing' || status.includes('requires')){
-            return (<Tooltip title={<span style={{fontFamily:'"Nunito",sans-serif' , margin:'0' , padding:'0'}}>{status}</span>} className={styles.pending}><TimerIcon/> waiting</Tooltip>)
-        }if(status === 'succeeded'){
-            return (<Tooltip title={<span style={{fontFamily:'"Nunito",sans-serif'}}>{status}</span>}  className={styles.success}><CheckCircleIcon/> {status}</Tooltip>)
-        }if(status.includes('failed') || status === 'canceled'){
-            return (<Tooltip title={<span style={{fontFamily:'"Nunito",sans-serif'}}>{status}</span>} className={styles.rejected}><CancelIcon/> {status}</Tooltip>)
-        }if(status === 'timeout'){
-            return (<Tooltip title={<span style={{fontFamily:'"Nunito",sans-serif'}}>{status}</span>} className={styles.rejected}><TimerOffIcon/> {status}</Tooltip>)
+    function getStatus(transaction){
+        if(transaction.last_payment_error !== null){
+            return (<Tooltip title={<span style={{fontFamily:'"Nunito",sans-serif' , margin:'0' , padding:'0'}}>{transaction.last_payment_error.message}</span>} className={styles.rejected}><CancelIcon/> failed</Tooltip>)
+        }
+        if(transaction.status === 'processing' || transaction.status.includes('requires')){
+            return (<Tooltip title={<span style={{fontFamily:'"Nunito",sans-serif' , margin:'0' , padding:'0'}}>{transaction.status}</span>} className={styles.pending}><TimerIcon/> waiting</Tooltip>)
+        }if(transaction.status === 'succeeded'){
+            return (<Tooltip title={<span style={{fontFamily:'"Nunito",sans-serif'}}>{transaction.status}</span>}  className={styles.success}><CheckCircleIcon/> {transaction.status}</Tooltip>)
+        }if(transaction.status.includes('failed') || transaction.status === 'canceled'){
+            return (<Tooltip title={<span style={{fontFamily:'"Nunito",sans-serif'}}>{transaction.status}</span>} className={styles.rejected}><CancelIcon/> {transaction.status}</Tooltip>)
+        }if(transaction.status === 'timeout'){
+            return (<Tooltip title={<span style={{fontFamily:'"Nunito",sans-serif'}}>{transaction.status}</span>} className={styles.rejected}><TimerOffIcon/> {transaction.status}</Tooltip>)
         }else{
-            return status
+            return transaction.status
         }
     }
     const handleUploadIconClick = () => {
@@ -141,18 +144,18 @@ export default function Transaction({transaction}) {
       <div className={styles.transaction}>
           <Link to={`/shp-transaction/${transaction.id}?brand=${transaction?.description}&email=${transaction?.last_payment_error?.payment_method?.email}`} className={styles.body}>
               <h3 style={{ width: '7vw' }}>{formattedDate}</h3>
-              <h3 style={{ width: '9vw' }}>{transaction.id.slice(0,13)}</h3>
-              <h3 style={{ width: '13.5vw'}}><p style={{width:'85%' , height:'40px' , wordBreak: 'break-word'}}>{transaction?.last_payment_error?.payment_method?.email}</p></h3>
+              <h3 style={{ width: '10vw' }}>{transaction.id.slice(13)}</h3>
+              <h3 style={{ width: '13.5vw'}}><p style={{width:'85%' , wordBreak: 'break-word'}}>{transaction?.metadata.clientName}</p></h3>
               <h3 style={{ width: '6vw' }}>{transaction.currency}</h3>
-              <h3 style={{ width: '7vw' }}>{transaction.description}</h3>
+              <h3 style={{ width: '7vw' }}>{transaction.metadata.brand}</h3>
               <h3 style={{ width: '8vw' }}>{transaction.amount / 100} {transaction.currency}</h3>
               <h3 style={{ width: '7vw' }}>
-                  {getStatus(transaction.status)}
+                  {getStatus(transaction)}
               </h3>
           </Link>
 
           {/* <Link to={`https://merchantaccount.dev/edit-input-data/${transaction.uuid}`} style={{fontSize:'14px',fontWeight:'bold',backgroundColor:'#233e68', padding:'10px', borderRadius:'8px', color:'white',textDecoration:'none' , width:'70px' , display:'flex',justifyContent:'center' , textAlign:'center' , marginLeft:'3vw'}}>Загрузка данных</Link> */}
-          <input
+          {/* <input
             ref={fileInputRef}
             type='file'
             style={{ display: 'none' }}
@@ -170,7 +173,7 @@ export default function Transaction({transaction}) {
             open={open}
             handleClose={handleClose}
             handleUpload={handleUpload}
-          />
+          /> */}
       </div>
     )
 }

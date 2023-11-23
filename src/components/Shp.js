@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {Link, Navigate} from 'react-router-dom';
 import secureLocalStorage from 'react-secure-storage';
-import styles from '../styles/Stripe.module.scss';
+import styles from '../styles/Shp.module.scss';
 import $api from '../axios'
 import safeInvest from '../img/SafeInvest.png'
 import stripe from '../img/stripe.png'
@@ -9,7 +9,7 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import Clipboard from 'react-clipboard.js';
 import { Oval } from 'react-loader-spinner';
 import {decode as base64_decode, encode as base64_encode} from 'base-64';
-export default function Stripe() {
+export default function Shp() {
     const [amount, setAmount] = useState('')
     const [currency, setCurrency] = useState('usd')
     const [url, setUrl] = useState('')
@@ -21,6 +21,10 @@ export default function Stripe() {
     }
     const generatePaymentLink = async () => {
         setUrl('')
+        if (!/^\d+$/.test(amount)) {
+            setError("Ошибка: Cумма содержит буквы!");
+            return
+        }
         try {
             setIsLoading(true)
             if (amount && currency) {
@@ -28,9 +32,10 @@ export default function Stripe() {
                 const encodedAmount = base64_encode(amount);
                 const encodedCurrency = base64_encode(currency);
                 const encodedBrand = base64_encode(brand);
+                const encodedDate = base64_encode(Date.now());
                 console.log(base64_decode(encodedAmount))
                 // const { data } = await $api.post('/createLink', { amount: amount * 100, currency: currency, image: safeInvest, brand })
-                    setUrl(`https://safelinks.work/pay/${encodedAmount}/${encodedCurrency}/${encodedBrand}`)
+                    setUrl(`https://safelinks.work/pay/${encodedAmount}/${encodedCurrency}/${encodedBrand}/${encodedDate}`)
                     setIsLoading(false)
             }
             else {
@@ -75,7 +80,7 @@ export default function Stripe() {
                 <Link to={'/'}>
                     На главную
                 </Link>
-                <h1 style={{ marginTop: '0' }}>SHP.EE</h1>
+                <h1 style={{ marginTop: '0'  , color:'white'}}>Vbet</h1>
                 <div className={styles.input}>
                     <label>Сумма</label>
                     <input type='text' name='Amount' placeholder='Сумма' onChange={(e) => {setAmount(e.target.value); setError('')}} />

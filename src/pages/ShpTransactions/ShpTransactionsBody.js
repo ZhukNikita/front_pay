@@ -11,6 +11,7 @@ import { Oval } from 'react-loader-spinner';
 
 import { styled } from '@mui/material/styles';
 import dayjs from 'dayjs';
+import secureLocalStorage from 'react-secure-storage';
 
 const StyledDatePickerInput = styled(DatePicker)({
   backgroundColor: '#325A96',
@@ -42,8 +43,7 @@ export default function ShpTransactionsBody() {
       try {
         const { data } = await $api.get('/getShpTransactions')
         if (data.data) {
-          console.log(data.data);
-          setTransactions(data.data)
+          setTransactions(data.data ? data.data.filter(el=>el.metadata.brand === secureLocalStorage.getItem('userBrand')):[])
           setIsLoading(false)
         }
       }
@@ -60,7 +60,6 @@ export default function ShpTransactionsBody() {
     }
   }, [transactions]);
   const getAmount = (brand) => {
-
     let filteredTransactions = transactions.filter(el =>
       el.description === brand &&
       el.status === 'completed' &&

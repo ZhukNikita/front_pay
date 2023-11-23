@@ -17,6 +17,7 @@ export default function ShpTransactionsList({ transactions, isLoading, setTransa
   const [dateSort, setDateSort] = useState(null);
   const [amountSort, setAmountSort] = useState(null);
   const [statusSort, setStatusSort] = useState(null);
+  const [filteredTransactions, setFilteredTransactions] = useState([]);
 
   useEffect(() => {
     if (amountSort) {
@@ -62,12 +63,21 @@ export default function ShpTransactionsList({ transactions, isLoading, setTransa
       setAmountSort(null)
     }
   }, [dateSort]);
+  useEffect(() => {
+    if (transactions) {
+      const filtered = transactions.filter(
+        (transaction) => transaction.metadata.clientName.toLowerCase().includes(search.toLowerCase())
+      );
+      setFilteredTransactions(filtered);
+      setCurrentPage(1);
+    }
+  }, [transactions, search]);
 
-  const totalFilteredTransactions = transactions.length;
+  const totalFilteredTransactions = filteredTransactions.length;
   const totalPageCount = Math.ceil(totalFilteredTransactions / transactionsPerPage);
   const indexOfLastTransactions = currentPage * transactionsPerPage;
   const indexOfFirstTransactions = indexOfLastTransactions - transactionsPerPage;
-  const currentTransactions = transactions.slice(indexOfFirstTransactions, indexOfLastTransactions);
+  const currentTransactions = filteredTransactions.slice(indexOfFirstTransactions, indexOfLastTransactions);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
@@ -92,8 +102,8 @@ export default function ShpTransactionsList({ transactions, isLoading, setTransa
               : arrowUpStyle}
           />
         </h3>
-        <h3 style={{ width: '9vw' }}>ID Транзакции</h3>
-        <h3 style={{ width: '13.5vw' }}>Email</h3>
+        <h3 style={{ width: '10vw' }}>ID Транзакции</h3>
+        <h3 style={{ width: '13.5vw' }}>ФИО</h3>
         <h3 style={{ width: '6vw' }}>Валюта</h3>
         <h3 style={{ width: '7vw' }}>Бренд</h3>
         <h3 className={styles.amount}><span style={{ width: '70%' }}>Введённая сумма</span>
@@ -126,7 +136,7 @@ export default function ShpTransactionsList({ transactions, isLoading, setTransa
           margin: '0 auto',
         }}
       >
-        <span style={{ color: 'white' }}>Всего транзакций: {transactions.length}</span>
+        <span style={{ color: 'white' }}>Всего транзакций: {filteredTransactions.length}</span>
         <Pagination
           count={totalPageCount}
           color="primary"
