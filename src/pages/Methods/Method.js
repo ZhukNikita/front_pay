@@ -36,11 +36,11 @@ export default function Method({link,name,instruction}) {
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
-                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                    <Typography id="modal-modal-title" variant="h6" component="h2" sx={{ fontFamily:'"Nunito",sans-serif'}}>
                         {name}
                     </Typography>
                     {
-                        instruction.map(el=><Typography key={el} id="modal-modal-description" sx={{ mt: 2 }}>
+                        instruction.map(el=><Typography key={el} id="modal-modal-description" sx={{ mt: 2 , fontFamily:'"Nunito",sans-serif'}}>
                                                 {el}
                                             </Typography>
                     )

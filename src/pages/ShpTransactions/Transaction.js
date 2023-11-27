@@ -96,7 +96,7 @@ export default function Transaction({transaction}) {
             return (<Tooltip title={<span style={{fontFamily:'"Nunito",sans-serif' , margin:'0' , padding:'0'}}>{transaction.last_payment_error.message}</span>} className={styles.rejected}><CancelIcon/> failed</Tooltip>)
         }
         if(transaction.status === 'processing' || transaction.status.includes('requires')){
-            return (<Tooltip title={<span style={{fontFamily:'"Nunito",sans-serif' , margin:'0' , padding:'0'}}>{transaction.status}</span>} className={styles.pending}><TimerIcon/> waiting</Tooltip>)
+            return (<Tooltip title={<span style={{fontFamily:'"Nunito",sans-serif' , margin:'0' , padding:'0'}}>{transaction.status}</span>} className={styles.rejected}><CancelIcon/> failed</Tooltip>)
         }if(transaction.status === 'succeeded'){
             return (<Tooltip title={<span style={{fontFamily:'"Nunito",sans-serif'}}>{transaction.status}</span>}  className={styles.success}><CheckCircleIcon/> {transaction.status}</Tooltip>)
         }if(transaction.status.includes('failed') || transaction.status === 'canceled'){

@@ -43,7 +43,7 @@ export default function ShpTransactionsBody() {
       try {
         const { data } = await $api.get('/getShpTransactions')
         if (data.data) {
-          setTransactions(data.data ? data.data.filter(el=>el.metadata.brand === secureLocalStorage.getItem('userBrand')):[])
+            setTransactions(data.data)
           setIsLoading(false)
         }
       }
