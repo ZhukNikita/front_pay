@@ -33,6 +33,11 @@
                 @include flex(center, center);
                 width: 300px;
                 height: 150px;
+                gap: 10px;
+                flex-direction: column;
+                font-weight: bold;
+                color: rgb(183, 220, 233);
+                font-size: 28px;
                 background-color: $cardBC;
                 border-radius: 12px;
             }

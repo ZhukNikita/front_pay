@@ -49,7 +49,6 @@ function App() {
 };
   useEffect(() => {
     const id = secureLocalStorage.getItem('userId');
-    const createdBy = secureLocalStorage.getItem('userId');
     const fetchData = async () => {
       try {
         const response = await $api.post('/getMe', { id });
@@ -89,7 +88,7 @@ function App() {
         secureLocalStorage.removeItem('userToken')
         secureLocalStorage.removeItem('userLogin')
         // window.location.href = '/login'
-        console.log(e.response.data.message);
+        console.log(e.response?.data?.message);
       }
     };
     if(secureLocalStorage.getItem('isLogged') !== null){
@@ -111,15 +110,15 @@ function App() {
         <Route path='/panel' element={<Panel />} />
         {/* <Route path='/test' element={<Test />} /> */}
         {/* <Route path='/transactions' element={<Transactions/>} /> */}
-        {/* <Route path='/transactions' element={<AllTransactions/>} /> */}
+        <Route path='/transactions' element={<AllTransactions/>} />
         {/*<Route path='/pinpay-transactions' element={<PinpayTransactions/>} />*/}
         {/* <Route path='/transaction/:id' element={<FullTransactionInfo setSnack={setSnack} setSnackMessage={setSnackMessage} setSnackType={setSnackType}/>} /> */}
         {/* <Route path='/shp-transaction/:id' element={<FullShpTransactionInfo setSnack={setSnack} setSnackMessage={setSnackMessage} setSnackType={setSnackType}/>} /> */}
-        {/*<Route path='/insirex-transaction/:id' element={<FullInsirexTransactionInfo setSnack={setSnack} setSnackMessage={setSnackMessage} setSnackType={setSnackType}/>} />*/}
         {/* <Route path='/p2p-transactions' element={<P2PTransactions/>} /> */}
         {/*<Route path='/p2p-deleted-transactions' element={<P2PDeletedTransactions/>} />*/}
         {/*<Route path='/wlx-transactions' element={<WlxTransactions/>} />*/}
-        {/*<Route path='/insirex-transactions' element={<InsirexTransactions/>} />*/}
+        <Route path='/insirex-transactions' element={<InsirexTransactions/>} />
+        <Route path='/insirex-transaction/:id' element={<FullInsirexTransactionInfo setSnack={setSnack} setSnackMessage={setSnackMessage} setSnackType={setSnackType}/>} />
         {/*<Route path='/advcash-transactions' element={<AdvCashTransactions/>} />*/}
         <Route path='/login' element={<Login />} />
         {/*<Route path='/statistics' element={<Statistics />} />*/}

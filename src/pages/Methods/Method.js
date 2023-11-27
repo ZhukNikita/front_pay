@@ -28,7 +28,7 @@ export default function Method({link,name,instruction}) {
         <Link to={link} style={{width:'100%', textAlign:"center"}}>
             <h3>{name}</h3>
         </Link>
-        <HelpIcon onClick={handleOpen} sx={{position:'absolute',color:'#fff', zIndex:'3', top:'6px' , right:'8px' , color:'rgb(6, 27, 100)'}}/>
+        <HelpIcon onClick={handleOpen} sx={{position:'absolute',color:'#fff', zIndex:'3', top:'6px' , right:'8px' , color:'rgb(183, 220, 233)'}}/>
         <Modal
                 open={open}
                 onClose={handleClose}

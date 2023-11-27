@@ -3,7 +3,6 @@
 
 .body {
     width: 600px;
-    min-height: 100vh;
     border-radius: 6px;
     @include flex(center, center);
     flex-direction: column;

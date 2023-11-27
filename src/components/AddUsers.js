@@ -52,6 +52,8 @@ export default function AddUsers() {
     const [isInsirexCheck, setIsInsirexCheck] = React.useState(false);
     const [isP2PCheck, setIsP2PCheck] = React.useState(false);
     const [isWLXCheck, setIsWLXCheck] = React.useState(false);
+    const [isShpCheck, setIsShpCheck] = React.useState(false);
+    const [isAdvCashCheck, setIsAdvCashCheck] = React.useState(false);
     const [selectedPayments, setSelectedPayments] = React.useState([]);
     const [openBrandModal, setOpenBrandModal] = React.useState(false);
     const [openDeleteBrandModal, setOpenDeleteBrandModal] = React.useState(false);
@@ -66,6 +68,8 @@ export default function AddUsers() {
         setIsWLXCheck(false);
         setIsInsirexCheck(false);
         setIsPinPayCheck(false)
+        setIsAdvCashCheck(false)
+        setIsShpCheck(false)
         setChoosenBrands([])
         setRole('')
         setLogin('')
@@ -96,6 +100,20 @@ export default function AddUsers() {
             } else {
                 updatedSelectedPayments = updatedSelectedPayments.filter(el => el !== '1');
             }
+            if (isShpCheck === true) {
+                if (!selectedPayments.includes('6')) {
+                    updatedSelectedPayments.push('6');
+                }
+            } else {
+                updatedSelectedPayments = updatedSelectedPayments.filter(el => el !== '6');
+            }
+            if (isAdvCashCheck === true) {
+                if (!selectedPayments.includes('5')) {
+                    updatedSelectedPayments.push('5');
+                }
+            } else {
+                updatedSelectedPayments = updatedSelectedPayments.filter(el => el !== '5');
+            }
             if (isP2PCheck === true) {
                 if (!selectedPayments.includes('3')) {
                     updatedSelectedPayments.push('3');
@@ -120,7 +138,7 @@ export default function AddUsers() {
 
             return updatedSelectedPayments;
         });
-    }, [isPinPayCheck, isP2PCheck, isInsirexCheck, isWLXCheck]);
+    }, [isPinPayCheck, isP2PCheck, isInsirexCheck, isWLXCheck, isShpCheck,isAdvCashCheck]);
 
     const handleCloseSnack = (event, reason) => {
         if (reason === 'clickaway') {
@@ -366,6 +384,14 @@ export default function AddUsers() {
                             <label className="lns-checkbox">
                                 <input type="checkbox" value={isWLXCheck} onChange={(e) => setIsWLXCheck(e.target.checked)} />
                                 <span>WLX</span>
+                            </label>
+                            <label className="lns-checkbox">
+                                <input type="checkbox" value={isShpCheck} onChange={(e) => setIsShpCheck(e.target.checked)} />
+                                <span>shp.ee</span>
+                            </label>
+                            <label className="lns-checkbox">
+                                <input type="checkbox" value={isAdvCashCheck} onChange={(e) => setIsAdvCashCheck(e.target.checked)} />
+                                <span>AdvCash</span>
                             </label>
                         </div>
                         {
