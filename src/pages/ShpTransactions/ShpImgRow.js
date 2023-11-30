@@ -26,8 +26,8 @@ export default function ShpImgRow({ el, handleOpen, setFullImg, transaction, row
 
     async function DeleteImg(img_path) {
         try {
-            const { data } = await $api.post('/deleteImgsPinPayTransation', { img_path });
-            await $api.post('/getImgsPinPayTransation', { id }).then((res) => setImgs(res.data));
+            const { data } = await $api.post('/deleteImgsShpTransation', { img_path });
+            await $api.post('/getImgsShpTransation', { id }).then((res) => setImgs(res.data));
             return data;
         } catch (e) {
             console.log(e);
@@ -35,18 +35,17 @@ export default function ShpImgRow({ el, handleOpen, setFullImg, transaction, row
     }
 
     const EditImg = async (event, img_path) => {
-        const id = transaction.payment_id;
 
         const img = new FormData();
         img.append('image', event.target.files[0]);
 
         try {
-            await $api.patch(`/editPinpayCheck/:${id}?login=${secureLocalStorage.getItem('userLogin')}&img_path=${img_path}&payment_method=PinPay`, img, {
+            await $api.patch(`/editShpCheck/:${id}?login=${secureLocalStorage.getItem('userLogin')}&img_path=${img_path}&payment_method=Shp`, img, {
                 headers: {
                     'content-type': 'mulpipart/form-data',
                 },
             });
-            await $api.post('/getImgsPinPayTransation', { id }).then((res) => setImgs(res.data));
+            await $api.post('/getImgsShpTransation', { id }).then((res) => setImgs(res.data));
         } catch (e) {
             console.log(e);
         }

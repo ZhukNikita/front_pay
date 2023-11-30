@@ -51,22 +51,22 @@ export default function ShpTransactionsList({ transactions, isLoading, setTransa
   }, [statusSort]);
   useEffect(() => {
     if (dateSort) {
-      const sortedTransactions = [...transactions].sort((a, b) => new Date(b.created) - new Date(a.created));
+      const sortedTransactions = [...transactions].sort((a, b) => new Date(a.created) - new Date(b.created));
       setTransactions(sortedTransactions);
       setStatusSort(null)
       setAmountSort(null)
     }
     if (dateSort === false) {
-      const sortedTransactions = [...transactions].sort((a, b) => new Date(a.created) - new Date(b.created));
+      const sortedTransactions = [...transactions].sort((a, b) => new Date(b.created) - new Date(a.created));
       setTransactions(sortedTransactions);
       setStatusSort(null)
       setAmountSort(null)
     }
   }, [dateSort]);
   useEffect(() => {
-    if (transactions) {
+    if (transactions.length > 0) {
       const filtered = transactions.filter(
-        (transaction) => transaction.metadata.clientName.toLowerCase().includes(search.toLowerCase())
+        (transaction) => transaction.metadata?.clientName?.toLowerCase().includes(search.toLowerCase())
       );
       setFilteredTransactions(filtered);
       setCurrentPage(1);

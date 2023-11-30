@@ -71,6 +71,9 @@ export default function Methods() {
     if(!secureLocalStorage.getItem('isLogged')){
         return <Navigate to={'/login'}/>
     }
+    if(secureLocalStorage.getItem('role') === 'User' && secureLocalStorage.getItem('isLogged')){
+        return <Navigate to={'/payments_methods'}/>
+      }
     return(
         <div className={styles.methodsPage}>
             <NavBar/>

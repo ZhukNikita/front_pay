@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo, useRef } from 'react';
 import styles from './FullTransactionInfo.module.scss'
-import { useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import $api, { API_URL } from '../../axios';
 import NavBar from '../../components/NavBar';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -14,7 +14,9 @@ import Backdrop from '@mui/material/Backdrop';
 import Fade from '@mui/material/Fade';
 import secureLocalStorage from 'react-secure-storage';
 import LinearProgress from '@mui/material/LinearProgress';
-import PinpayImgRow from './ShpImgRow';
+import ShpImgRow from './ShpImgRow';
+import Tooltip from '@mui/material/Tooltip';
+import TimerOffIcon from '@mui/icons-material/TimerOff';
 
 const style = {
     position: 'absolute',
@@ -88,7 +90,16 @@ function FileUploadModal({ selectedFile, openPreview, handleClose, handleUpload 
 }
 
 
-export default function FullTransactionInfo({ setSnack, setSnackMessage, setSnackType }) {
+export default function FullTransactionInfoShp({ setSnack, setSnackMessage, setSnackType }) {
+    if(!secureLocalStorage.getItem('isLogged')){
+        window.location.href = '/login'
+    }
+    if(secureLocalStorage.getItem('role') === 'User' && secureLocalStorage.getItem('isLogged')){
+        window.location.href = '/payments_methods'
+      }
+    if(!secureLocalStorage.getItem('methods').includes('shp.ee')){
+    window.location.href = '/payments_methods'
+    }
     const [transaction, setTransaction] = useState()
     const [imgs, setImgs] = useState([])
     const [fullImg, setFullImg] = useState('')
@@ -116,7 +127,6 @@ export default function FullTransactionInfo({ setSnack, setSnackMessage, setSnac
             fileInputRef.current.click();
         }
     };
-
     const addImg = (event) => {
         const files = event.target.files;
         if (files && files.length > 0) {
@@ -127,11 +137,10 @@ export default function FullTransactionInfo({ setSnack, setSnackMessage, setSnac
     };
 
     useEffect(() => {
-        const payment_id = id
         setIsLoading(true)
         try {
-            $api.post('/getOneTransation', { payment_id }).then(res => setTransaction(res.data))
-            $api.post('/getImgsPinPayTransation', { id }).then(res => setImgs(res.data))
+            $api.post('/getOneShpTransactions', { id }).then(res => setTransaction(res.data[0]))
+            $api.post('/getImgsShpTransation', { id }).then(res => setImgs(res.data))
             if (transaction) {
                 setIsLoading(false)
             }
@@ -140,7 +149,6 @@ export default function FullTransactionInfo({ setSnack, setSnackMessage, setSnac
             console.log(e)
         }
     }, [])
-
     if (!transaction) {
         return (
             <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -150,36 +158,43 @@ export default function FullTransactionInfo({ setSnack, setSnackMessage, setSnac
             </div>)
     }
 
-    function getStatus(status) {
-        if (status === 'completed') {
-            return (<div className={styles.success}><CheckCircleIcon /> {status}</div>)
-        } if (status === 'failed') {
-            return (<div className={styles.rejected}><CancelIcon /> {status}</div>)
-        } else {
-            return status
+    function getStatus(transaction){
+        if(transaction.last_payment_error !== null){
+            return (<Tooltip title={<span style={{fontFamily:'"Nunito",sans-serif' , margin:'0' , padding:'0'}}>{transaction.last_payment_error.message}</span>} className={styles.rejected}><span><CancelIcon/> failed</span></Tooltip>)
+        }
+        if(transaction.status === 'processing' || transaction.status.includes('requires')){
+            return (<Tooltip title={<span style={{fontFamily:'"Nunito",sans-serif' , margin:'0' , padding:'0'}}>{transaction.status}</span>} className={styles.rejected}><CancelIcon/> failed</Tooltip>)
+        }if(transaction.status === 'succeeded'){
+            return (<Tooltip title={<span style={{fontFamily:'"Nunito",sans-serif'}}>{transaction.status}</span>}  className={styles.success}><span><CheckCircleIcon/> {transaction.status}</span></Tooltip>)
+        }if(transaction.status.includes('failed') || transaction.status === 'canceled'){
+            return (<Tooltip title={<span style={{fontFamily:'"Nunito",sans-serif'}}>{transaction.status}</span>} className={styles.rejected}><CancelIcon/> {transaction.status}</Tooltip>)
+        }if(transaction.status === 'timeout'){
+            return (<Tooltip title={<span style={{fontFamily:'"Nunito",sans-serif'}}>{transaction.status}</span>} className={styles.rejected}><TimerOffIcon/> {transaction.status}</Tooltip>)
+        }else{
+            return transaction.status
         }
     }
-
     function getFormattedDate(param) {
-        const date = new Date(param);
+        const timestamp = param ? param * 1000 : 0;
+    
+        const date = new Date(timestamp);
         const formattedDate = `${date.getDate().toString().padStart(2, '0')}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getFullYear()} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
-        return formattedDate
+        
+        return formattedDate;
     }
     const handleUpload = async () => {
-        const id = transaction.payment_id
-
         const img = new FormData();
         selectedFile.forEach((file, index) => {
             img.append(`image`, file);
         });
 
         try {
-            await $api.patch(`/uploadPinpayCheck/:${id}?login=${secureLocalStorage.getItem('userLogin')}&payment_method=PinPay`, img, {
+            await $api.patch(`/uploadShpCheck/:${id}?login=${secureLocalStorage.getItem('userLogin')}&payment_method=Shp`, img, {
                 headers: {
                     'content-type': 'mulpipart/form-data',
                 },
             });
-            await $api.post('/getImgsPinPayTransation', { id }).then(res => setImgs(res.data))
+            await $api.post('/getImgsShpTransation', { id }).then(res => setImgs(res.data))
             setSnackMessage('Фото успешно загружено');
             setSnackType('success');
             setSnack(true)
@@ -196,35 +211,35 @@ export default function FullTransactionInfo({ setSnack, setSnackMessage, setSnac
                     <div className={styles.header}>
                         <h1>Транзакция #
                             <span style={{ fontSize: '16px', backgroundColor: '#153769', padding: '7px', borderRadius: '8px' }}>
-                                {transaction.payment_id}
+                                {transaction.id}
                             </span>
                         </h1>
-                        {getStatus(transaction.transaction_status)}
+                        <div style={{width:'19%' , display:'flex', alignItems:'center',gap:'7px', justifyContent:'center' , flexDirection:'column'}}>
+                            {getStatus(transaction)}
+                            <span className={imgs.length>0?styles.success : styles.rejected}>Чек {imgs.length>0? 'загружен' : "не загружен"}</span>
+                        </div>
                     </div>
                     <div className={styles.section}>
                         <div className={styles.section1}>
-                            <div className={styles.amount}>
+                            <div className={styles.amount }>
                                 <h2>Сумма: </h2>
-                                <span style={transaction.transaction_status === 'completed' ? { fontSize: '24px', color: "#2edf1e" } : { fontSize: '24px', color: "rgb(255 ,0, 34)" }}>
-                                    {transaction.amount}€
+                                <span style={transaction.status === 'succeeded' ? { fontSize: '24px', color: "#2edf1e" } : { fontSize: '24px', color: "rgb(255 ,0, 34)" }}>
+                                    {transaction.amount / 100}
                                 </span>
                             </div>
                             <div className={styles.date}>
-                                <h2>Дата:</h2> <span>{getFormattedDate(transaction.create_date)}</span>
+                                <h2>Дата:</h2> <span>{getFormattedDate(transaction.created)}</span>
                             </div>
                             <div className={styles.date}>
-                                <h2>Бренд:</h2> <span>{query.get('brand')}</span>
+                                <h2>Бренд:</h2> <span>{transaction.metadata.brand}</span>
                             </div>
                         </div>
                         <div className={styles.section2}>
                             <div className={styles.currency}>
-                                <h2>Валюта:</h2> <span style={{ fontSize: '24px' }}>{transaction.currency}</span>
+                                <h2>Валюта:</h2> <span style={{ fontSize: '24px' }}>{transaction.currency.toUpperCase()}</span>
                             </div>
                             <div className={styles.card}>
-                                <h2>Номер карты:</h2> <span>{transaction.card_pan}</span>
-                            </div>
-                            <div className={styles.card}>
-                                <h2>Email:</h2> <span>{query.get('email')}</span>
+                                <h2>ФИО:</h2> <span>{transaction.metadata.clientName}</span>
                             </div>
                         </div>
                         <div className={styles.section3}>
@@ -266,7 +281,7 @@ export default function FullTransactionInfo({ setSnack, setSnackMessage, setSnac
                                     </div>
 
                                     {imgs.map(el =>
-                                        <PinpayImgRow key={el.id}
+                                        <ShpImgRow key={el.id}
                                             el={el}
                                             handleOpen={handleOpen}
                                             rowId={rowId}

@@ -5,6 +5,7 @@ import axios from "axios";
 import secureLocalStorage from "react-secure-storage";
 import { Navigate } from 'react-router-dom'
 import InfoIcon from "@mui/icons-material/Info";
+import $api from '../../axios';
 export default function Login() {
     const [login, setLogin] = useState('')
     const [password, setPassword] = useState('')
@@ -57,7 +58,7 @@ export default function Login() {
     }
     const Login = async () => {
         try {
-            const { data } = await axios.post('http://localhost:5000/login', { login, password });
+            const { data } = await $api.post('/login', { login, password });
             if (data) {
                 secureLocalStorage.setItem('role', data.role);
                 secureLocalStorage.setItem('isLogged', true);

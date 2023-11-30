@@ -93,14 +93,14 @@ export default function Transaction({transaction}) {
 
     function getStatus(transaction){
         if(transaction.last_payment_error !== null){
-            return (<Tooltip title={<span style={{fontFamily:'"Nunito",sans-serif' , margin:'0' , padding:'0'}}>{transaction.last_payment_error.message}</span>} className={styles.rejected}><CancelIcon/> failed</Tooltip>)
+            return (<Tooltip sx={{ zIndex:'100'}} title={<span style={{fontFamily:'"Nunito",sans-serif' , margin:'0' , padding:'0' , zIndex:100}}>{transaction.last_payment_error.message}</span>} className={styles.rejected}><span><CancelIcon/> failed</span></Tooltip>)
         }
         if(transaction.status === 'processing' || transaction.status.includes('requires')){
-            return (<Tooltip title={<span style={{fontFamily:'"Nunito",sans-serif' , margin:'0' , padding:'0'}}>{transaction.status}</span>} className={styles.rejected}><CancelIcon/> failed</Tooltip>)
+            return (<Tooltip title={<span style={{fontFamily:'"Nunito",sans-serif' , margin:'0' , padding:'0'}}>{transaction.status}</span>} className={styles.rejected}><span><CancelIcon/> failed</span></Tooltip>)
         }if(transaction.status === 'succeeded'){
-            return (<Tooltip title={<span style={{fontFamily:'"Nunito",sans-serif'}}>{transaction.status}</span>}  className={styles.success}><CheckCircleIcon/> {transaction.status}</Tooltip>)
+            return (<Tooltip title={<span style={{fontFamily:'"Nunito",sans-serif'}}>{transaction.status}</span>}  className={styles.success}><span><CheckCircleIcon/> {transaction.status}</span></Tooltip>)
         }if(transaction.status.includes('failed') || transaction.status === 'canceled'){
-            return (<Tooltip title={<span style={{fontFamily:'"Nunito",sans-serif'}}>{transaction.status}</span>} className={styles.rejected}><CancelIcon/> {transaction.status}</Tooltip>)
+            return (<Tooltip title={<span style={{fontFamily:'"Nunito",sans-serif'}}>{transaction.status}</span>} className={styles.rejected}><span><CancelIcon/> {transaction.status}</span></Tooltip>)
         }if(transaction.status === 'timeout'){
             return (<Tooltip title={<span style={{fontFamily:'"Nunito",sans-serif'}}>{transaction.status}</span>} className={styles.rejected}><TimerOffIcon/> {transaction.status}</Tooltip>)
         }else{
@@ -141,8 +141,8 @@ export default function Transaction({transaction}) {
         }
     };
     return(
-      <div className={styles.transaction}>
-          <Link to={`/shp-transaction/${transaction.id}?brand=${transaction?.description}&email=${transaction?.last_payment_error?.payment_method?.email}`} className={styles.body}>
+      <div className={styles.transaction} style={{zIndex:'1'}}>
+          <Link to={`/shp-transaction/${transaction.metadata.transaction_id}`} className={styles.body}>
               <h3 style={{ width: '7vw' }}>{formattedDate}</h3>
               <h3 style={{ width: '10vw' }}>{transaction.id.slice(13)}</h3>
               <h3 style={{ width: '13.5vw'}}><p style={{width:'85%' , wordBreak: 'break-word'}}>{transaction?.metadata.clientName}</p></h3>

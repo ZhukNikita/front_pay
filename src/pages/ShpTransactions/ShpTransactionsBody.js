@@ -41,9 +41,9 @@ export default function ShpTransactionsBody() {
     const fetchData = async () => {
       setIsLoading(true)
       try {
-        const { data } = await $api.get('/getShpTransactions')
-        if (data.data) {
-            setTransactions(data.data)
+        const { data } = await $api.post('/getShpTransactions',{brand: secureLocalStorage.getItem('userBrand')})
+        if (data) {
+            setTransactions(data)
           setIsLoading(false)
         }
       }
