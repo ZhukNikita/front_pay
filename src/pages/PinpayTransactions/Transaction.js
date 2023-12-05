@@ -150,7 +150,7 @@ export default function Transaction({transaction}) {
                 </Link>
 
                 {/* <Link to={`https://merchantaccount.dev/edit-input-data/${transaction.uuid}`} style={{fontSize:'14px',fontWeight:'bold',backgroundColor:'#233e68', padding:'10px', borderRadius:'8px', color:'white',textDecoration:'none' , width:'70px' , display:'flex',justifyContent:'center' , textAlign:'center' , marginLeft:'3vw'}}>Загрузка данных</Link> */}
-                <input
+                {/* <input
                     ref={fileInputRef}
                     type='file'
                     style={{ display: 'none' }}
@@ -168,7 +168,7 @@ export default function Transaction({transaction}) {
                     open={open}
                     handleClose={handleClose}
                     handleUpload={handleUpload}
-                />
+                /> */}
             </div>
     )
 }

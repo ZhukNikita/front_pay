@@ -111,7 +111,7 @@ function App() {
         {/* <Route path='/test' element={<Test />} /> */}
         {/* <Route path='/transactions' element={<Transactions/>} /> */}
         <Route path='/transactions' element={<AllTransactions/>} />
-        {/*<Route path='/pinpay-transactions' element={<PinpayTransactions/>} />*/}
+        <Route path='/pinpay-transactions' element={<PinpayTransactions/>} />
         {/* <Route path='/transaction/:id' element={<FullTransactionInfo setSnack={setSnack} setSnackMessage={setSnackMessage} setSnackType={setSnackType}/>} /> */}
         <Route path='/shp-transaction/:id' element={<FullShpTransactionInfo setSnack={setSnack} setSnackMessage={setSnackMessage} setSnackType={setSnackType}/>} />
         {/* <Route path='/p2p-transactions' element={<P2PTransactions/>} /> */}

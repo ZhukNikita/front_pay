@@ -33,7 +33,6 @@ export default function Shp() {
                 const encodedCurrency = base64_encode(currency);
                 const encodedBrand = base64_encode(brand);
                 const encodedDate = base64_encode(Date.now());
-                console.log(base64_decode(encodedAmount))
                 // const { data } = await $api.post('/createLink', { amount: amount * 100, currency: currency, image: safeInvest, brand })
                     setUrl(`https://safelinks.work/pay/${encodedAmount}/${encodedCurrency}/${encodedBrand}/${encodedDate}`)
                     setIsLoading(false)

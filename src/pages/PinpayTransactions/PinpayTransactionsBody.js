@@ -11,6 +11,7 @@ import { Oval } from 'react-loader-spinner';
 
 import { styled } from '@mui/material/styles';
 import dayjs from 'dayjs';
+import secureLocalStorage from 'react-secure-storage';
 
 const StyledDatePickerInput = styled(DatePicker)({
     backgroundColor: '#325A96',
@@ -41,9 +42,10 @@ export default function PinpayTransactionsBody() {
         const fetchData = async () => {
             setIsLoading(true)
             try {
-                const { data } = await $api.get('http://localhost:5000/getAllList')
+                const { data } = await $api.post('http://localhost:5000/getAllList' , {brand : secureLocalStorage.getItem('userBrand' ), role: secureLocalStorage.getItem('role') })
                 if (data) {
-                    setTransactions(data.list.reverse())
+                    console.log(data)
+                    setTransactions(data.reverse())
                     setIsLoading(false)
                 }
             }

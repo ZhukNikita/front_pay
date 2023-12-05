@@ -76,7 +76,7 @@
         flex-direction: row;
         padding-left: 20px;
         border-bottom: 1px solid #233e68;
-
+        transition: all 0.3s ease;
         .body {
             @include flex(center, start);
             flex-direction: row;
@@ -162,5 +162,8 @@
                width: 80%;
            }
         }
+    }
+    .transaction:hover{
+        background-color: #233e68;
     }
 }
