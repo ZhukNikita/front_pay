@@ -12,6 +12,7 @@ import Fade from '@mui/material/Fade';
 import { useRef,useState,useEffect } from 'react';
 import $api from '../../axios';
 import secureLocalStorage from 'react-secure-storage';
+import { Tooltip } from '@mui/material';
 const style = {
     position: 'absolute',
     top: '50%',
@@ -94,7 +95,7 @@ export default function Transaction({transaction}) {
         }if(status === 'completed'){
             return (<div className={styles.success}><CheckCircleIcon/> {status}</div>)
         }if(status === 'failed'){
-            return (<div className={styles.rejected}><CancelIcon/> {status}</div>)
+            return (<Tooltip title={<span style={{fontFamily:'"Nunito",sans-serif'}}>{transaction.error_description}</span>}  className={styles.rejected}><span><CancelIcon/> {status}</span></Tooltip>)
         }if(status === 'timeout'){
             return (<div className={styles.rejected}><TimerOffIcon/> {status}</div>)
         }else{

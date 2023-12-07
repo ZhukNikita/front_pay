@@ -135,11 +135,15 @@ export default function P2PTransactionsBody() {
             <div className={styles.header}>
                 <h1>Транзакции P2P</h1>
                 <div className={styles.buttons}>
-                    <button onClick={handleOpen}><AccountBalanceIcon />Добавить IBAN</button>
-                    <button onClick={handleOpenDelete} style={{backgroundColor:'#ad2824' , color:'#ffa6b2'}}><DeleteOutlineIcon />Удалить IBAN</button>
-                    {
+                {
                         secureLocalStorage.getItem('role') === 'SuperAdmin' ?
+                        <>
+                                            <button onClick={handleOpen}><AccountBalanceIcon />Добавить IBAN</button>
+                    <button onClick={handleOpenDelete} style={{backgroundColor:'#ad2824' , color:'#ffa6b2'}}><DeleteOutlineIcon />Удалить IBAN</button>
+
                             <Link to={'/p2p-deleted-transactions'} className={styles.deletedTransactions}>Удаленные транзакции</Link>
+                        </>
+
                             : <></>
                     }
                 </div>

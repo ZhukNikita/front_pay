@@ -43,6 +43,7 @@ export default function P2PTransactionsList({ibans ,setIbans}) {
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const [brand, setBrand] = useState('')
+    const [brands, setBrands] = useState('')
     const [brandError, setBrandError] = useState('')
     const [login, setLogin] = useState('')
     const [loginError, setLoginError] = useState('')
@@ -145,6 +146,7 @@ export default function P2PTransactionsList({ibans ,setIbans}) {
         const fetchData = async () => {
             try {
                 $api.get('/p2pGetAll').then(res => setIbans(res.data))
+                $api.post('/getBrands' , {createdBy}).then(res => setBrands(res.data))
                 $api.post('/p2pGetAllTransactions', {createdBy}).then(res => setTransactions(res.data))
                 $api.post('/users', { userToken }).then(res => setUsers(res.data.reverse()))
             } catch (e) {
@@ -153,7 +155,7 @@ export default function P2PTransactionsList({ibans ,setIbans}) {
         }
         fetchData()
     }, [])
-
+    console.log(brands)
     const Create = async () => {
         const createdBy = secureLocalStorage.getItem('userId')
         const status = '0'
@@ -287,11 +289,7 @@ export default function P2PTransactionsList({ibans ,setIbans}) {
                                     <label style={{ color: 'white', width: '100%', fontFamily: "'Nunito',sans-serif" }}>Бренд</label>
                                     <select onChange={(e) => { ChangeUsersByBrand(e); setBrandError('') }} style={{ outline: 'none', padding: '15px 20px', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', width: '100%' }} placeholder='Бренд'>
                                         <option value="">None</option>
-                                        <option value="SafeInvest">SafeInvest</option>
-                                        <option value="VitalInvest">VitalInvest</option>
-                                        <option value="RiseInvest">RiseInvest</option>
-                                        <option value="Revolut">Revolut</option>
-                                        <option value="InfinityInvest">InfinityInvest</option>
+                                        {brands && (brands.map(el=> <option key={el.id} value={el.brand}>{el.brand}</option>))}
                                     </select>
                                     {
                                         brandError && <div style={{ color: 'red', fontSize: '13px', margin: '0', fontFamily: "'Nunito',sans-serif", fontWeight: 'bold' }}>{brandError}</div>

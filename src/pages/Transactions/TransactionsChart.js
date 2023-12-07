@@ -24,7 +24,7 @@ export default function PieChartWithCustomizedLabel({value,title,totalTransactio
     if(isNaN(percent.toFixed(0))){
       return ''
     }
-    return `${(percent * 100).toFixed(0)}%`;
+    return ``;
   };
   const StyledText = styled('text')(({ theme }) => ({
     fill: '#b7dce9',

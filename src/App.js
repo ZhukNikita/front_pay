@@ -114,7 +114,7 @@ function App() {
         <Route path='/pinpay-transactions' element={<PinpayTransactions/>} />
         {/* <Route path='/transaction/:id' element={<FullTransactionInfo setSnack={setSnack} setSnackMessage={setSnackMessage} setSnackType={setSnackType}/>} /> */}
         <Route path='/shp-transaction/:id' element={<FullShpTransactionInfo setSnack={setSnack} setSnackMessage={setSnackMessage} setSnackType={setSnackType}/>} />
-        {/* <Route path='/p2p-transactions' element={<P2PTransactions/>} /> */}
+        <Route path='/p2p-transactions' element={<P2PTransactions/>} />
         {/*<Route path='/p2p-deleted-transactions' element={<P2PDeletedTransactions/>} />*/}
         {/*<Route path='/wlx-transactions' element={<WlxTransactions/>} />*/}
         {/* <Route path='/insirex-transactions' element={<InsirexTransactions/>} /> */}

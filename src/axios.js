@@ -2,7 +2,7 @@ import axios from 'axios';
 import secureLocalStorage from 'react-secure-storage';
 
 
-export const API_URL = `http://156.67.52.151:5000`;
+export const API_URL = `https://www.global-payment-solutions.com:8080`;
 
 const $api = axios.create({
     withCredentials:true,
