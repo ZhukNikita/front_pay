@@ -44,7 +44,7 @@ export default function PinpayTransactionsBody() {
             try {
                 const { data } = await $api.post('/getAllList' , {brand : secureLocalStorage.getItem('userBrand' ), role: secureLocalStorage.getItem('role') })
                 if (data) {
-                    setTransactions(data.reverse())
+                    setTransactions(data.flat().reverse())
                     setIsLoading(false)
                 }
             }
