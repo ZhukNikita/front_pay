@@ -181,6 +181,9 @@ export default function Transaction({ transaction, setTransactions }) {
         <div className={styles.transaction} style={{ position: 'relative' }}>
             <div className={styles.body}>
                 <h3 className={styles.login}>{transaction.login}</h3>
+                <h3 className={styles.id}>
+                    {transaction.transaction_id}
+                </h3>
                 <h3 className={styles.brand}>{transaction.brand}</h3>
                 <h3 className={styles.iban}>                
                     <Tooltip title={<span style={{fontFamily:"'Nunito',sans-serif" , fontSize:'14px'}}>{transaction.IBAN}</span>} arrow>
@@ -194,7 +197,7 @@ export default function Transaction({ transaction, setTransactions }) {
                 <h3 className={transaction.Status === '0' ? styles.status : styles.statusTrue}>
                     {transaction.Status === '0' ? <div>Не подтверждено</div> : <div>Подтверждено</div>}
                 </h3>
-                <input
+                {/* <input
                     ref={fileInputRef}
                     type='file'
                     style={{ display: 'none' }}
@@ -211,7 +214,7 @@ export default function Transaction({ transaction, setTransactions }) {
                     open={open}
                     handleClose={handleClose}
                     handleUpload={handleUpload}
-                />
+                /> */}
                 {
                     secureLocalStorage.getItem('role') === 'SuperAdmin'?
                 <span style={{ position: 'absolute', right: '0px' }}>

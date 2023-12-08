@@ -218,6 +218,8 @@ export default function P2PTransactionsList({ibans ,setIbans}) {
                     : arrowUpStyle}
                 />
                 </h3>
+                <h3 style={{ width: '10vw' }}>Id Транзакции</h3>
+
                 <h3 style={{ width: '9.5vw' }}>Бренд</h3>
                 <h3 style={{ width: '16vw' }}>IBAN</h3>
                 <h3 className={styles.amount}>Сумма
@@ -236,7 +238,6 @@ export default function P2PTransactionsList({ibans ,setIbans}) {
                 />
                 </h3>
                 <h3 style={{ width: '8.6vw' }}>Статус</h3>
-                <h3 style={{ width: '7vw' }}>Загрузить чек</h3>
             </div>
             {
                 currentTransactions.map(el => <Transaction key={el.id} setTransactions={setTransactions} transaction={el} />)
