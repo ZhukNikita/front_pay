@@ -155,7 +155,6 @@ export default function P2PTransactionsList({ibans ,setIbans}) {
         }
         fetchData()
     }, [])
-    console.log(brands)
     const Create = async () => {
         const createdBy = secureLocalStorage.getItem('userId')
         const status = '0'

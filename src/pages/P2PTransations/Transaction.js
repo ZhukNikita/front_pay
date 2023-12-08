@@ -15,6 +15,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import Swal from 'sweetalert2';
 import Tooltip from '@mui/material/Tooltip';
 import $api from '../../axios';
+import { Link } from 'react-router-dom';
 
 const style = {
     position: 'absolute',
@@ -178,7 +179,7 @@ export default function Transaction({ transaction, setTransactions }) {
     };
 
     return (
-        <div className={styles.transaction} style={{ position: 'relative' }}>
+        <Link to={`/p2p-transaction/${transaction.transaction_id}`} className={styles.transaction} style={{ position: 'relative' ,textDecoration:'none'}}>
             <div className={styles.body}>
                 <h3 className={styles.login}>{transaction.login}</h3>
                 <h3 className={styles.id}>
@@ -260,6 +261,6 @@ export default function Transaction({ transaction, setTransactions }) {
                 :''
                 }
             </div>
-        </div>
+        </Link>
     );
 }

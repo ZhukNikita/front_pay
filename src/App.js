@@ -31,6 +31,7 @@ import AdvCash from './components/AdvCash';
 import Shp from './components/Shp.js';
 import AdvCashTransactions from './pages/AdvCashTransactions/AdvCashTransactions.js';
 import ShpTransactions from "./pages/ShpTransactions/ShpTransactions";
+import FullP2PTransactionInfo from './pages/P2PTransations/FullInfoTransaction.js';
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
@@ -115,10 +116,12 @@ function App() {
         {/* <Route path='/transaction/:id' element={<FullTransactionInfo setSnack={setSnack} setSnackMessage={setSnackMessage} setSnackType={setSnackType}/>} /> */}
         <Route path='/shp-transaction/:id' element={<FullShpTransactionInfo setSnack={setSnack} setSnackMessage={setSnackMessage} setSnackType={setSnackType}/>} />
         <Route path='/p2p-transactions' element={<P2PTransactions/>} />
+        <Route path='/p2p-transaction/:id' element={<FullP2PTransactionInfo setSnack={setSnack} setSnackMessage={setSnackMessage} setSnackType={setSnackType}/>} />
+
         {/*<Route path='/p2p-deleted-transactions' element={<P2PDeletedTransactions/>} />*/}
         {/*<Route path='/wlx-transactions' element={<WlxTransactions/>} />*/}
-        {/* <Route path='/insirex-transactions' element={<InsirexTransactions/>} /> */}
-        {/* <Route path='/insirex-transaction/:id' element={<FullInsirexTransactionInfo setSnack={setSnack} setSnackMessage={setSnackMessage} setSnackType={setSnackType}/>} /> */}
+        {/* <Route path='/insirex-transactions' element={<InsirexTransactions/>} />
+        <Route path='/insirex-transaction/:id' element={<FullInsirexTransactionInfo setSnack={setSnack} setSnackMessage={setSnackMessage} setSnackType={setSnackType}/>} /> */}
         {/*<Route path='/advcash-transactions' element={<AdvCashTransactions/>} />*/}
         <Route path='/login' element={<Login />} />
         {/*<Route path='/statistics' element={<Statistics />} />*/}
