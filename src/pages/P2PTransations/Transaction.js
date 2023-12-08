@@ -212,6 +212,8 @@ export default function Transaction({ transaction, setTransactions }) {
                     handleClose={handleClose}
                     handleUpload={handleUpload}
                 />
+                {
+                    secureLocalStorage.getItem('role') === 'SuperAdmin'?
                 <span style={{ position: 'absolute', right: '0px' }}>
                     <IconButton
                         aria-label="more"
@@ -252,6 +254,8 @@ export default function Transaction({ transaction, setTransactions }) {
                         </Menu>
                     </ThemeProvider>
                 </span>
+                :''
+                }
             </div>
         </div>
     );
