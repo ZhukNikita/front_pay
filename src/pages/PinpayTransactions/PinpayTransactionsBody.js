@@ -143,7 +143,7 @@ export default function PinpayTransactionsBody() {
                         </div>
 
                     </div>
-                    <div className={styles.pinpayPie}>
+                    {/* <div className={styles.pinpayPie}>
                         <h2>Транзакции PinPay</h2>
                         {isLoading ?
                             <div style={{ height: '189px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -172,7 +172,7 @@ export default function PinpayTransactionsBody() {
                                 <h4>Успешно</h4>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
 
             </div>
