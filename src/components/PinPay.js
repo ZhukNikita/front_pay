@@ -168,7 +168,7 @@ function PinPay() {
     && newAddressError === ''
     && newPostalError === '') {
       const orderId = Date.now();
-      const redirectUrl = `https://secure.pinpaygate.com/hpp?project=${currency === 'EUR'?'cfdf3b4d14cb4cfc87c18d2c553c11c5' : 'dad3234bc6e140c1a6a9786aff5f1c18'}&price=${(+amount).toFixed(2)}&user_name=${holderName.replace(/ /g, "+")}&user_contact_email=${email}&user_phone=${phone}&result_url=https%3A%2F%2Fexample.com%2Fresult&description=${query.get('brand')}&user_country=${country.toUpperCase()}&user_city=${city.replace(/ /g, "+")}&user_state=${state.replace(/ /g, "+")}&user_address=${address.replace(/ /g, "+")}&user_postal_code=${postalCode.replace(/ /g, "+")}&order_id=${orderId}&currency=${currency}&success_url=http://global-payment-solutions.com/success&failure_url=http://global-payment-solutions.com/failure&locale=en`;
+      const redirectUrl = `https://secure.pinpaygate.com/hpp?project=cfdf3b4d14cb4cfc87c18d2c553c11c5&price=${(+amount).toFixed(2)}&user_name=${holderName.replace(/ /g, "+")}&user_contact_email=${email}&user_phone=${phone}&result_url=https%3A%2F%2Fexample.com%2Fresult&description=${query.get('brand')}&user_country=${country.toUpperCase()}&user_city=${city.replace(/ /g, "+")}&user_state=${state.replace(/ /g, "+")}&user_address=${address.replace(/ /g, "+")}&user_postal_code=${postalCode.replace(/ /g, "+")}&order_id=${orderId}&currency=EUR&success_url=http://global-payment-solutions.com/success&failure_url=http://global-payment-solutions.com/failure&locale=en`;
       setUrl(redirectUrl)
       // window.location.href = redirectUrl;
     } else {
@@ -265,14 +265,14 @@ function PinPay() {
                 <div className={styles.CardPayment}>
                   <div style={{display:'flex' , alignItems:'center' , justifyContent:'left'}}>
                   <div className={styles.CardPaymentInput}>
-                        <label>Сумма платежа({currency})</label>
+                        <label>Сумма платежа(EUR)</label>
                         <input type="text" maxLength="30" placeholder='00.0' className={styles.ccCvcInput} onChange={(e)=>{setAmount(e.target.value);setAmountError('');setUrl('')}}/>
                         {amountError? <p style={{color:'red' , fontFamily:"'Montserrat', sans-serif", fontWeight:'bold' , fontSize:'13px' , marginTop:'30px', position:'absolute' , bottom:'-47px'}}>{amountError}</p> : ''}
                   </div>
-                    <select onChange={(e)=>{setCurrency(e.target.value);setUrl('')}}>
+                    {/* <select onChange={(e)=>{setCurrency(e.target.value);setUrl('')}}>
                       <option value={'USD'}>USD</option>
                       <option value={'EUR'}>EUR</option>
-                    </select>
+                    </select> */}
                   </div>
 
                     <div><button onClick={onPay} className={amountError === '' && nameError === '' && holderName !== '' && amount !== ''?styles.Pay:styles.buttonDisable}>Создать платёж</button></div>

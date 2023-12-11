@@ -109,7 +109,31 @@
                         h2 {
                             margin: 0;
                         }
+                        .fullName{
+                            @include flex(center,start);
+                            gap: 6px;
+                            input{
+                                width: 80%;
+                                padding: 10px;
+                                font-family: Nunito,sans-serif;
+                                font-size: 16px;
+                                border-radius: 8px;
+                                border: none;
+                                outline: none;
+                                background-color: rgb(21, 55, 105);
+                                color: #b7dce9;
+                            }
+                            input::placeholder{
+                                color: #8cb9c9;
+                                font-weight: bold;
+                                transition: 0.4s all ease;
+                            }
+                            input:focus::placeholder {
+                                padding-left: 10px;
+                            }
+                        }
                     }
+
                 }
 
                 .section2 {

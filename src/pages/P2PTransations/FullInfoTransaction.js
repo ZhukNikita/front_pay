@@ -5,6 +5,7 @@ import $api, { API_URL } from '../../axios';
 import NavBar from '../../components/NavBar';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
+import CreateRoundedIcon from '@mui/icons-material/CreateRounded';
 import InfoIcon from "@mui/icons-material/Info";
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
@@ -35,7 +36,7 @@ const style = {
     outline: 'none'
 };
 
-function FileUploadModal({ selectedFile, openPreview, handleClose, handleUpload }) {
+function FileUploadModal({ setSelectedFile,selectedFile, openPreview, handleClose, handleUpload }) {
     return (
         <Modal
             aria-labelledby="transition-modal-title"
@@ -66,7 +67,7 @@ function FileUploadModal({ selectedFile, openPreview, handleClose, handleUpload 
                     </div>
 
 
-                    <button onClick={() => { handleUpload(); handleClose() }}
+                    <button onClick={() => { handleUpload(); handleClose() ;setSelectedFile(null)}}
                         style={{
                             display: 'flex',
                             alignItems: 'center',
@@ -105,7 +106,8 @@ export default function FullP2PTransactionInfo({ setSnack, setSnackMessage, setS
     const handleOpenPreview = () => setOpenPreview(true);
     const handleClose = () => { setOpen(false); setFullImg('') };
     const handleClosePreview = () => { setOpenPreview(false); setFullImg(''); setSelectedFile(null) };
-
+    const [fullName, setFullName] = useState('');
+    const [fullNameChange , setFullNameChange] = useState(true)
     const handleUploadIconClick = () => {
         if (fileInputRef.current) {
             fileInputRef.current.click();
@@ -113,12 +115,14 @@ export default function FullP2PTransactionInfo({ setSnack, setSnackMessage, setS
     };
 
     const addImg = (event) => {
+        console.log('change')
         const files = event.target.files;
         if (files && files.length > 0) {
             const selectedFilesArray = Array.from(files);
             setSelectedFile(selectedFilesArray);
             handleOpenPreview();
         }
+
     };
 
     useEffect(() => {
@@ -245,6 +249,23 @@ export default function FullP2PTransactionInfo({ setSnack, setSnackMessage, setS
                             <div className={styles.date}>
                                 <h2>Бренд:</h2> <span>{transaction.brand}</span>
                             </div>
+                            {/* <div className={styles.date}>
+                                <h2>Полное Имя:</h2> 
+                                {
+                                    fullNameChange? 
+                                    <div className={styles.fullName}>
+                                        <input placeholder='Введите имя' value={fullName} onChange={(e)=> setFullName(e.target.value)}/>
+                                        <CheckCircleIcon sx={{cursor:'pointer'}} onClick={()=> setFullNameChange(false)}/>
+                                    </div>:''
+                                }
+                                {
+                                    !fullNameChange? 
+                                    <div className={styles.fullName}>
+                                        <span style={{width:'171.41px'}}>{fullName}</span>
+                                        <CreateRoundedIcon sx={{cursor:'pointer'}} onClick={()=> setFullNameChange(true)}/>
+                                    </div> : ''
+                                }
+                            </div> */}
                         </div>
                         <div className={styles.section2}>
                             <div className={styles.currency}>
@@ -281,7 +302,7 @@ export default function FullP2PTransactionInfo({ setSnack, setSnackMessage, setS
                                         openPreview={openPreview}
                                         handleClose={handleClosePreview}
                                         handleUpload={handleUpload}
-
+                                        setSelectedFile={setSelectedFile}
                                     />
                                 </h2>
                                 <div className={styles.imgList}>
