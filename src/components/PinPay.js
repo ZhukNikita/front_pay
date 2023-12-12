@@ -138,15 +138,15 @@ function PinPay() {
       error = true
       newPostalError = 'Пожалуйста, введите почтовый индекс'
     }
-    if(+amount < 1){
-      setAmountError('Минимальная сумма платежа 1€')
+    if(+amount < 10){
+      setAmountError(`Минимальная сумма платежа 10(${currency})`)
       error = true
-      newAmountError = 'Минимальная сумма платежа 1€';
+      newAmountError = `Минимальная сумма платежа 10(${currency})`;
     }
-    if(+amount > 20000){
-      setAmountError('Максимальная сумма платежа 20000€')
+    if(+amount >= 20000){
+      setAmountError(`Максимальная сумма платежа 19999(${currency})`)
       error = true
-      newAmountError = 'Максимальная сумма платежа 20000€';
+      newAmountError = `Максимальная сумма платежа 19999(${currency})`;
     }
     if(/[a-zA-Z]/.test(amount)){
       setAmountError('Неверный формат суммы платежа')
@@ -267,7 +267,7 @@ function PinPay() {
                   <div className={styles.CardPaymentInput}>
                         <label>Сумма платежа({currency})</label>
                         <input type="text" maxLength="30" placeholder='00.0' className={styles.ccCvcInput} onChange={(e)=>{setAmount(e.target.value);setAmountError('');setUrl('')}}/>
-                        {amountError? <p style={{color:'red' , fontFamily:"'Montserrat', sans-serif", fontWeight:'bold' , fontSize:'13px' , marginTop:'30px', position:'absolute' , bottom:'-47px'}}>{amountError}</p> : ''}
+                        {amountError? <p style={{color:'red',width:'200px' , fontFamily:"'Montserrat', sans-serif", fontWeight:'bold' , fontSize:'13px' , marginTop:'30px', position:'absolute' , bottom:'-47px'}}>{amountError}</p> : ''}
                   </div>
                     <select onChange={(e)=>{setCurrency(e.target.value);setUrl('')}}>
                       <option value={'USD'}>USD</option>
