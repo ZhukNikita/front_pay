@@ -57,6 +57,13 @@ export default function Methods() {
             link:'/shp' ,
             instruction:[],
             brands: ['SafeInvest']
+        },
+        {
+            id:8,
+            name: 'RuCassa',
+            link:'/rucassa' ,
+            instruction:[],
+            brands: ['SafeInvest']
         }
     ]
 

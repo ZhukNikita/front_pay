@@ -32,6 +32,7 @@ import Shp from './components/Shp.js';
 import AdvCashTransactions from './pages/AdvCashTransactions/AdvCashTransactions.js';
 import ShpTransactions from "./pages/ShpTransactions/ShpTransactions";
 import FullP2PTransactionInfo from './pages/P2PTransations/FullInfoTransaction.js';
+import RuCassa from './pages/RuCassa/RuCassa.js';
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
@@ -126,6 +127,7 @@ function App() {
         <Route path='/login' element={<Login />} />
         {/*<Route path='/statistics' element={<Statistics />} />*/}
         <Route path='/wlx' element={<WLX />} />
+        <Route path='/rucassa' element={<RuCassa />} />
         <Route path='/advcash' element={<AdvCash />} />
         <Route path='/shp' element={<Shp />} />
       </Routes>
