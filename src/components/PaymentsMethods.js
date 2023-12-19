@@ -58,6 +58,13 @@ export default function PaymentsMethods() {
             link:'/shp',
             instruction:[],
             brands: ['SafeInvest']
+        },
+        {
+            id:8,
+            name: 'RuCassa',
+            link:'/rucassa',
+            instruction:[],
+            brands: ['AdminBrand']
         }
     ]
 

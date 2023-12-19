@@ -113,4 +113,32 @@
       transition: all 0.4s ease; 
     }
   }
+                  .Pay{
+                    border: none;
+                    background-color: #38b6ff;
+                    color: white;
+                    padding: 15px 20px;
+                    border-radius: 10px;
+                    font-size: 18px;
+                    width: 120px;
+                    text-align: center;
+                    text-decoration: none;
+                    transition: all 0.4s ease-in;
+                    font-family: 'Montserrat', sans-serif;
+                  
+                  }
+                  .Pay:active{
+                    border: none;
+                    background-color: #0f2f42;
+                    color: white;
+                    padding: 15px 20px;
+                    border-radius: 10px;
+                    font-size: 18px;
+                    width: 120px;
+                    text-align: center;
+                    text-decoration: none;
+                    transition: all 0.4s ease-in;
+                    font-family: 'Montserrat', sans-serif;
+                  
+                  }
 }

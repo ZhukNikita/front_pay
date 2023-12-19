@@ -69,6 +69,7 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
     const [isWLXCheck, setIsWLXCheck] = React.useState(user.methods.includes('WLX'));
     const [isAdvCashCheck, setIsAdvCashCheck] = React.useState(user.methods.includes('AdvCash'));
     const [isStripeCheck, setIsStripeCheck] = React.useState(user.methods.includes('shp.ee'));
+    const [isRuCassaCheck, setIsRuCassaCheck] = React.useState(user.methods.includes('RuCassa'));
     const [selectedPayments, setSelectedPayments] = React.useState([]);
     const [choosenbrands, setChoosenBrands] = React.useState(user.brand && brands ? brands.filter(item => user.brands.includes(item.brand)) : [])
     React.useEffect(() => {
@@ -86,6 +87,13 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
                 }
             } else {
                 updatedSelectedPayments = updatedSelectedPayments.filter(el => el !== '1');
+            }
+            if (isRuCassaCheck === true) {
+                if (!selectedPayments.includes('7')) {
+                    updatedSelectedPayments.push('7');
+                }
+            } else {
+                updatedSelectedPayments = updatedSelectedPayments.filter(el => el !== '7');
             }
             if (isStripeCheck === true) {
                 if (!selectedPayments.includes('6')) {
@@ -123,7 +131,7 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
 
             return updatedSelectedPayments;
         });
-    }, [isPinPayCheck, isP2PCheck, isInsirexCheck, isWLXCheck, isAdvCashCheck , isStripeCheck]);
+    }, [isPinPayCheck, isP2PCheck, isInsirexCheck, isWLXCheck, isAdvCashCheck , isStripeCheck, isRuCassaCheck]);
 
     React.useEffect(() => {
         if (user) {
@@ -154,8 +162,15 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
             }
             if (!user.methods.includes('WLX')) {
                 setIsWLXCheck(false)
-            }else{
+            }
+            else{
                 setIsWLXCheck(true)
+            }
+            if (!user.methods.includes('RuCassa')) {
+                setIsRuCassaCheck(false)
+            }
+            else{
+                setIsRuCassaCheck(true)
             }
             setBrand(user.brand)
             setRole(user.role)
@@ -505,6 +520,10 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
                                 <label className="lns-checkbox">
                                     <input type="checkbox" name='shp.ee' checked={isStripeCheck} onChange={(e) => setIsStripeCheck(e.target.checked)} />
                                     <span>shp.ee</span>
+                                </label>
+                                <label className="lns-checkbox">
+                                    <input type="checkbox" name='shp.ee' checked={isRuCassaCheck} onChange={(e) => setIsRuCassaCheck(e.target.checked)} />
+                                    <span>RuCassa</span>
                                 </label>
                             </div>
 

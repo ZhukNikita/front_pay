@@ -307,6 +307,7 @@ export default function UserList({ users, setUsers, brands }) {
                 <option value="4">WLX</option>
                 <option value="5">AdvCash</option>
                 <option value="6">shp.ee</option>
+                <option value="7">RuCassa</option>
               </select>
               {
                 deletePaymentError && <div style={{ color: 'red', fontSize: '13px', margin: '0', fontFamily: "'Nunito',sans-serif", fontWeight: 'bold' }}>{deletePaymentError}</div>
