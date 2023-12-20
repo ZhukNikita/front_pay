@@ -33,6 +33,7 @@ import AdvCashTransactions from './pages/AdvCashTransactions/AdvCashTransactions
 import ShpTransactions from "./pages/ShpTransactions/ShpTransactions";
 import FullP2PTransactionInfo from './pages/P2PTransations/FullInfoTransaction.js';
 import RuCassa from './pages/RuCassa/RuCassa.js';
+import RuCassaTransactions from './pages/RuCassaTransactions/RuCassaTransactions.js'
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
@@ -117,6 +118,7 @@ function App() {
         {/* <Route path='/transaction/:id' element={<FullTransactionInfo setSnack={setSnack} setSnackMessage={setSnackMessage} setSnackType={setSnackType}/>} /> */}
         <Route path='/shp-transaction/:id' element={<FullShpTransactionInfo setSnack={setSnack} setSnackMessage={setSnackMessage} setSnackType={setSnackType}/>} />
         <Route path='/p2p-transactions' element={<P2PTransactions/>} />
+        <Route path='/rucassa-transactions' element={<RuCassaTransactions/>} />
         <Route path='/p2p-transaction/:id' element={<FullP2PTransactionInfo setSnack={setSnack} setSnackMessage={setSnackMessage} setSnackType={setSnackType}/>} />
 
         {/*<Route path='/p2p-deleted-transactions' element={<P2PDeletedTransactions/>} />*/}

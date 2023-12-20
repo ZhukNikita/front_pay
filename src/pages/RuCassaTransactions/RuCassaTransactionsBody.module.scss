@@ -1,0 +1,44 @@
+@import '../../styles/vars.scss';
+
+.body {
+    padding-left: 30px;
+    padding-top: 30px;
+    width: 76%;
+    height: 93vh;
+    font-family: 'Nunito', sans-serif;
+    margin-left: 20%;
+    .header {
+        @include flex(center, space-between);
+
+        h1 {
+            color: rgb(183, 220, 233);
+        }
+        
+        .buttons{
+            @include flex(center, center);
+            gap: 20px;
+            button{
+                @include flex(center, center);
+                gap: 10px;
+                background-color: $cardBC;
+                color: rgb(183, 220, 233);
+                border: none;
+                padding: 16.5px;
+                border-radius: 8px;
+                font-weight: bold;
+                font-family: 'Nunito',sans-serif;
+                font-size: 16px;
+                cursor: pointer;
+            }
+            .deletedTransactions{
+                background-color: $cardBC;
+                padding: 20px;
+                border-radius: 8px;
+                text-decoration: none;
+                color: rgb(183, 220, 233);
+                font-weight: bold;
+            }
+        }
+    }
+
+}
