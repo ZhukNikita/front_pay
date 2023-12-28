@@ -149,6 +149,11 @@ export default function RuCassaTransactionsBody() {
 
             </div>
             <RuCassaTransactionsList ibans={ibans} setIbans={setIbans} />
+            <div className={styles.stats}>
+                <div className={styles.card}>
+
+                </div>
+            </div>
             <Modal
                 open={open}
                 onClose={handleClose}

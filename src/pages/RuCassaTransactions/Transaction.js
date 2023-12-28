@@ -1,11 +1,14 @@
 import React, { useRef, useState } from 'react';
 import styles from './RuCassaTransactionsList.module.scss';
 import Tooltip from '@mui/material/Tooltip';
-
+import UpdateIcon from '@mui/icons-material/Update';
 import { Link } from 'react-router-dom';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 import TimerIcon from '@mui/icons-material/Timer';
+import axios from 'axios';
+import $api from '../../axios';
+import secureLocalStorage from 'react-secure-storage';
 
 
 
@@ -36,6 +39,18 @@ export default function Transaction({ transaction, setTransactions }) {
       
         return text.replace(/&[^;]+;/g, entity => entities[entity] || entity);
       }
+    async function HandleUpdate(id){
+        try {
+            await $api.post('/updateRuCassaTransaction',{id})
+            const { data } = await $api.post('/getAllListRuCassa' , {brand : secureLocalStorage.getItem('userBrand' ), role: secureLocalStorage.getItem('role') })
+            if (data) {
+                setTransactions(data.flat().reverse())
+            }
+        }
+        catch (e) {
+            console.log(e)
+        }
+    }
     return (
         <div className={styles.transaction} style={{ position: 'relative' ,textDecoration:'none'}}>
             <div className={styles.body}>
@@ -46,9 +61,14 @@ export default function Transaction({ transaction, setTransactions }) {
                 <h3 className={styles.brand}>{JSON.parse(decodeHtmlEntities(transaction.data)).brand}</h3>
                 <h3 className={styles.amount}>{transaction.amount} ₽</h3>
                 <h3 className={styles.amount}>{formattedDate}</h3>
-                <h3 style={{ width: '7vw' }}>
+                <h3 style={{ width: '9vw' }}>
                     {getStatus(transaction)}
                 </h3>
+                {
+                    transaction.status === 'WAIT' && (
+                        <h3 style={{ width: '6vw' , display:'flex' , alignItems:'center' , cursor:'pointer' }}><UpdateIcon onClick={()=>HandleUpdate(transaction.id)}/></h3>
+                    )
+                }
                 {/* <input
                     ref={fileInputRef}
                     type='file'
