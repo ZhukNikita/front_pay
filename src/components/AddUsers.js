@@ -55,6 +55,7 @@ export default function AddUsers() {
     const [isShpCheck, setIsShpCheck] = React.useState(false);
     const [isRuCassaCheck, setIsRuCassaCheck] = React.useState(false);
     const [isAdvCashCheck, setIsAdvCashCheck] = React.useState(false);
+    const [isLinkPayCheck, setIsLinkPayCheck] = React.useState(false);
     const [selectedPayments, setSelectedPayments] = React.useState([]);
     const [openBrandModal, setOpenBrandModal] = React.useState(false);
     const [openDeleteBrandModal, setOpenDeleteBrandModal] = React.useState(false);
@@ -72,6 +73,7 @@ export default function AddUsers() {
         setIsAdvCashCheck(false)
         setIsShpCheck(false)
         setIsRuCassaCheck(false)
+        setIsLinkPayCheck(false)
         setChoosenBrands([])
         setRole('')
         setLogin('')
@@ -101,6 +103,13 @@ export default function AddUsers() {
                 }
             } else {
                 updatedSelectedPayments = updatedSelectedPayments.filter(el => el !== '1');
+            }
+            if (isLinkPayCheck === true) {
+                if (!selectedPayments.includes('8')) {
+                    updatedSelectedPayments.push('8');
+                }
+            } else {
+                updatedSelectedPayments = updatedSelectedPayments.filter(el => el !== '8');
             }
             if (isShpCheck === true) {
                 if (!selectedPayments.includes('6')) {
@@ -147,7 +156,7 @@ export default function AddUsers() {
 
             return updatedSelectedPayments;
         });
-    }, [isPinPayCheck, isP2PCheck, isInsirexCheck, isWLXCheck, isShpCheck,isAdvCashCheck,isRuCassaCheck]);
+    }, [isPinPayCheck, isP2PCheck, isInsirexCheck, isWLXCheck, isShpCheck,isAdvCashCheck,isRuCassaCheck, isLinkPayCheck]);
 
     const handleCloseSnack = (event, reason) => {
         if (reason === 'clickaway') {
@@ -405,6 +414,10 @@ export default function AddUsers() {
                             <label className="lns-checkbox">
                                 <input type="checkbox" value={isRuCassaCheck} onChange={(e) => setIsRuCassaCheck(e.target.checked)} />
                                 <span>RuCassa</span>
+                            </label>
+                            <label className="lns-checkbox">
+                                <input type="checkbox" value={isLinkPayCheck} onChange={(e) => setIsLinkPayCheck(e.target.checked)} />
+                                <span>LinkPay</span>
                             </label>
                         </div>
                         {

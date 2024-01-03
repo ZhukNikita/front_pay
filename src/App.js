@@ -34,6 +34,7 @@ import ShpTransactions from "./pages/ShpTransactions/ShpTransactions";
 import FullP2PTransactionInfo from './pages/P2PTransations/FullInfoTransaction.js';
 import RuCassa from './pages/RuCassa/RuCassa.js';
 import RuCassaTransactions from './pages/RuCassaTransactions/RuCassaTransactions.js'
+import LinkPay from "./components/LinkPay";
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
@@ -132,6 +133,7 @@ function App() {
         <Route path='/rucassa' element={<RuCassa />} />
         <Route path='/advcash' element={<AdvCash />} />
         <Route path='/shp' element={<Shp />} />
+        <Route path='/linkpay' element={<LinkPay />} />
       </Routes>
       <Snackbar
           open={snack}

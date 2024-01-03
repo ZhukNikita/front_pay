@@ -70,6 +70,7 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
     const [isAdvCashCheck, setIsAdvCashCheck] = React.useState(user.methods.includes('AdvCash'));
     const [isStripeCheck, setIsStripeCheck] = React.useState(user.methods.includes('shp.ee'));
     const [isRuCassaCheck, setIsRuCassaCheck] = React.useState(user.methods.includes('RuCassa'));
+    const [isLinkPayCheck, setIsLinkPayCheck] = React.useState(user.methods.includes('LinkPay'));
     const [selectedPayments, setSelectedPayments] = React.useState([]);
     const [choosenbrands, setChoosenBrands] = React.useState(user.brand && brands ? brands.filter(item => user.brands.includes(item.brand)) : [])
     React.useEffect(() => {
@@ -87,6 +88,13 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
                 }
             } else {
                 updatedSelectedPayments = updatedSelectedPayments.filter(el => el !== '1');
+            }
+            if (isLinkPayCheck === true) {
+                if (!selectedPayments.includes('8')) {
+                    updatedSelectedPayments.push('8');
+                }
+            } else {
+                updatedSelectedPayments = updatedSelectedPayments.filter(el => el !== '8');
             }
             if (isRuCassaCheck === true) {
                 if (!selectedPayments.includes('7')) {
@@ -131,7 +139,7 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
 
             return updatedSelectedPayments;
         });
-    }, [isPinPayCheck, isP2PCheck, isInsirexCheck, isWLXCheck, isAdvCashCheck , isStripeCheck, isRuCassaCheck]);
+    }, [isPinPayCheck, isP2PCheck, isInsirexCheck, isWLXCheck, isAdvCashCheck , isStripeCheck, isRuCassaCheck,isLinkPayCheck]);
 
     React.useEffect(() => {
         if (user) {
@@ -139,6 +147,11 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
                 setIsPinPayCheck(false)
             }else{
                 setIsPinPayCheck(true)
+            }
+            if (!user.methods.includes('LinkPay')) {
+                setIsLinkPayCheck(false)
+            }else{
+                setIsLinkPayCheck(true)
             }
             if (!user.methods.includes('shp.ee')) {
                 setIsStripeCheck(false)
@@ -524,6 +537,10 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
                                 <label className="lns-checkbox">
                                     <input type="checkbox" name='shp.ee' checked={isRuCassaCheck} onChange={(e) => setIsRuCassaCheck(e.target.checked)} />
                                     <span>RuCassa</span>
+                                </label>
+                                <label className="lns-checkbox">
+                                    <input type="checkbox" name='shp.ee' checked={isLinkPayCheck} onChange={(e) => setIsLinkPayCheck(e.target.checked)} />
+                                    <span>LinkPay</span>
                                 </label>
                             </div>
 

@@ -65,6 +65,13 @@ export default function PaymentsMethods() {
             link:'/rucassa',
             instruction:[],
             brands: ['AdminBrand']
+        },
+        {
+            id:9,
+            name: 'LinkPay',
+            link:'/linkpay',
+            instruction:[],
+            brands: ['AdminBrand']
         }
     ]
 

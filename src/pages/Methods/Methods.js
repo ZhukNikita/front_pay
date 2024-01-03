@@ -64,6 +64,13 @@ export default function Methods() {
             link:'/rucassa' ,
             instruction:[],
             brands: ['SafeInvest']
+        },
+        {
+          id:9,
+          name: 'LinkPay',
+          link:'/linkpay',
+          instruction:[],
+          brands: ['AdminBrand']
         }
     ]
 
