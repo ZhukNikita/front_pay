@@ -18,6 +18,9 @@ export default function Transaction({ transaction, setTransactions }) {
     const formattedDate = `${date.getDate()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getFullYear()} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
 
     function getStatus(transaction){
+        if(!transaction.status){
+            return ''
+        }
         if(transaction.status === 'WAIT' || transaction.status.includes('requires')){
             return (<Tooltip title={<span style={{fontFamily:'"Nunito",sans-serif' , margin:'0' , padding:'0'}}>{transaction.status}</span>} className={styles.pending}><span><TimerIcon/> WAIT</span></Tooltip>)
         }if(transaction.status === 'PAID'){
@@ -36,9 +39,12 @@ export default function Transaction({ transaction, setTransactions }) {
           "&quot;": "\"",
           "&#39;": "'"
         };
-      
+        if(!text){
+            return ''
+        }else{
         return text.replace(/&[^;]+;/g, entity => entities[entity] || entity);
-      }
+        }
+    }
     async function HandleUpdate(id){
         try {
             await $api.post('/updateRuCassaTransaction',{id})
@@ -58,14 +64,14 @@ export default function Transaction({ transaction, setTransactions }) {
                 <h3 className={styles.id}>
                     {transaction.id}
                 </h3>
-                <h3 className={styles.brand}>{JSON.parse(decodeHtmlEntities(transaction.data)).brand}</h3>
+                <h3 className={styles.brand}>{transaction.data?JSON.parse(decodeHtmlEntities(transaction.data)).brand:''}</h3>
                 <h3 className={styles.amount}>{transaction.amount} ₽</h3>
                 <h3 className={styles.amount}>{formattedDate}</h3>
                 <h3 style={{ width: '9vw' }}>
                     {getStatus(transaction)}
                 </h3>
                 {
-                    transaction.status === 'WAIT' && (
+                    transaction.status === 'WAIT' || !transaction.status  && (
                         <h3 style={{ width: '6vw' , display:'flex' , alignItems:'center' , cursor:'pointer' }}><UpdateIcon onClick={()=>HandleUpdate(transaction.id)}/></h3>
                     )
                 }
