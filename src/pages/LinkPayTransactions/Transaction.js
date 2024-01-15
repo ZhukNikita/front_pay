@@ -139,7 +139,7 @@ export default function Transaction({transaction}) {
     };
     return(
       <div className={styles.transaction} style={{zIndex:'1'}}>
-          <Link to={`/shp-transaction/${transaction.id}`} className={styles.body}>
+          <Link to={`/linkpay-transaction/${transaction.id}`} className={styles.body}>
               <h3 style={{ width: '7vw' }}>{formattedDate}</h3>
               <h3 style={{ width: '10vw' }}>{transaction.id.slice(13)}</h3>
               <h3 style={{ width: '13.5vw'}}><p style={{width:'85%' , wordBreak: 'break-word'}}>{transaction?.brand}</p></h3>
