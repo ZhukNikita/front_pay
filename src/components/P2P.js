@@ -4,7 +4,7 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import Swal from 'sweetalert2';
 import Clipboard from 'react-clipboard.js';
 import secureLocalStorage from 'react-secure-storage';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import $api from '../axios';
 
 export default function P2P() {
@@ -13,7 +13,7 @@ export default function P2P() {
   const [bank, setBank] = useState('');
   const [bic, setBic] = useState('');
   const [seconds, setSeconds] = useState(180);
-
+  const {country} = useParams()
   useEffect(() => {
     let countdownWorker;
 
@@ -60,7 +60,7 @@ export default function P2P() {
   useEffect(() => {
     if (seconds === 180) {
       $api
-        .get('/p2p')
+        .get(`/p2p/${country}`)
         .then((response) => {
           setUrl(response.data.IBAN);
           setRecipient(response.data.Recipient);

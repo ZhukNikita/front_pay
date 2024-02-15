@@ -1,0 +1,56 @@
+@import '../../styles/vars.scss';
+
+
+.choosePage {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    position: relative;
+    .toHome{
+        top: 20px;
+        right: 20px;
+        color: rgb(183, 220, 233);
+        font-size: 18px;
+        background-color: #325A96;
+        border-radius: 4px;
+        padding: 12px;
+        position: absolute;
+        text-decoration: none;
+        font-family: 'Nunito', sans-serif;
+        font-weight: 500;
+        cursor: pointer;
+        z-index: 2;
+    }
+    .body {
+        width: 100%;
+        @include flex(center, center);
+        gap: 40px;
+        flex-direction: row;
+        font-family: 'Nunito', sans-serif;
+        color: #ffffff;
+        position: relative;
+        height: 100vh;
+
+        .country {
+            cursor: pointer;
+            @include flex(center, center);
+            flex-direction: column;
+            height: 200px;
+            width: 25%;
+            color: rgb(183, 220, 233);
+            font-size: 28px;
+            background-color: #325A96;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: bold;
+            gap: 10px;
+            p{
+                margin: 0;
+            }
+        }
+    }
+
+}

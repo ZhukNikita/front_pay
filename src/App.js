@@ -36,6 +36,7 @@ import RuCassa from './pages/RuCassa/RuCassa.js';
 import RuCassaTransactions from './pages/RuCassaTransactions/RuCassaTransactions.js'
 import LinkPay from "./components/LinkPay";
 import LinkPayTransactions from './pages/LinkPayTransactions/LinkPayTransactions.js';
+import P2PChoose from './pages/P2PTransations/P2PChoose.js';
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
@@ -109,7 +110,8 @@ function App() {
         <Route path={'/LinkPay-transactions'} element={<LinkPayTransactions />} />
         <Route path={'/payments_methods'} element={<PaymentsMethods />} />
         <Route path={'/methods'} element={<Methods/>} />
-        <Route path={'/p2p'} element={<P2P />} />
+        <Route path={'/p2p/:country'} element={<P2P />} />
+        <Route path={'/p2p/choose'} element={<P2PChoose />} />
         <Route path='*' element={<NoMatch />} />
         <Route path='/failure' element={<Failure />} />
         <Route path='/success' element={<Success />} />
@@ -125,7 +127,7 @@ function App() {
         <Route path='/p2p-transaction/:id' element={<FullP2PTransactionInfo setSnack={setSnack} setSnackMessage={setSnackMessage} setSnackType={setSnackType}/>} />
 
         {/*<Route path='/p2p-deleted-transactions' element={<P2PDeletedTransactions/>} />*/}
-        {/*<Route path='/wlx-transactions' element={<WlxTransactions/>} />*/}
+        {/* <Route path='/wlx-transactions' element={<WlxTransactions/>} /> */}
         {/* <Route path='/insirex-transactions' element={<InsirexTransactions/>} />
         <Route path='/insirex-transaction/:id' element={<FullInsirexTransactionInfo setSnack={setSnack} setSnackMessage={setSnackMessage} setSnackType={setSnackType}/>} /> */}
         {/*<Route path='/advcash-transactions' element={<AdvCashTransactions/>} />*/}

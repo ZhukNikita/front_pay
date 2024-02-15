@@ -47,6 +47,9 @@ export default function P2PTransactionsBody() {
     const [bank, setBank] = useState('')
     const [bankError, setBankError] = useState('')
     const [bic, setBic] = useState('')
+    const [country, setCountry] = useState('')
+    const [countryCode, setCountryCode] = useState('')
+    const [accountNumber, setAccountNumber] = useState('')
     const [bicError, setBicError] = useState('')
     const [ibans, setIbans] = useState([])
     const [snack, setSnack] = useState(false);
@@ -59,6 +62,9 @@ export default function P2PTransactionsBody() {
         setRecipient('');
         setBank('');
         setBic('');
+        setCountry('')
+        setCountryCode('')
+        setAccountNumber('')
     };
     const handleDeleteClose = () => {
         setOpenDelete(false);
@@ -79,9 +85,6 @@ export default function P2PTransactionsBody() {
         if(!bank){
             setBankError('Введите банк получателя')
         }
-        if(!bic){
-            setBicError('Введите BIC банка')
-        }
     }
 
     const handleCloseSnack = (event, reason) => {
@@ -95,7 +98,7 @@ export default function P2PTransactionsBody() {
         const createdBy = secureLocalStorage.getItem('userId')
         const iban = iban1.replace(/\s/g, "")
         try{
-           const {data} = await $api.post('/createIban' , {iban,recipient,bank, bic , createdBy})
+           const {data} = await $api.post('/createIban' , {iban,recipient,bank, bic , country, countryCode, accountNumber, createdBy})
             await $api.get('/p2pGetAll').then(res => setIbans(res.data))
             setSnack(true)
             setSnackType('success')
@@ -185,9 +188,9 @@ export default function P2PTransactionsBody() {
                         <div style={{ width: '40%', display: 'flex', flexDirection: 'column' }}>
                             <label style={{ marginBottom: '0', width: '100%', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', color: 'rgb(183, 220, 233)' }}>BIC Банка</label>
                             <input onChange={(e)=> {setBic(e.target.value) ; setBicError('')}} style={{ outline: 'none', padding: '15px 20px', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', width: '90%' }} placeholder='BIC Банка' />
-                            {
+                            {/* {
                                 bicError? <p style={{width:'182px' , margin:'0 0 0 5px', color:'red', fontFamily: '"Nunito"  ,sans-serif', fontWeight:'bold'}}>{bicError}</p> : ''
-                            }
+                            } */}
                         </div>
                         <div style={{ backgroundColor: 'white', width: '46%', borderRadius: '7px' }}>
                             <div style={{ backgroundColor: 'rgba(255, 237, 193, 0.5)', width: 'calc(100% - 2px)', borderRadius: '8px', border: '1px solid #FFECA1', height: 'calc(100% - 2px)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
@@ -196,9 +199,34 @@ export default function P2PTransactionsBody() {
                             </div>
                         </div>
                     </div>
+                    <div style={{ width: '100%', display: 'flex', justifyContent: 'start', gap: '60px' }}>
+                        <div style={{ width: '40%', display: 'flex', flexDirection: 'column'}}>
+                            <label style={{ marginBottom: '0', width: '100%', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', color: 'rgb(183, 220, 233)' }}>Номер счёта</label>
+                            <input onChange={(e)=> {setAccountNumber(e.target.value)}}  style={inputStyle} placeholder='Номер счёта' />
+                            {/* {
+                                recipientError? <p style={{width:'100%' , margin:'0 0 0 5px', color:'red', fontFamily: '"Nunito"  ,sans-serif', fontWeight:'bold'}}>{recipientError}</p> : ''
+                            } */}
+                        </div>
+                        <div style={{ width: '40%', display: 'flex', flexDirection: 'column' }}>
+                            <label style={{ marginBottom: '0', width: '100%', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', color: 'rgb(183, 220, 233)' }}>Код страны</label>
+                            <input onChange={(e)=> {setCountryCode(e.target.value)}} style={inputStyle} placeholder='Код страны' />
+                            {/* {
+                                bankError? <p style={{width:'182px' , margin:'0 0 0 5px', color:'red', fontFamily: '"Nunito"  ,sans-serif', fontWeight:'bold'}}>{bankError}</p> : ''
+                            } */}
+                        </div>
+                    </div>
+                    <div style={{ width: '100%', display: 'flex', justifyContent: 'start', gap: '60px' }}>
+                        <div style={{ width: '40%', display: 'flex', flexDirection: 'column'}}>
+                            <label style={{ marginBottom: '0', width: '100%', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', color: 'rgb(183, 220, 233)' }}>Страна</label>
+                            <input onChange={(e)=> {setCountry(e.target.value)}}  style={inputStyle} placeholder='Страна' />
+                            {/* {
+                                recipientError? <p style={{width:'100%' , margin:'0 0 0 5px', color:'red', fontFamily: '"Nunito"  ,sans-serif', fontWeight:'bold'}}>{recipientError}</p> : ''
+                            } */}
+                        </div>
+                    </div>
                     <div>
                         {
-                            iban1 && bic && recipient && bank
+                            iban1 && recipient && bank
                                 ? <button
                                     onClick={Create}
                                     style={{
