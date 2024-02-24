@@ -6,6 +6,7 @@ import Clipboard from 'react-clipboard.js';
 import secureLocalStorage from 'react-secure-storage';
 import { Navigate, useParams } from 'react-router-dom';
 import $api from '../axios';
+import WarningIcon from '@mui/icons-material/Warning';
 
 export default function P2P() {
   const [url, setUrl] = useState('');
@@ -14,6 +15,7 @@ export default function P2P() {
   const [bic, setBic] = useState('');
   const [accountNumber, setAccountNumber] = useState('');
   const [countryCode, setCountryCode] = useState('');
+  const [limit, setLimit] = useState('');
   const [seconds, setSeconds] = useState(180);
   const {country} = useParams()
   useEffect(() => {
@@ -70,6 +72,7 @@ export default function P2P() {
           setBic(response.data.BIC);
           setAccountNumber(response.data.accountNumber);
           setCountryCode(response.data.countryCode);
+          setLimit(response.data.isLimit)
         })
         .catch((error) => {
           console.error('Ошибка:', error);
@@ -157,7 +160,19 @@ export default function P2P() {
               ) : (
                 <h3 style={{ width: '210px', wordBreak: 'break-all' }}>''</h3>
               )}
-            </div>            
+            </div>
+            <div className={styles.credits} style={{width:'100%'}}>
+              {!limit || limit == 0 ? (
+                <h3 style={{ width: '200px', wordBreak: 'break-all' }}></h3>
+              ) : (
+                <div style={{ backgroundColor: 'white', width: '100%', borderRadius: '7px' }}>
+                  <div style={{ backgroundColor: 'rgba(255, 237, 193, 0.5)', width: 'calc(100% - 2px)', borderRadius: '8px', border: '1px solid #FFECA1', height: 'calc(100% - 2px)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
+                      <WarningIcon sx={{ color: 'red', marginLeft: '10px' }} />
+                      <p style={{ fontSize: '15px', fontFamily: "'Nunito',sans-serif", fontWeight: '600', marginRight: '10px', color: 'red' }}>Возможно данные реквизиты в спами</p>
+                  </div>
+                </div>
+              )}
+            </div>             
           </div>
           {
             url ? <Clipboard data-clipboard-text={`${url + '\n' + recipient + '\n' + bank + '\n' + bic}`}>
