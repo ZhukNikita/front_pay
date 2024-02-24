@@ -12,6 +12,8 @@ export default function P2P() {
   const [recipient, setRecipient] = useState('');
   const [bank, setBank] = useState('');
   const [bic, setBic] = useState('');
+  const [accountNumber, setAccountNumber] = useState('');
+  const [countryCode, setCountryCode] = useState('');
   const [seconds, setSeconds] = useState(180);
   const {country} = useParams()
   useEffect(() => {
@@ -66,6 +68,8 @@ export default function P2P() {
           setRecipient(response.data.Recipient);
           setBank(response.data.Bank);
           setBic(response.data.BIC);
+          setAccountNumber(response.data.accountNumber);
+          setCountryCode(response.data.countryCode);
         })
         .catch((error) => {
           console.error('Ошибка:', error);
@@ -138,6 +142,22 @@ export default function P2P() {
                 <h3 style={{ width: '210px', wordBreak: 'break-all' }}>''</h3>
               )}
             </div>
+            <div className={styles.credits}>
+              <span>Номер счёта</span>
+              {accountNumber ? (
+                <h3 style={{ width: '200px', wordBreak: 'break-all' }}>{accountNumber}</h3>
+              ) : (
+                <h3 style={{ width: '210px', wordBreak: 'break-all' }}>''</h3>
+              )}
+            </div>
+            <div className={styles.credits}>
+              <span>Код страны</span>
+              {countryCode ? (
+                <h3 style={{ width: '200px', wordBreak: 'break-all' }}>{countryCode}</h3>
+              ) : (
+                <h3 style={{ width: '210px', wordBreak: 'break-all' }}>''</h3>
+              )}
+            </div>            
           </div>
           {
             url ? <Clipboard data-clipboard-text={`${url + '\n' + recipient + '\n' + bank + '\n' + bic}`}>
