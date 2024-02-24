@@ -168,7 +168,7 @@ export default function P2P() {
                 <div style={{ backgroundColor: 'white', width: '100%', borderRadius: '7px' }}>
                   <div style={{ backgroundColor: 'rgba(255, 237, 193, 0.5)', width: 'calc(100% - 2px)', borderRadius: '8px', border: '1px solid #FFECA1', height: 'calc(100% - 2px)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
                       <WarningIcon sx={{ color: 'red', marginLeft: '10px' }} />
-                      <p style={{ fontSize: '15px', fontFamily: "'Nunito',sans-serif", fontWeight: '600', marginRight: '10px', color: 'red' }}>Возможно данные реквизиты в спами</p>
+                      <p style={{ fontSize: '15px', fontFamily: "'Nunito',sans-serif", fontWeight: '600', marginRight: '10px', color: 'red' }}>Возможно данные реквизиты в спамe</p>
                   </div>
                 </div>
               )}
