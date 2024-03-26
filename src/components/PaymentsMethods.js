@@ -72,6 +72,13 @@ export default function PaymentsMethods() {
             link:'/linkpay',
             instruction:[],
             brands: ['AdminBrand']
+        },
+        {
+            id:10,
+            name: 'NowPay',
+            link:'/nowPay',
+            instruction:[],
+            brands: ['AdminBrand']
         }
     ]
 
