@@ -29,6 +29,7 @@ import MuiAlert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 import AdvCash from './components/AdvCash';
 import Shp from './components/Shp.js';
+import NowPay from './components/NowPay.js';
 import AdvCashTransactions from './pages/AdvCashTransactions/AdvCashTransactions.js';
 import ShpTransactions from "./pages/ShpTransactions/ShpTransactions";
 import FullP2PTransactionInfo from './pages/P2PTransations/FullInfoTransaction.js';
@@ -139,6 +140,7 @@ function App() {
         <Route path='/rucassa' element={<RuCassa />} />
         <Route path='/advcash' element={<AdvCash />} />
         <Route path='/shp' element={<Shp />} />
+        <Route path='/nowPay' element={<NowPay />} />
         <Route path='/linkpay' element={<LinkPay />} />
       </Routes>
       <Snackbar
