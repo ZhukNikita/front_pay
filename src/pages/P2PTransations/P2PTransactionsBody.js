@@ -12,6 +12,8 @@ import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import $api from '../../axios'
+import BlockIcon from '@mui/icons-material/Block';
+import axios from 'axios'
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
@@ -36,8 +38,10 @@ const inputStyle = { outline: 'none', padding: '15px 20px', fontFamily: '"Nunito
 export default function P2PTransactionsBody() {
     const [open, setOpen] = useState(false);
     const [openDelete, setOpenDelete] = useState(false);
+    const [openEdit, setOpenEdit] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleOpenDelete = () => setOpenDelete(true);
+    const handleOpenEdit = () => setOpenEdit(true);
     const [iban1, setIban] = useState('')
     const [ibanToDelete, setIbanToDelete] = useState('')
     const [ibanError, setIbanError] = useState('')
@@ -47,9 +51,13 @@ export default function P2PTransactionsBody() {
     const [bank, setBank] = useState('')
     const [bankError, setBankError] = useState('')
     const [bic, setBic] = useState('')
+    const [country, setCountry] = useState('')
+    const [countryCode, setCountryCode] = useState('')
+    const [accountNumber, setAccountNumber] = useState('')
     const [bicError, setBicError] = useState('')
     const [ibans, setIbans] = useState([])
     const [snack, setSnack] = useState(false);
+    const [limit, setLimit] = useState(false);
     const [snackMessage, setSnackMessage] = useState('');
     const [snackType, setSnackType] = useState('');
 
@@ -59,14 +67,27 @@ export default function P2PTransactionsBody() {
         setRecipient('');
         setBank('');
         setBic('');
+        setCountry('')
+        setCountryCode('')
+        setAccountNumber('')
     };
     const handleDeleteClose = () => {
         setOpenDelete(false);
         setIbanToDelete('');
     };
+    const handleEditClose = () => {
+        setOpenEdit(false);
+        setIbanToDelete('');
+        setLimit(false)
+    };
     const CheckToDelete = () =>{
         if(!ibanToDelete){
             setIbanErrorToDelete('Выберите IBAN для удаления')
+        }
+    }
+    const CheckToEdit = () =>{
+        if(!ibanToDelete){
+            setIbanErrorToDelete('Выберите IBAN для изменения')
         }
     }
     const Check = () => {
@@ -79,9 +100,6 @@ export default function P2PTransactionsBody() {
         if(!bank){
             setBankError('Введите банк получателя')
         }
-        if(!bic){
-            setBicError('Введите BIC банка')
-        }
     }
 
     const handleCloseSnack = (event, reason) => {
@@ -91,11 +109,26 @@ export default function P2PTransactionsBody() {
         setSnackMessage('')
         setSnack(false);
     };
+    const SetLimit = async () =>{
+        console.log(limit)
+        try{
+            const {data} = await $api.post('/setIbanLimit' , {iban:ibanToDelete , limit: limit? '1' : '0'})
+            if(data){
+                setSnack(true)
+                setSnackType('success')
+                setSnackMessage('IBAN успешно изменён!')
+            }
+        }catch(e){
+            console.log(e)
+        }finally{
+            handleEditClose()
+        }
+    }
     const Create = async() => {
         const createdBy = secureLocalStorage.getItem('userId')
         const iban = iban1.replace(/\s/g, "")
         try{
-           const {data} = await $api.post('/createIban' , {iban,recipient,bank, bic , createdBy})
+           const {data} = await $api.post('/createIban' , {iban,recipient,bank, bic , country, countryCode, accountNumber, createdBy})
             await $api.get('/p2pGetAll').then(res => setIbans(res.data))
             setSnack(true)
             setSnackType('success')
@@ -138,7 +171,8 @@ export default function P2PTransactionsBody() {
                 {
                         secureLocalStorage.getItem('role') === 'SuperAdmin' ?
                         <>
-                                            <button onClick={handleOpen}><AccountBalanceIcon />Добавить IBAN</button>
+                        <button onClick={handleOpenEdit}><BlockIcon />Внести в спам</button>
+                        <button onClick={handleOpen}><AccountBalanceIcon />Добавить IBAN</button>
                     <button onClick={handleOpenDelete} style={{backgroundColor:'#ad2824' , color:'#ffa6b2'}}><DeleteOutlineIcon />Удалить IBAN</button>
 
                             <Link to={'/p2p-deleted-transactions'} className={styles.deletedTransactions}>Удаленные транзакции</Link>
@@ -185,9 +219,9 @@ export default function P2PTransactionsBody() {
                         <div style={{ width: '40%', display: 'flex', flexDirection: 'column' }}>
                             <label style={{ marginBottom: '0', width: '100%', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', color: 'rgb(183, 220, 233)' }}>BIC Банка</label>
                             <input onChange={(e)=> {setBic(e.target.value) ; setBicError('')}} style={{ outline: 'none', padding: '15px 20px', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', width: '90%' }} placeholder='BIC Банка' />
-                            {
+                            {/* {
                                 bicError? <p style={{width:'182px' , margin:'0 0 0 5px', color:'red', fontFamily: '"Nunito"  ,sans-serif', fontWeight:'bold'}}>{bicError}</p> : ''
-                            }
+                            } */}
                         </div>
                         <div style={{ backgroundColor: 'white', width: '46%', borderRadius: '7px' }}>
                             <div style={{ backgroundColor: 'rgba(255, 237, 193, 0.5)', width: 'calc(100% - 2px)', borderRadius: '8px', border: '1px solid #FFECA1', height: 'calc(100% - 2px)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
@@ -196,9 +230,34 @@ export default function P2PTransactionsBody() {
                             </div>
                         </div>
                     </div>
+                    <div style={{ width: '100%', display: 'flex', justifyContent: 'start', gap: '60px' }}>
+                        <div style={{ width: '40%', display: 'flex', flexDirection: 'column'}}>
+                            <label style={{ marginBottom: '0', width: '100%', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', color: 'rgb(183, 220, 233)' }}>Номер счёта</label>
+                            <input onChange={(e)=> {setAccountNumber(e.target.value)}}  style={inputStyle} placeholder='Номер счёта' />
+                            {/* {
+                                recipientError? <p style={{width:'100%' , margin:'0 0 0 5px', color:'red', fontFamily: '"Nunito"  ,sans-serif', fontWeight:'bold'}}>{recipientError}</p> : ''
+                            } */}
+                        </div>
+                        <div style={{ width: '40%', display: 'flex', flexDirection: 'column' }}>
+                            <label style={{ marginBottom: '0', width: '100%', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', color: 'rgb(183, 220, 233)' }}>Код страны</label>
+                            <input onChange={(e)=> {setCountryCode(e.target.value)}} style={inputStyle} placeholder='Код страны' />
+                            {/* {
+                                bankError? <p style={{width:'182px' , margin:'0 0 0 5px', color:'red', fontFamily: '"Nunito"  ,sans-serif', fontWeight:'bold'}}>{bankError}</p> : ''
+                            } */}
+                        </div>
+                    </div>
+                    <div style={{ width: '100%', display: 'flex', justifyContent: 'start', gap: '60px' }}>
+                        <div style={{ width: '40%', display: 'flex', flexDirection: 'column'}}>
+                            <label style={{ marginBottom: '0', width: '100%', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', color: 'rgb(183, 220, 233)' }}>Страна</label>
+                            <input onChange={(e)=> {setCountry(e.target.value)}}  style={inputStyle} placeholder='Страна' />
+                            {/* {
+                                recipientError? <p style={{width:'100%' , margin:'0 0 0 5px', color:'red', fontFamily: '"Nunito"  ,sans-serif', fontWeight:'bold'}}>{recipientError}</p> : ''
+                            } */}
+                        </div>
+                    </div>
                     <div>
                         {
-                            iban1 && bic && recipient && bank
+                            iban1 && recipient && bank
                                 ? <button
                                     onClick={Create}
                                     style={{
@@ -296,6 +355,72 @@ export default function P2PTransactionsBody() {
                                         cursor: 'pointer'
                                     }}>
                                     <DeleteOutlineIcon />Удалить
+                                </button>
+                        }
+
+                    </div>
+                </Box>
+            </Modal>
+            <Modal
+                open={openEdit}
+                onClose={handleEditClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <h2 style={{ fontFamily: "'Nunito',sans-serif", color: 'rgb(183, 220, 233)', marginTop: '0' }}>Изменить IBAN</h2>
+                    <div style={{ width: '100%'}}>
+                            <label style={{ color: 'white', width: '100%', fontFamily: "'Nunito',sans-serif" }}>IBAN</label>
+                            <select value={ibanToDelete} onChange={(e) => { setIbanToDelete(e.target.value); setIbanErrorToDelete('') }} style={{ outline: 'none', padding: '15px 20px', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', width: '100%' }} placeholder='Бренд'>
+                                <option value="">None</option>
+                                {ibans.map(el => <option style={{ width: '300px', wordBreak: 'break-all' }} value={el.IBAN} key={el.IBAN}>{el.IBAN}</option>)}
+                            </select>
+                            {
+                                ibanErrorToDelete && <p style={{ color: 'red', fontSize: '16px', margin: '0 0 0 5px', fontFamily: "'Nunito',sans-serif", fontWeight: 'bold' }}>{ibanErrorToDelete}</p>
+                            }
+                    </div>
+                    <label className="lns-checkbox">
+                                <input type="checkbox" value={limit} onChange={(e) => setLimit(e.target.checked)} />
+                                <span>Спам</span>
+                            </label>
+                    <div>
+                        {
+                            ibanToDelete
+                                ? <button
+                                    onClick={SetLimit}
+                                    style={{
+                                        border: 'none',
+                                        padding: '15px',
+                                        borderRadius: '8px',
+                                        backgroundColor: 'rgb(56, 182, 255)',
+                                        fontFamily: "'Nunito',sans-serif",
+                                        fontWeight: '600',
+                                        color: 'white',
+                                        fontSize: '16px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '5px',
+                                        cursor: 'pointer'
+                                    }}>
+                                    Изменить
+                                </button>
+                                : <button
+                                    onClick={CheckToEdit}
+                                    style={{
+                                        border: '1px solid rgb(56, 182, 255)',
+                                        padding: '15px',
+                                        borderRadius: '8px',
+                                        background: 'none',
+                                        fontFamily: "'Nunito',sans-serif",
+                                        fontWeight: '600',
+                                        color: 'white',
+                                        fontSize: '16px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '5px',
+                                        cursor: 'pointer'
+                                    }}>
+                                    Изменить
                                 </button>
                         }
 

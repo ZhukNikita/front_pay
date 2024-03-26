@@ -66,7 +66,7 @@ export default function ShpTransactionsList({ transactions, isLoading, setTransa
   useEffect(() => {
     if (transactions.length > 0) {
       const filtered = transactions.filter(
-        (transaction) => transaction.metadata?.clientName?.toLowerCase().includes(search.toLowerCase())
+        (transaction) => transaction.brand?.toLowerCase().includes(search.toLowerCase())
       );
       setFilteredTransactions(filtered);
       setCurrentPage(1);
@@ -79,7 +79,7 @@ export default function ShpTransactionsList({ transactions, isLoading, setTransa
   const indexOfFirstTransactions = indexOfLastTransactions - transactionsPerPage;
   const currentTransactions = filteredTransactions.slice(indexOfFirstTransactions, indexOfLastTransactions);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
+  console.log(transactions);
   return (
     <div className={styles.transactionsList}>
       <div className={styles.search}>

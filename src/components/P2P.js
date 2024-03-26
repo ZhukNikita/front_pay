@@ -4,16 +4,20 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import Swal from 'sweetalert2';
 import Clipboard from 'react-clipboard.js';
 import secureLocalStorage from 'react-secure-storage';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import $api from '../axios';
+import WarningIcon from '@mui/icons-material/Warning';
 
 export default function P2P() {
   const [url, setUrl] = useState('');
   const [recipient, setRecipient] = useState('');
   const [bank, setBank] = useState('');
   const [bic, setBic] = useState('');
+  const [accountNumber, setAccountNumber] = useState('');
+  const [countryCode, setCountryCode] = useState('');
+  const [limit, setLimit] = useState('');
   const [seconds, setSeconds] = useState(180);
-
+  const {country} = useParams()
   useEffect(() => {
     let countdownWorker;
 
@@ -60,12 +64,15 @@ export default function P2P() {
   useEffect(() => {
     if (seconds === 180) {
       $api
-        .get('/p2p')
+        .get(`/p2p/${country}`)
         .then((response) => {
           setUrl(response.data.IBAN);
           setRecipient(response.data.Recipient);
           setBank(response.data.Bank);
           setBic(response.data.BIC);
+          setAccountNumber(response.data.accountNumber);
+          setCountryCode(response.data.countryCode);
+          setLimit(response.data.isLimit)
         })
         .catch((error) => {
           console.error('Ошибка:', error);
@@ -138,6 +145,34 @@ export default function P2P() {
                 <h3 style={{ width: '210px', wordBreak: 'break-all' }}>''</h3>
               )}
             </div>
+            <div className={styles.credits}>
+              <span>Номер счёта</span>
+              {accountNumber ? (
+                <h3 style={{ width: '200px', wordBreak: 'break-all' }}>{accountNumber}</h3>
+              ) : (
+                <h3 style={{ width: '210px', wordBreak: 'break-all' }}>''</h3>
+              )}
+            </div>
+            <div className={styles.credits}>
+              <span>Код страны</span>
+              {countryCode ? (
+                <h3 style={{ width: '200px', wordBreak: 'break-all' }}>{countryCode}</h3>
+              ) : (
+                <h3 style={{ width: '210px', wordBreak: 'break-all' }}>''</h3>
+              )}
+            </div>
+            <div className={styles.credits} style={{width:'100%'}}>
+              {!limit || limit == 0 ? (
+                <h3 style={{ width: '200px', wordBreak: 'break-all' }}></h3>
+              ) : (
+                <div style={{ backgroundColor: 'white', width: '100%', borderRadius: '7px' }}>
+                  <div style={{ backgroundColor: 'rgba(255, 237, 193, 0.5)', width: 'calc(100% - 2px)', borderRadius: '8px', border: '1px solid #FFECA1', height: 'calc(100% - 2px)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
+                      <WarningIcon sx={{ color: 'red', marginLeft: '10px' }} />
+                      <p style={{ fontSize: '15px', fontFamily: "'Nunito',sans-serif", fontWeight: '600', marginRight: '10px', color: 'red' }}>Возможно данные реквизиты в спамe</p>
+                  </div>
+                </div>
+              )}
+            </div>             
           </div>
           {
             url ? <Clipboard data-clipboard-text={`${url + '\n' + recipient + '\n' + bank + '\n' + bic}`}>
