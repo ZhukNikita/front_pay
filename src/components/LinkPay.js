@@ -27,7 +27,7 @@ export default function LinkPay() {
       setIsLoading(true)
       if (amount && currency) {
         const brand = secureLocalStorage.getItem('userBrand');
-        const {data} = await  $api.post('/createLink',{amount : amount * 100,currency,brand})
+        const {data} = await  $api.post('/createLink',{amount : amount * 100,currency : currency.toUpperCase(),brand})
         console.log(data)
         setUrl(data.paymentUrl)
         setIsLoading(false)
