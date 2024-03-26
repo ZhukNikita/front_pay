@@ -41,7 +41,7 @@ export default function NowPayTransactionsBody() {
     const fetchData = async () => {
       setIsLoading(true)
       try {
-        const { data } = await $api.post('/getShpTransactions',{brand: secureLocalStorage.getItem('userBrand')})
+        const { data } = await $api.post('/getAllTransactionsNow',{createdBy: secureLocalStorage.getItem('userId')})
         if (data) {
             setTransactions(data)
           setIsLoading(false)
@@ -92,7 +92,7 @@ export default function NowPayTransactionsBody() {
   return (
     <div className={styles.body}>
       <div className={styles.header}>
-        <h1>Транзакции Shp.ee</h1>
+        <h1>Транзакции NowPay</h1>
       </div>
       <NowPayTransactionsList transactions={transactions} isLoading={isLoading} setTransactions={setTransactions} />
       {/*<div className={styles.shpStats}>*/}
