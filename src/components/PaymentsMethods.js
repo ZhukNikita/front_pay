@@ -79,6 +79,13 @@ export default function PaymentsMethods() {
             link:'/nowPay',
             instruction:[],
             brands: ['AdminBrand']
+        },
+        {
+            id:11,
+            name: 'PrMoney',
+            link:'/prmoney',
+            instruction:[],
+            brands: ['AdminBrand']
         }
     ]
 

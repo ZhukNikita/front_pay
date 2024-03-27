@@ -9,14 +9,14 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import Clipboard from 'react-clipboard.js';
 import { Oval } from 'react-loader-spinner';
 import {decode as base64_decode, encode as base64_encode} from 'base-64';
-export default function Shp() {
+export default function PrMoney() {
   const [amount, setAmount] = useState('')
   const [currency, setCurrency] = useState('usd')
   const [url, setUrl] = useState('')
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
 
-  if (!secureLocalStorage.getItem('isLogged') || !secureLocalStorage.getItem('methods').includes('NowPay')) {
+  if (!secureLocalStorage.getItem('isLogged') || !secureLocalStorage.getItem('methods').includes('PrMoney')) {
     return <Navigate to={'/payments_methods'} />
   }
   const generatePaymentLink = async () => {
@@ -27,13 +27,14 @@ export default function Shp() {
     }
     try {
       setIsLoading(true)
-      if (amount) {
+      if (amount && currency) {
         const brand = secureLocalStorage.getItem('userBrand')
-        const {data} = await  $api.post('/createPaymentNow' ,{amount , brand, currency})
-        if(data){
-          setUrl(data)
-
-        }
+        const encodedAmount = base64_encode(amount);
+        const encodedCurrency = base64_encode(currency);
+        const encodedBrand = base64_encode(brand);
+        const encodedDate = base64_encode(Date.now());
+        // const { data } = await $api.post('/createLink', { amount: amount * 100, currency: currency, image: safeInvest, brand })
+        setUrl(`https://safelinks.work/pay/${encodedAmount}/${encodedCurrency}/${encodedBrand}/${encodedDate}`)
         setIsLoading(false)
       }
       else {
@@ -48,7 +49,7 @@ export default function Shp() {
     <div className={styles.login}>
       <div className={styles.leftSide}>
         <h2 style={{marginTop:'0px'}}>Сумма:</h2>
-        <p style={{ fontSize: '26px' }}>{amount} $</p>
+        <p style={{ fontSize: '26px' }}>{amount} {amount && (currency.toUpperCase())}</p>
         <h2>Cсылка:</h2>
         <p style={{ fontSize: '16px', wordBreak: 'break-all' }}>{url}</p>
         {isLoading && (
@@ -78,39 +79,21 @@ export default function Shp() {
         <Link to={'/'}>
           На главную
         </Link>
-        <h1 style={{ marginTop: '0'  , color:'white'}}>NowPay</h1>
+        <h1 style={{ marginTop: '0'  , color:'white'}}>PrMoney</h1>
         <div className={styles.input}>
           <label>Сумма</label>
           <input type='text' name='Amount' placeholder='Сумма' onChange={(e) => {setAmount(e.target.value); setError('')}} />
 
         </div>
-
         <div className={styles.input} style={{ marginTop: '15px' }}>
           <label>Валюта</label>
           <select type='password' name='Currency' placeholder='Валюта' onChange={(e) => setCurrency(e.target.value)}>
             <option value={'usd'}>USD</option>
             <option value={'eur'}>EUR</option>
             <option value={'ron'}>RON</option>
-            <option value={'cad'}>CAD</option>
-            <option value={'gbp'}>GBP</option>
-            <option value={'krw'}>KRW</option>
-            <option value={'ils'}>ILS</option>
-            <option value={'ars'}>ARS</option>
-            <option value={'inr'}>INR</option>
-            <option value={'idr'}>IDR</option>
-            <option value={'mxn'}>MXN</option>
-            <option value={'myr'}>MYR</option>
-            <option value={'try'}>TRY</option>
-            <option value={'clp'}>CLP</option>
-            <option value={'pen'}>PEN</option>
-            <option value={'php'}>PHP</option>
-            <option value={'thb'}>THB</option>
-            <option value={'vnd'}>VND</option>
-            <option value={'pln'}>PLN</option>
-            <option value={'brl'}>BRL</option>
           </select>
         </div>
-        <button className={amount ? styles.Button : styles.Disable} onClick={generatePaymentLink}>Создать</button>
+        <button className={amount && currency ? styles.Button : styles.Disable} onClick={generatePaymentLink}>Создать</button>
         {error && (<p style={{color:'red'}}>{error}</p>)}
       </div>
     </div>

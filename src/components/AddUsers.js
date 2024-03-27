@@ -57,6 +57,7 @@ export default function AddUsers() {
     const [isAdvCashCheck, setIsAdvCashCheck] = React.useState(false);
     const [isLinkPayCheck, setIsLinkPayCheck] = React.useState(false);
     const [isNowPayCheck, setIsNowPayCheck] = React.useState(false);
+    const [isPrMoneyCheck, setIsPrMoneyCheck] = React.useState(false);
     const [selectedPayments, setSelectedPayments] = React.useState([]);
     const [openBrandModal, setOpenBrandModal] = React.useState(false);
     const [openDeleteBrandModal, setOpenDeleteBrandModal] = React.useState(false);
@@ -76,6 +77,7 @@ export default function AddUsers() {
         setIsRuCassaCheck(false)
         setIsLinkPayCheck(false)
         setIsNowPayCheck(false)
+        setIsPrMoneyCheck(false)
         setChoosenBrands([])
         setRole('')
         setLogin('')
@@ -112,6 +114,13 @@ export default function AddUsers() {
                 }
             } else {
                 updatedSelectedPayments = updatedSelectedPayments.filter(el => el !== '9');
+            }
+            if (isPrMoneyCheck === true) {
+                if (!selectedPayments.includes('10')) {
+                    updatedSelectedPayments.push('10');
+                }
+            } else {
+                updatedSelectedPayments = updatedSelectedPayments.filter(el => el !== '10');
             }
             if (isLinkPayCheck === true) {
                 if (!selectedPayments.includes('8')) {
@@ -165,7 +174,7 @@ export default function AddUsers() {
 
             return updatedSelectedPayments;
         });
-    }, [isPinPayCheck, isP2PCheck, isInsirexCheck, isWLXCheck, isShpCheck,isAdvCashCheck,isRuCassaCheck, isLinkPayCheck, isNowPayCheck]);
+    }, [isPinPayCheck, isP2PCheck, isInsirexCheck, isWLXCheck, isShpCheck,isAdvCashCheck,isRuCassaCheck, isLinkPayCheck, isNowPayCheck, isPrMoneyCheck]);
 
     const handleCloseSnack = (event, reason) => {
         if (reason === 'clickaway') {
@@ -431,6 +440,10 @@ export default function AddUsers() {
                             <label className="lns-checkbox">
                                 <input type="checkbox" value={isNowPayCheck} onChange={(e) => setIsNowPayCheck(e.target.checked)} />
                                 <span>NowPay</span>
+                            </label>
+                            <label className="lns-checkbox">
+                                <input type="checkbox" value={isPrMoneyCheck} onChange={(e) => setIsPrMoneyCheck(e.target.checked)} />
+                                <span>PrMoney</span>
                             </label>
                         </div>
                         {

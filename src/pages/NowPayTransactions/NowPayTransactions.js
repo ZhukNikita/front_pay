@@ -12,7 +12,7 @@ export default function NowPayTransactions() {
   if(secureLocalStorage.getItem('role') === 'User' && secureLocalStorage.getItem('isLogged')){
     return <Navigate to={'/payments_methods'}/>
   }
-  if(!secureLocalStorage.getItem('methods').includes('shp.ee')){
+  if(!secureLocalStorage.getItem('methods').includes('NowPay')){
     return <Navigate to={'/payments_methods'}/>
   }
   return(
