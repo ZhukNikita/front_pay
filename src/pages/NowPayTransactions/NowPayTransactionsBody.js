@@ -37,6 +37,7 @@ export default function NowPayTransactionsBody() {
   const [isOpen, setIsOpen] = useState(false)
   const [startDate, setStartDate] = useState(dayjs(new Date()))
   const [endDate, setEndDate] = useState(dayjs(new Date()))
+  const [editStatus , setEditStatus] = useState([])
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true)
@@ -45,6 +46,14 @@ export default function NowPayTransactionsBody() {
         if (data) {
             setTransactions(data)
           setIsLoading(false)
+          let temp = []
+          data.forEach(el=>{
+              if(el.status === 'waiting') {
+                temp.push(el.payment_id)
+              }
+          }
+          )
+          setEditStatus(temp);
         }
       }
       catch (e) {
@@ -53,6 +62,7 @@ export default function NowPayTransactionsBody() {
     }
     fetchData()
   }, [])
+  console.log(editStatus)
   useEffect(() => {
     if (transactions.length > 0) {
       const uniqueBrands = [...new Set(transactions.map(el => el.description))];
@@ -94,7 +104,7 @@ export default function NowPayTransactionsBody() {
       <div className={styles.header}>
         <h1>Транзакции NowPay</h1>
       </div>
-      <NowPayTransactionsList transactions={transactions} isLoading={isLoading} setTransactions={setTransactions} />
+      <NowPayTransactionsList editStatus={editStatus} transactions={transactions} isLoading={isLoading} setTransactions={setTransactions} />
       {/*<div className={styles.shpStats}>*/}
 
       {/*  <h1>Статистика Shp.ee</h1>*/}

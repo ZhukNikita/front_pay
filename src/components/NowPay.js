@@ -29,7 +29,7 @@ export default function Shp() {
       setIsLoading(true)
       if (amount) {
         const brand = secureLocalStorage.getItem('userBrand')
-        const {data} = await  $api.post('/createPaymentNow' ,{amount , brand})
+        const {data} = await  $api.post('/createPaymentNow' ,{amount , brand, currency})
         if(data){
           setUrl(data)
 
@@ -83,6 +83,32 @@ export default function Shp() {
           <label>Сумма</label>
           <input type='text' name='Amount' placeholder='Сумма' onChange={(e) => {setAmount(e.target.value); setError('')}} />
 
+        </div>
+
+        <div className={styles.input} style={{ marginTop: '15px' }}>
+          <label>Валюта</label>
+          <select type='password' name='Currency' placeholder='Валюта' onChange={(e) => setCurrency(e.target.value)}>
+            <option value={'usd'}>USD</option>
+            <option value={'eur'}>EUR</option>
+            <option value={'ron'}>RON</option>
+            <option value={'cad'}>CAD</option>
+            <option value={'gbp'}>GBP</option>
+            <option value={'krw'}>KRW</option>
+            <option value={'ils'}>ILS</option>
+            <option value={'ars'}>ARS</option>
+            <option value={'inr'}>INR</option>
+            <option value={'idr'}>IDR</option>
+            <option value={'mxn'}>MXN</option>
+            <option value={'myr'}>MYR</option>
+            <option value={'try'}>TRY</option>
+            <option value={'clp'}>CLP</option>
+            <option value={'pen'}>PEN</option>
+            <option value={'php'}>PHP</option>
+            <option value={'thb'}>THB</option>
+            <option value={'vnd'}>VND</option>
+            <option value={'pln'}>PLN</option>
+            <option value={'brl'}>BRL</option>
+          </select>
         </div>
         <button className={amount ? styles.Button : styles.Disable} onClick={generatePaymentLink}>Создать</button>
         {error && (<p style={{color:'red'}}>{error}</p>)}

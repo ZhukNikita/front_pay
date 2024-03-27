@@ -4,11 +4,13 @@ import { Pagination } from '@mui/material';
 import LinearProgress from '@mui/material/LinearProgress';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import Transaction from './Transaction';
+import $api from "../../axios";
+import secureLocalStorage from "react-secure-storage";
 const arrowDownStyle = { width: '17px', transition: 'all 0.3s ease', transform: 'rotate(180deg)', cursor: 'pointer' }
 const arrowUpStyle = { width: '17px', transition: 'all 0.3s ease', transform: 'rotate(0deg)', cursor: 'pointer' }
 
 
-export default function NowPayTransactionsList({ transactions, isLoading, setTransactions }) {
+export default function NowPayTransactionsList({ transactions, isLoading, setTransactions,editStatus }) {
 
   const [search, setSearch] = useState('')
 
@@ -79,7 +81,19 @@ export default function NowPayTransactionsList({ transactions, isLoading, setTra
   const indexOfFirstTransactions = indexOfLastTransactions - transactionsPerPage;
   const currentTransactions = filteredTransactions.slice(indexOfFirstTransactions, indexOfLastTransactions);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-  console.log(transactions);
+  const UpdateStatuses = async() =>{
+    try{
+      const {data} = await $api.post('/updateStatusesNow',{editStatus})
+      if(data){
+        const transactions = await $api.post('/getAllTransactionsNow',{createdBy: secureLocalStorage.getItem('userId')})
+        if (transactions) {
+          setTransactions(transactions)
+        }
+      }
+    }catch (e) {
+      console.log(e)
+    }
+  }
   return (
     <div className={styles.transactionsList}>
       <div className={styles.search}>
@@ -92,6 +106,7 @@ export default function NowPayTransactionsList({ transactions, isLoading, setTra
         {
           isLoading && (<LinearProgress sx={{ width: '75%' }} color='inherit' />)
         }
+        <button onClick={UpdateStatuses}>Обновить статусы</button>
       </div>
       <div className={styles.header}>
         <h3 className={styles.date}>Дата

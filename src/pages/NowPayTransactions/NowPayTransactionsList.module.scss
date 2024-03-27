@@ -10,7 +10,7 @@
     .search {
         margin-left: 15px;
         margin-bottom: 15px;
-        @include flex(center,start);
+        @include flex(center,space-between);
         gap: 50px;
         input {
             padding: 15px;
