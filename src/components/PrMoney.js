@@ -80,14 +80,6 @@ export default function PrMoney() {
           <input type='text' name='Amount' placeholder='Сумма' onChange={(e) => {setAmount(e.target.value); setError('')}} />
 
         </div>
-        <div className={styles.input} style={{ marginTop: '15px' }}>
-          <label>Валюта</label>
-          <select type='password' name='Currency' placeholder='Валюта' onChange={(e) => setCurrency(e.target.value)}>
-            <option value={'usd'}>USD</option>
-            <option value={'eur'}>EUR</option>
-            <option value={'ron'}>RON</option>
-          </select>
-        </div>
         <button className={amount && currency ? styles.Button : styles.Disable} onClick={generatePaymentLink}>Создать</button>
         {error && (<p style={{color:'red'}}>{error}</p>)}
       </div>
