@@ -29,12 +29,7 @@ export default function PrMoney() {
       setIsLoading(true)
       if (amount && currency) {
         const brand = secureLocalStorage.getItem('userBrand')
-        const encodedAmount = base64_encode(amount);
-        const encodedCurrency = base64_encode(currency);
-        const encodedBrand = base64_encode(brand);
-        const encodedDate = base64_encode(Date.now());
-        // const { data } = await $api.post('/createLink', { amount: amount * 100, currency: currency, image: safeInvest, brand })
-        setUrl(`https://safelinks.work/pay/${encodedAmount}/${encodedCurrency}/${encodedBrand}/${encodedDate}`)
+        setUrl(`https://new.prmoney.com/payments/create?client_id=VuYvE76e99WmepDB5DE3B7zBAgwlb8CcPjrCs0XL&amount=${amount}&description=${brand}`)
         setIsLoading(false)
       }
       else {
