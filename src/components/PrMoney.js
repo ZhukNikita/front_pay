@@ -9,14 +9,15 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import Clipboard from 'react-clipboard.js';
 import { Oval } from 'react-loader-spinner';
 import {decode as base64_decode, encode as base64_encode} from 'base-64';
-export default function PrMoney() {
+export default function Readies() {
   const [amount, setAmount] = useState('')
+  const [email, setEmail] = useState('')
   const [currency, setCurrency] = useState('usd')
   const [url, setUrl] = useState('')
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
 
-  if (!secureLocalStorage.getItem('isLogged') || !secureLocalStorage.getItem('methods').includes('PrMoney')) {
+  if (!secureLocalStorage.getItem('isLogged') || !secureLocalStorage.getItem('methods').includes('Readies')) {
     return <Navigate to={'/payments_methods'} />
   }
   const generatePaymentLink = async () => {
@@ -29,7 +30,7 @@ export default function PrMoney() {
       setIsLoading(true)
       if (amount && currency) {
         const brand = secureLocalStorage.getItem('userBrand')
-        setUrl(`https://new.prmoney.com/payments/create?client_id=VuYvE76e99WmepDB5DE3B7zBAgwlb8CcPjrCs0XL&amount=${amount}&description=${brand}`)
+        setUrl(`https://new.prmoney.com/payments/create?client_id=VuYvE76e99WmepDB5DE3B7zBAgwlb8CcPjrCs0XL&amount=${amount}&description=${brand}&client_email=${email}`)
         setIsLoading(false)
       }
       else {
@@ -74,10 +75,15 @@ export default function PrMoney() {
         <Link to={'/'}>
           На главную
         </Link>
-        <h1 style={{ marginTop: '0'  , color:'white'}}>PrMoney</h1>
+        <h1 style={{ marginTop: '0'  , color:'white'}}>Readies</h1>
         <div className={styles.input}>
           <label>Сумма</label>
           <input type='text' name='Amount' placeholder='Сумма' onChange={(e) => {setAmount(e.target.value); setError('')}} />
+
+        </div>
+        <div className={styles.input}>
+          <label>Email</label>
+          <input type='text' name='Email' placeholder='Email' onChange={(e) => {setEmail(e.target.value); setError('')}} />
 
         </div>
         <button className={amount && currency ? styles.Button : styles.Disable} onClick={generatePaymentLink}>Создать</button>

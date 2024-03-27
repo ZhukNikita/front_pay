@@ -82,8 +82,8 @@ export default function PaymentsMethods() {
         },
         {
             id:11,
-            name: 'PrMoney',
-            link:'/prmoney',
+            name: 'Readies',
+            link:'/readies',
             instruction:[],
             brands: ['AdminBrand']
         }

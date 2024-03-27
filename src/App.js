@@ -40,6 +40,7 @@ import LinkPayTransactions from './pages/LinkPayTransactions/LinkPayTransactions
 import P2PChoose from './pages/P2PTransations/P2PChoose.js';
 import NowPayTransactions from "./pages/NowPayTransactions/NowPayTransactions";
 import PrMoney from "./components/PrMoney";
+import Readies from "./components/PrMoney";
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
@@ -141,7 +142,7 @@ function App() {
         <Route path='/rucassa' element={<RuCassa />} />
         <Route path='/advcash' element={<AdvCash />} />
         <Route path='/shp' element={<Shp />} />
-        <Route path='/prmoney' element={<PrMoney />} />
+        <Route path='/readies' element={<Readies />} />
         <Route path='/nowPay' element={<NowPay />} />
         <Route path='/linkpay' element={<LinkPay />} />
       </Routes>
