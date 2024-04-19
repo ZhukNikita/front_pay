@@ -145,6 +145,7 @@ export default function P2PTransactionsBody() {
                 setSnack(true)
                 setSnackType('success')
                 setSnackMessage('IBAN успешно изменён!')
+                await $api.get('/p2pGetAll').then(res => setIbans(res.data))
             }
         }catch(e){
             console.log(e)
@@ -159,6 +160,8 @@ export default function P2PTransactionsBody() {
                 setSnack(true)
                 setSnackType('success')
                 setSnackMessage('IBAN успешно изменён!')
+                await $api.get('/p2pGetAll').then(res => setIbans(res.data))
+
             }
         }catch(e){
             console.log(e)
@@ -500,7 +503,7 @@ export default function P2PTransactionsBody() {
                             <label style={{ color: 'white', width: '100%', fontFamily: "'Nunito',sans-serif" }}>IBAN</label>
                             <select value={ibanToDelete} onChange={(e) => { setIbanToDelete(e.target.value); setIbanErrorToDelete('') }} style={{ outline: 'none', padding: '15px 20px', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', width: '100%' }} placeholder='Бренд'>
                                 <option value="">None</option>
-                                {ibans.map(el => <option style={{ width: '300px', wordBreak: 'break-all' }} value={el.IBAN} key={el.IBAN}>{el.IBAN}</option>)}
+                                {ibans?.filter(elem => elem.Status === '0')?.map(el => <option style={{ width: '300px', wordBreak: 'break-all' }} value={el.IBAN} key={el.IBAN}>{el.IBAN}</option>)}
                             </select>
                             {
                                 ibanErrorToDelete && <p style={{ color: 'red', fontSize: '16px', margin: '0 0 0 5px', fontFamily: "'Nunito',sans-serif", fontWeight: 'bold' }}>{ibanErrorToDelete}</p>
