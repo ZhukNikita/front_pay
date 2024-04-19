@@ -13,14 +13,13 @@ import MuiAlert from '@mui/material/Alert';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import $api from '../../axios'
 import BlockIcon from '@mui/icons-material/Block';
-import axios from 'axios'
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { renderTimeViewClock } from '@mui/x-date-pickers/timeViewRenderers';
 import dayjs from 'dayjs'
-import moment from 'moment'
+import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import utc from 'dayjs/plugin/utc'
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -47,9 +46,11 @@ export default function P2PTransactionsBody() {
     const [open, setOpen] = useState(false);
     const [openDelete, setOpenDelete] = useState(false);
     const [openEdit, setOpenEdit] = useState(false);
+    const [openEditIban, setOpenEditIban] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleOpenDelete = () => setOpenDelete(true);
     const handleOpenEdit = () => setOpenEdit(true);
+    const handleOpenEditIban = () => setOpenEditIban(true);
     const [iban1, setIban] = useState('')
     const [ibanToDelete, setIbanToDelete] = useState('')
     const [ibanError, setIbanError] = useState('')
@@ -69,7 +70,6 @@ export default function P2PTransactionsBody() {
     const [snackMessage, setSnackMessage] = useState('');
     const [snackType, setSnackType] = useState('');
     const [period , setPeriod] = useState()
-    console.log(new Date(period))
     dayjs.extend(utc)
     const handleClose = () => {
         setOpen(false);
@@ -87,6 +87,12 @@ export default function P2PTransactionsBody() {
     };
     const handleEditClose = () => {
         setOpenEdit(false);
+        setIbanToDelete('');
+        setLimit(false)
+        setPeriod()
+    };
+    const handleEditIbanClose = () => {
+        setOpenEditIban(false);
         setIbanToDelete('');
         setLimit(false)
     };
@@ -127,7 +133,6 @@ export default function P2PTransactionsBody() {
             return
             
         }
-        
         if(dayjs(period).utc() < dayjs(new Date(Date.now())).utc()){
             setSnack(true)
             setSnackType('error')
@@ -145,6 +150,20 @@ export default function P2PTransactionsBody() {
             console.log(e)
         }finally{
             handleEditClose()
+        }
+    }
+    const unBan = async () =>{
+        try{
+            const {data} = await $api.post('/unBanIban' , {iban:ibanToDelete})
+            if(data){
+                setSnack(true)
+                setSnackType('success')
+                setSnackMessage('IBAN успешно изменён!')
+            }
+        }catch(e){
+            console.log(e)
+        }finally{
+            handleEditIbanClose()
         }
     }
     const Create = async() => {
@@ -186,6 +205,7 @@ export default function P2PTransactionsBody() {
             handleDeleteClose()
         }
     }
+    console.log(ibans)
     return (
         <div className={styles.body}>
             <div className={styles.header}>
@@ -195,6 +215,7 @@ export default function P2PTransactionsBody() {
                         secureLocalStorage.getItem('role') === 'SuperAdmin' ?
                         <>
                         <button onClick={handleOpenEdit}><BlockIcon />Внести в спам</button>
+                        <button onClick={handleOpenEditIban}><CheckCircleRoundedIcon />Убрать из спама</button>
                         <button onClick={handleOpen}><AccountBalanceIcon />Добавить IBAN</button>
                     <button onClick={handleOpenDelete} style={{backgroundColor:'#ad2824' , color:'#ffa6b2'}}><DeleteOutlineIcon />Удалить IBAN</button>
 
@@ -423,10 +444,6 @@ export default function P2PTransactionsBody() {
                                 />
                             </DemoContainer>
                         </LocalizationProvider>
-                            <label className="lns-checkbox">
-                                <input type="checkbox" value={limit} onChange={(e) => setLimit(e.target.checked)} />
-                                <span>Спам</span>
-                            </label>
                     <div>
                         {
                             ibanToDelete
@@ -465,6 +482,68 @@ export default function P2PTransactionsBody() {
                                         cursor: 'pointer'
                                     }}>
                                     Изменить
+                                </button>
+                        }
+
+                    </div>
+                </Box>
+            </Modal>
+            <Modal
+                open={openEditIban}
+                onClose={handleEditIbanClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <h2 style={{ fontFamily: "'Nunito',sans-serif", color: 'rgb(183, 220, 233)', marginTop: '0' }}>Изменить IBAN</h2>
+                    <div style={{ width: '100%'}}>
+                            <label style={{ color: 'white', width: '100%', fontFamily: "'Nunito',sans-serif" }}>IBAN</label>
+                            <select value={ibanToDelete} onChange={(e) => { setIbanToDelete(e.target.value); setIbanErrorToDelete('') }} style={{ outline: 'none', padding: '15px 20px', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', width: '100%' }} placeholder='Бренд'>
+                                <option value="">None</option>
+                                {ibans.map(el => <option style={{ width: '300px', wordBreak: 'break-all' }} value={el.IBAN} key={el.IBAN}>{el.IBAN}</option>)}
+                            </select>
+                            {
+                                ibanErrorToDelete && <p style={{ color: 'red', fontSize: '16px', margin: '0 0 0 5px', fontFamily: "'Nunito',sans-serif", fontWeight: 'bold' }}>{ibanErrorToDelete}</p>
+                            }
+                    </div>
+                    <div>
+                        {
+                            ibanToDelete
+                                ? <button
+                                    onClick={unBan}
+                                    style={{
+                                        border: 'none',
+                                        padding: '15px',
+                                        borderRadius: '8px',
+                                        backgroundColor: 'rgb(56, 182, 255)',
+                                        fontFamily: "'Nunito',sans-serif",
+                                        fontWeight: '600',
+                                        color: 'white',
+                                        fontSize: '16px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '5px',
+                                        cursor: 'pointer'
+                                    }}>
+                                    Убрать из спама
+                                </button>
+                                : <button
+                                    onClick={CheckToEdit}
+                                    style={{
+                                        border: '1px solid rgb(56, 182, 255)',
+                                        padding: '15px',
+                                        borderRadius: '8px',
+                                        background: 'none',
+                                        fontFamily: "'Nunito',sans-serif",
+                                        fontWeight: '600',
+                                        color: 'white',
+                                        fontSize: '16px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '5px',
+                                        cursor: 'pointer'
+                                    }}>
+                                    Убрать из спама
                                 </button>
                         }
 
