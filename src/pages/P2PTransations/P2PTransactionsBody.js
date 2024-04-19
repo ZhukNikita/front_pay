@@ -14,6 +14,14 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import $api from '../../axios'
 import BlockIcon from '@mui/icons-material/Block';
 import axios from 'axios'
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import { renderTimeViewClock } from '@mui/x-date-pickers/timeViewRenderers';
+import dayjs from 'dayjs'
+import moment from 'moment'
+import utc from 'dayjs/plugin/utc'
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
@@ -60,7 +68,9 @@ export default function P2PTransactionsBody() {
     const [limit, setLimit] = useState(false);
     const [snackMessage, setSnackMessage] = useState('');
     const [snackType, setSnackType] = useState('');
-
+    const [period , setPeriod] = useState()
+    console.log(new Date(period))
+    dayjs.extend(utc)
     const handleClose = () => {
         setOpen(false);
         setIban('');
@@ -110,9 +120,22 @@ export default function P2PTransactionsBody() {
         setSnack(false);
     };
     const SetLimit = async () =>{
-        console.log(limit)
+        if(!period){
+            setSnack(true)
+            setSnackType('error')
+            setSnackMessage('Не выбрано время спама!')
+            return
+            
+        }
+        
+        if(dayjs(period).utc() < dayjs(new Date(Date.now())).utc()){
+            setSnack(true)
+            setSnackType('error')
+            setSnackMessage('Время не может быть меньше текущего!')
+            return
+        }
         try{
-            const {data} = await $api.post('/setIbanLimit' , {iban:ibanToDelete , limit: limit? '1' : '0'})
+            const {data} = await $api.post('/setIbanLimit' , {iban:ibanToDelete , limit: limit? '1' : '0' ,period : dayjs(period).utc().format('YYYY-MM-DD HH:mm')})
             if(data){
                 setSnack(true)
                 setSnackType('success')
@@ -379,7 +402,28 @@ export default function P2PTransactionsBody() {
                                 ibanErrorToDelete && <p style={{ color: 'red', fontSize: '16px', margin: '0 0 0 5px', fontFamily: "'Nunito',sans-serif", fontWeight: 'bold' }}>{ibanErrorToDelete}</p>
                             }
                     </div>
-                    <label className="lns-checkbox">
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DemoContainer components={['TimePicker']}>
+                                <TimePicker
+                                onChange={e=> setPeriod(e)}
+                                sx={
+                                    {
+                                        backgroundColor: 'white',
+                                        paddingTop: '0px',
+                                        borderRadius: '8px',
+                                    }
+                                }
+                                ampm={false}
+                                label="Ban Time"
+                                viewRenderers={{
+                                    hours: renderTimeViewClock,
+                                    minutes: renderTimeViewClock,
+                                    seconds: renderTimeViewClock,
+                                }}
+                                />
+                            </DemoContainer>
+                        </LocalizationProvider>
+                            <label className="lns-checkbox">
                                 <input type="checkbox" value={limit} onChange={(e) => setLimit(e.target.checked)} />
                                 <span>Спам</span>
                             </label>
