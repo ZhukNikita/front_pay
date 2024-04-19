@@ -29,7 +29,7 @@ export default function P2PChoose(){
             <div className={styles.body}>
                 {
                     countries.map(el=> <Link to={`/p2p/${el.country}`} key={el.country} className={styles.country}>
-                        <img src={Countries.find(elem=> (elem.name.common.includes(el.country) || elem.altSpellings.includes(el.country.slice(0,2))))?.flags?.png} alt='Contry' width={30}/>
+                        <img src={Countries.find(elem=> (elem.name.common.includes(el.country) || elem.altSpellings.includes(el.country.slice(0,2))))?.flags?.png} alt='Contry' width={50}/>
                         <p>{el.country}</p>
                     </Link>)
                 }
