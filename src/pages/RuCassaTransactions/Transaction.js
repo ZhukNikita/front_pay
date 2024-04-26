@@ -57,6 +57,7 @@ export default function Transaction({ transaction, setTransactions }) {
             console.log(e)
         }
     }
+    console.log(secureLocalStorage.getItem('role'))
     return (
         <div className={styles.transaction} style={{ position: 'relative' ,textDecoration:'none'}}>
             <div className={styles.body}>
@@ -71,9 +72,9 @@ export default function Transaction({ transaction, setTransactions }) {
                     {getStatus(transaction)}
                 </h3>
                 {
-                    transaction.status === 'WAIT' || !transaction.status  && (
+                    transaction.status === 'WAIT' && secureLocalStorage.getItem('role') === 'SuperAdmin'?
                         <h3 style={{ width: '6vw' , display:'flex' , alignItems:'center' , cursor:'pointer' }}><UpdateIcon onClick={()=>HandleUpdate(transaction.id)}/></h3>
-                    )
+                    :''
                 }
                 {/* <input
                     ref={fileInputRef}
