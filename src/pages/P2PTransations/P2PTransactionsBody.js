@@ -1,4 +1,4 @@
-import React,{ useState } from 'react'
+import React, { useState } from 'react'
 import styles from './P2PTransactionsBody.module.scss'
 import P2PTransactionsList from './P2PTransactionsList'
 import secureLocalStorage from 'react-secure-storage'
@@ -21,6 +21,8 @@ import { renderTimeViewClock } from '@mui/x-date-pickers/timeViewRenderers';
 import dayjs from 'dayjs'
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import utc from 'dayjs/plugin/utc'
+import { DateTimePicker } from '@mui/x-date-pickers'
+import moment from 'moment/moment'
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
@@ -69,7 +71,7 @@ export default function P2PTransactionsBody() {
     const [limit, setLimit] = useState(false);
     const [snackMessage, setSnackMessage] = useState('');
     const [snackType, setSnackType] = useState('');
-    const [period , setPeriod] = useState()
+    const [period, setPeriod] = useState()
     dayjs.extend(utc)
     const handleClose = () => {
         setOpen(false);
@@ -96,24 +98,24 @@ export default function P2PTransactionsBody() {
         setIbanToDelete('');
         setLimit(false)
     };
-    const CheckToDelete = () =>{
-        if(!ibanToDelete){
+    const CheckToDelete = () => {
+        if (!ibanToDelete) {
             setIbanErrorToDelete('Выберите IBAN для удаления')
         }
     }
-    const CheckToEdit = () =>{
-        if(!ibanToDelete){
+    const CheckToEdit = () => {
+        if (!ibanToDelete) {
             setIbanErrorToDelete('Выберите IBAN для изменения')
         }
     }
     const Check = () => {
-        if(!iban1){
+        if (!iban1) {
             setIbanError('Введите IBAN')
         }
-        if(!recipient){
+        if (!recipient) {
             setRecipientError('Введите получателя')
         }
-        if(!bank){
+        if (!bank) {
             setBankError('Введите банк получателя')
         }
     }
@@ -125,61 +127,61 @@ export default function P2PTransactionsBody() {
         setSnackMessage('')
         setSnack(false);
     };
-    const SetLimit = async () =>{
-        if(!period){
+    const SetLimit = async () => {
+        if (!period) {
             setSnack(true)
             setSnackType('error')
             setSnackMessage('Не выбрано время спама!')
             return
-            
+
         }
-        if(dayjs(period).utc() < dayjs(new Date(Date.now())).utc()){
+        if (dayjs(period).utc() < dayjs(new Date(Date.now())).utc()) {
             setSnack(true)
             setSnackType('error')
             setSnackMessage('Время не может быть меньше текущего!')
             return
         }
-        try{
-            const {data} = await $api.post('/setIbanLimit' , {iban:ibanToDelete , limit: limit? '1' : '0' ,period : dayjs(period).utc().format('YYYY-MM-DD HH:mm')})
-            if(data){
+        try {
+            const { data } = await $api.post('/setIbanLimit', { iban: ibanToDelete, limit: limit ? '1' : '0', period: dayjs(period).utc().format('YYYY-MM-DD HH:mm') })
+            if (data) {
                 setSnack(true)
                 setSnackType('success')
                 setSnackMessage('IBAN успешно изменён!')
                 await $api.get('/p2pGetAll').then(res => setIbans(res.data))
             }
-        }catch(e){
+        } catch (e) {
             console.log(e)
-        }finally{
+        } finally {
             handleEditClose()
         }
     }
-    const unBan = async () =>{
-        try{
-            const {data} = await $api.post('/unBanIban' , {iban:ibanToDelete})
-            if(data){
+    const unBan = async () => {
+        try {
+            const { data } = await $api.post('/unBanIban', { iban: ibanToDelete })
+            if (data) {
                 setSnack(true)
                 setSnackType('success')
                 setSnackMessage('IBAN успешно изменён!')
                 await $api.get('/p2pGetAll').then(res => setIbans(res.data))
 
             }
-        }catch(e){
+        } catch (e) {
             console.log(e)
-        }finally{
+        } finally {
             handleEditIbanClose()
         }
     }
-    const Create = async() => {
+    const Create = async () => {
         const createdBy = secureLocalStorage.getItem('userId')
         const iban = iban1.replace(/\s/g, "")
-        try{
-           const {data} = await $api.post('/createIban' , {iban,recipient,bank, bic , country, countryCode, accountNumber, createdBy})
+        try {
+            const { data } = await $api.post('/createIban', { iban, recipient, bank, bic, country, countryCode, accountNumber, createdBy })
             await $api.get('/p2pGetAll').then(res => setIbans(res.data))
             setSnack(true)
             setSnackType('success')
             setSnackMessage('IBAN успешно создан')
             return data
-        }catch(e){
+        } catch (e) {
             console.log(e)
             setSnack(true)
             setSnackType('error')
@@ -189,16 +191,16 @@ export default function P2PTransactionsBody() {
             handleClose()
         }
     }
-    const Delete = async() => {
+    const Delete = async () => {
         const createdBy = secureLocalStorage.getItem('userId')
-        try{
-           const {data} = await $api.post('/deleteIban' , {ibanToDelete, createdBy})
+        try {
+            const { data } = await $api.post('/deleteIban', { ibanToDelete, createdBy })
             await $api.get('/p2pGetAll').then(res => setIbans(res.data))
             setSnack(true)
             setSnackType('success')
             setSnackMessage('IBAN успешно удалён')
             return data
-        }catch(e){
+        } catch (e) {
             console.log(e)
             setSnack(true)
             setSnackType('error')
@@ -208,29 +210,28 @@ export default function P2PTransactionsBody() {
             handleDeleteClose()
         }
     }
-    console.log(ibans)
     return (
         <div className={styles.body}>
             <div className={styles.header}>
                 <h1>Транзакции P2P</h1>
                 <div className={styles.buttons}>
-                {
+                    {
                         secureLocalStorage.getItem('role') === 'SuperAdmin' ?
-                        <>
-                        <button onClick={handleOpenEdit}><BlockIcon />Внести в спам</button>
-                        <button onClick={handleOpenEditIban}><CheckCircleRoundedIcon />Убрать из спама</button>
-                        <button onClick={handleOpen}><AccountBalanceIcon />Добавить IBAN</button>
-                    <button onClick={handleOpenDelete} style={{backgroundColor:'#ad2824' , color:'#ffa6b2'}}><DeleteOutlineIcon />Удалить IBAN</button>
+                            <>
+                                <button onClick={handleOpenEdit}><BlockIcon />Внести в спам</button>
+                                <button onClick={handleOpenEditIban}><CheckCircleRoundedIcon />Убрать из спама</button>
+                                <button onClick={handleOpen}><AccountBalanceIcon />Добавить IBAN</button>
+                                <button onClick={handleOpenDelete} style={{ backgroundColor: '#ad2824', color: '#ffa6b2' }}><DeleteOutlineIcon />Удалить IBAN</button>
 
-                            <Link to={'/p2p-deleted-transactions'} className={styles.deletedTransactions}>Удаленные транзакции</Link>
-                        </>
+                                <Link to={'/p2p-deleted-transactions'} className={styles.deletedTransactions}>Удаленные транзакции</Link>
+                            </>
 
                             : <></>
                     }
                 </div>
 
             </div>
-            <P2PTransactionsList ibans={ibans} setIbans={setIbans}/>
+            <P2PTransactionsList ibans={ibans} setIbans={setIbans} />
             <Modal
                 open={open}
                 onClose={handleClose}
@@ -239,33 +240,33 @@ export default function P2PTransactionsBody() {
             >
                 <Box sx={style}>
                     <h2 style={{ fontFamily: "'Nunito',sans-serif", color: 'rgb(183, 220, 233)', marginTop: '0' }}>Добавить IBAN</h2>
-                    <div style={{ width: '100%'}}>
+                    <div style={{ width: '100%' }}>
                         <label style={{ marginBottom: '0', width: '100%', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', color: 'rgb(183, 220, 233)' }}>IBAN</label>
-                        <input onChange={(e)=> {setIban(e.target.value) ; setIbanError('')}}  style={{ outline: 'none', padding: '15px 20px', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', width: '90%' }} placeholder='Введите IBAN' />
+                        <input onChange={(e) => { setIban(e.target.value); setIbanError('') }} style={{ outline: 'none', padding: '15px 20px', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', width: '90%' }} placeholder='Введите IBAN' />
                         {
-                            ibanError? <p style={{ margin:'0 0 0 5px', color:'red', fontFamily: '"Nunito"  ,sans-serif', fontWeight:'bold'}}>{ibanError}</p> : ''
+                            ibanError ? <p style={{ margin: '0 0 0 5px', color: 'red', fontFamily: '"Nunito"  ,sans-serif', fontWeight: 'bold' }}>{ibanError}</p> : ''
                         }
                     </div>
                     <div style={{ width: '100%', display: 'flex', justifyContent: 'start', gap: '60px' }}>
-                        <div style={{ width: '40%', display: 'flex', flexDirection: 'column'}}>
+                        <div style={{ width: '40%', display: 'flex', flexDirection: 'column' }}>
                             <label style={{ marginBottom: '0', width: '100%', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', color: 'rgb(183, 220, 233)' }}>Получатель</label>
-                            <input onChange={(e)=> {setRecipient(e.target.value) ; setRecipientError('')}}  style={inputStyle} placeholder='Получатель' />
+                            <input onChange={(e) => { setRecipient(e.target.value); setRecipientError('') }} style={inputStyle} placeholder='Получатель' />
                             {
-                                recipientError? <p style={{width:'100%' , margin:'0 0 0 5px', color:'red', fontFamily: '"Nunito"  ,sans-serif', fontWeight:'bold'}}>{recipientError}</p> : ''
+                                recipientError ? <p style={{ width: '100%', margin: '0 0 0 5px', color: 'red', fontFamily: '"Nunito"  ,sans-serif', fontWeight: 'bold' }}>{recipientError}</p> : ''
                             }
                         </div>
                         <div style={{ width: '40%', display: 'flex', flexDirection: 'column' }}>
                             <label style={{ marginBottom: '0', width: '100%', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', color: 'rgb(183, 220, 233)' }}>Банк</label>
-                            <input onChange={(e)=> {setBank(e.target.value) ; setBankError('')}} style={inputStyle} placeholder='Банк' />
+                            <input onChange={(e) => { setBank(e.target.value); setBankError('') }} style={inputStyle} placeholder='Банк' />
                             {
-                                bankError? <p style={{width:'182px' , margin:'0 0 0 5px', color:'red', fontFamily: '"Nunito"  ,sans-serif', fontWeight:'bold'}}>{bankError}</p> : ''
+                                bankError ? <p style={{ width: '182px', margin: '0 0 0 5px', color: 'red', fontFamily: '"Nunito"  ,sans-serif', fontWeight: 'bold' }}>{bankError}</p> : ''
                             }
                         </div>
                     </div>
                     <div style={{ width: '100%', display: 'flex', justifyContent: 'start', gap: '60px' }}>
                         <div style={{ width: '40%', display: 'flex', flexDirection: 'column' }}>
                             <label style={{ marginBottom: '0', width: '100%', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', color: 'rgb(183, 220, 233)' }}>BIC Банка</label>
-                            <input onChange={(e)=> {setBic(e.target.value) ; setBicError('')}} style={{ outline: 'none', padding: '15px 20px', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', width: '90%' }} placeholder='BIC Банка' />
+                            <input onChange={(e) => { setBic(e.target.value); setBicError('') }} style={{ outline: 'none', padding: '15px 20px', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', width: '90%' }} placeholder='BIC Банка' />
                             {/* {
                                 bicError? <p style={{width:'182px' , margin:'0 0 0 5px', color:'red', fontFamily: '"Nunito"  ,sans-serif', fontWeight:'bold'}}>{bicError}</p> : ''
                             } */}
@@ -278,25 +279,25 @@ export default function P2PTransactionsBody() {
                         </div>
                     </div>
                     <div style={{ width: '100%', display: 'flex', justifyContent: 'start', gap: '60px' }}>
-                        <div style={{ width: '40%', display: 'flex', flexDirection: 'column'}}>
+                        <div style={{ width: '40%', display: 'flex', flexDirection: 'column' }}>
                             <label style={{ marginBottom: '0', width: '100%', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', color: 'rgb(183, 220, 233)' }}>Номер счёта</label>
-                            <input onChange={(e)=> {setAccountNumber(e.target.value)}}  style={inputStyle} placeholder='Номер счёта' />
+                            <input onChange={(e) => { setAccountNumber(e.target.value) }} style={inputStyle} placeholder='Номер счёта' />
                             {/* {
                                 recipientError? <p style={{width:'100%' , margin:'0 0 0 5px', color:'red', fontFamily: '"Nunito"  ,sans-serif', fontWeight:'bold'}}>{recipientError}</p> : ''
                             } */}
                         </div>
                         <div style={{ width: '40%', display: 'flex', flexDirection: 'column' }}>
                             <label style={{ marginBottom: '0', width: '100%', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', color: 'rgb(183, 220, 233)' }}>Код страны</label>
-                            <input onChange={(e)=> {setCountryCode(e.target.value)}} style={inputStyle} placeholder='Код страны' />
+                            <input onChange={(e) => { setCountryCode(e.target.value) }} style={inputStyle} placeholder='Код страны' />
                             {/* {
                                 bankError? <p style={{width:'182px' , margin:'0 0 0 5px', color:'red', fontFamily: '"Nunito"  ,sans-serif', fontWeight:'bold'}}>{bankError}</p> : ''
                             } */}
                         </div>
                     </div>
                     <div style={{ width: '100%', display: 'flex', justifyContent: 'start', gap: '60px' }}>
-                        <div style={{ width: '40%', display: 'flex', flexDirection: 'column'}}>
+                        <div style={{ width: '40%', display: 'flex', flexDirection: 'column' }}>
                             <label style={{ marginBottom: '0', width: '100%', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', color: 'rgb(183, 220, 233)' }}>Страна</label>
-                            <input onChange={(e)=> {setCountry(e.target.value)}}  style={inputStyle} placeholder='Страна' />
+                            <input onChange={(e) => { setCountry(e.target.value) }} style={inputStyle} placeholder='Страна' />
                             {/* {
                                 recipientError? <p style={{width:'100%' , margin:'0 0 0 5px', color:'red', fontFamily: '"Nunito"  ,sans-serif', fontWeight:'bold'}}>{recipientError}</p> : ''
                             } */}
@@ -354,15 +355,15 @@ export default function P2PTransactionsBody() {
             >
                 <Box sx={style}>
                     <h2 style={{ fontFamily: "'Nunito',sans-serif", color: 'rgb(183, 220, 233)', marginTop: '0' }}>Удалить IBAN</h2>
-                    <div style={{ width: '100%'}}>
-                            <label style={{ color: 'white', width: '100%', fontFamily: "'Nunito',sans-serif" }}>IBAN</label>
-                            <select value={ibanToDelete} onChange={(e) => { setIbanToDelete(e.target.value); setIbanErrorToDelete('') }} style={{ outline: 'none', padding: '15px 20px', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', width: '100%' }} placeholder='Бренд'>
-                                <option value="">None</option>
-                                {ibans.map(el => <option style={{ width: '300px', wordBreak: 'break-all' }} value={el.IBAN} key={el.IBAN}>{el.IBAN}</option>)}
-                            </select>
-                            {
-                                ibanErrorToDelete && <p style={{ color: 'red', fontSize: '16px', margin: '0 0 0 5px', fontFamily: "'Nunito',sans-serif", fontWeight: 'bold' }}>{ibanErrorToDelete}</p>
-                            }
+                    <div style={{ width: '100%' }}>
+                        <label style={{ color: 'white', width: '100%', fontFamily: "'Nunito',sans-serif" }}>IBAN</label>
+                        <select value={ibanToDelete} onChange={(e) => { setIbanToDelete(e.target.value); setIbanErrorToDelete('') }} style={{ outline: 'none', padding: '15px 20px', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', width: '100%' }} placeholder='Бренд'>
+                            <option value="">None</option>
+                            {ibans.map(el => <option style={{ width: '300px', wordBreak: 'break-all' }} value={el.IBAN} key={el.IBAN}>{el.IBAN}</option>)}
+                        </select>
+                        {
+                            ibanErrorToDelete && <p style={{ color: 'red', fontSize: '16px', margin: '0 0 0 5px', fontFamily: "'Nunito',sans-serif", fontWeight: 'bold' }}>{ibanErrorToDelete}</p>
+                        }
                     </div>
                     <div>
                         {
@@ -416,20 +417,19 @@ export default function P2PTransactionsBody() {
             >
                 <Box sx={style}>
                     <h2 style={{ fontFamily: "'Nunito',sans-serif", color: 'rgb(183, 220, 233)', marginTop: '0' }}>Изменить IBAN</h2>
-                    <div style={{ width: '100%'}}>
-                            <label style={{ color: 'white', width: '100%', fontFamily: "'Nunito',sans-serif" }}>IBAN</label>
-                            <select value={ibanToDelete} onChange={(e) => { setIbanToDelete(e.target.value); setIbanErrorToDelete('') }} style={{ outline: 'none', padding: '15px 20px', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', width: '100%' }} placeholder='Бренд'>
-                                <option value="">None</option>
-                                {ibans.map(el => <option style={{ width: '300px', wordBreak: 'break-all' }} value={el.IBAN} key={el.IBAN}>{el.IBAN}</option>)}
-                            </select>
-                            {
-                                ibanErrorToDelete && <p style={{ color: 'red', fontSize: '16px', margin: '0 0 0 5px', fontFamily: "'Nunito',sans-serif", fontWeight: 'bold' }}>{ibanErrorToDelete}</p>
-                            }
+                    <div style={{ width: '100%' }}>
+                        <label style={{ color: 'white', width: '100%', fontFamily: "'Nunito',sans-serif" }}>IBAN</label>
+                        <select value={ibanToDelete} onChange={(e) => { setIbanToDelete(e.target.value); setIbanErrorToDelete('') }} style={{ outline: 'none', padding: '15px 20px', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', width: '100%' }} placeholder='Бренд'>
+                            <option value="">None</option>
+                            {ibans.map(el => <option style={{ width: '300px', wordBreak: 'break-all' }} value={el.IBAN} key={el.IBAN}>{el.IBAN}</option>)}
+                        </select>
+                        {
+                            ibanErrorToDelete && <p style={{ color: 'red', fontSize: '16px', margin: '0 0 0 5px', fontFamily: "'Nunito',sans-serif", fontWeight: 'bold' }}>{ibanErrorToDelete}</p>
+                        }
                     </div>
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DemoContainer components={['TimePicker']}>
-                                <TimePicker
-                                onChange={e=> setPeriod(e)}
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DemoContainer components={['DateTimePicker']} sx={{ padding: 0, border: 'none' }}>
+                            <DateTimePicker
                                 sx={
                                     {
                                         backgroundColor: 'white',
@@ -437,16 +437,17 @@ export default function P2PTransactionsBody() {
                                         borderRadius: '8px',
                                     }
                                 }
-                                ampm={false}
-                                label="Ban Time"
                                 viewRenderers={{
                                     hours: renderTimeViewClock,
                                     minutes: renderTimeViewClock,
                                     seconds: renderTimeViewClock,
                                 }}
-                                />
-                            </DemoContainer>
-                        </LocalizationProvider>
+                                onChange={e => setPeriod(e)}
+                                inputFormat="dd/MM/yyyy HH:mm"
+                                ampm={false}
+                            />
+                        </DemoContainer>
+                    </LocalizationProvider>
                     <div>
                         {
                             ibanToDelete
@@ -499,15 +500,27 @@ export default function P2PTransactionsBody() {
             >
                 <Box sx={style}>
                     <h2 style={{ fontFamily: "'Nunito',sans-serif", color: 'rgb(183, 220, 233)', marginTop: '0' }}>Изменить IBAN</h2>
-                    <div style={{ width: '100%'}}>
-                            <label style={{ color: 'white', width: '100%', fontFamily: "'Nunito',sans-serif" }}>IBAN</label>
-                            <select value={ibanToDelete} onChange={(e) => { setIbanToDelete(e.target.value); setIbanErrorToDelete('') }} style={{ outline: 'none', padding: '15px 20px', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', width: '100%' }} placeholder='Бренд'>
-                                <option value="">None</option>
-                                {ibans?.filter(elem => elem.Status === '0')?.map(el => <option style={{ width: '300px', wordBreak: 'break-all' }} value={el.IBAN} key={el.IBAN}>{el.IBAN}</option>)}
-                            </select>
-                            {
-                                ibanErrorToDelete && <p style={{ color: 'red', fontSize: '16px', margin: '0 0 0 5px', fontFamily: "'Nunito',sans-serif", fontWeight: 'bold' }}>{ibanErrorToDelete}</p>
-                            }
+                    <div style={{ width: '100%' }}>
+                        <label style={{ color: 'white', width: '100%', fontFamily: "'Nunito',sans-serif" }}>IBAN</label>
+                        <select value={ibanToDelete} onChange={(e) => { setIbanToDelete(e.target.value); setIbanErrorToDelete('') }} style={{ outline: 'none', padding: '15px 20px', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', width: '100%' }} placeholder='Бренд'>
+                            <option value="">None</option>
+                            {ibans?.filter(elem => elem.Status === '0')?.map(el => <option style={{ width: '300px', wordBreak: 'break-all' }} value={el.IBAN} key={el.IBAN}>{el.IBAN}</option>)}
+                        </select>
+                        {
+                            ibanErrorToDelete && <p style={{ color: 'red', fontSize: '16px', margin: '0 0 0 5px', fontFamily: "'Nunito',sans-serif", fontWeight: 'bold' }}>{ibanErrorToDelete}</p>
+                        }
+                        {
+                            ibanToDelete && (
+                                <div style={{ backgroundColor: 'white', width: '50%', borderRadius: '7px',marginTop:'10px' }}>
+                                    <div style={{ backgroundColor: 'rgba(255, 237, 193, 0.5)', width: 'calc(100% - 2px)', borderRadius: '8px', border: '1px solid #FFECA1', height: 'calc(100% - 2px)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
+                                        <WarningIcon sx={{ color: '#D18E00', marginLeft: '10px' }} />
+                                        <p style={{ fontSize: '13px', fontFamily: "'Nunito',sans-serif", fontWeight: '600', marginRight: '10px', color: '#D18E00' }}>
+                                            IBAN выйдет из бана: <b>{moment(ibans.find(elem=> elem.IBAN === ibanToDelete).banPeriod).format('YYYY-MM-DD HH:mm')}</b>
+                                        </p>
+                                    </div>
+                                </div>
+                            )
+                        }
                     </div>
                     <div>
                         {
@@ -554,12 +567,12 @@ export default function P2PTransactionsBody() {
                 </Box>
             </Modal>
             <Snackbar
-                    open={snack}
-                    autoHideDuration={2000}
-                    onClose={handleCloseSnack}
-                    message={snackMessage}
-                >
-                    <Alert severity={snackType}>{snackMessage}</Alert>
+                open={snack}
+                autoHideDuration={2000}
+                onClose={handleCloseSnack}
+                message={snackMessage}
+            >
+                <Alert severity={snackType}>{snackMessage}</Alert>
 
             </Snackbar>
         </div>
