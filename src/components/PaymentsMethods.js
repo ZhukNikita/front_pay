@@ -86,6 +86,13 @@ export default function PaymentsMethods() {
             link:'/readies',
             instruction:[],
             brands: ['AdminBrand']
+        },
+        {
+            id:12,
+            name: 'LinkWorld',
+            link:'/linkworld',
+            instruction:[],
+            brands: ['AdminBrand']
         }
     ]
 

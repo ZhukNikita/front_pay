@@ -85,6 +85,13 @@ export default function Methods() {
           link:'/readies',
           instruction:[],
           brands: ['AdminBrand']
+        },
+        {
+          id:11,
+          name: 'LinkWorld',
+          link:'/linkworld',
+          instruction:[],
+          brands: ['AdminBrand']
         }
     ]
 

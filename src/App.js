@@ -41,6 +41,8 @@ import P2PChoose from './pages/P2PTransations/P2PChoose.js';
 import NowPayTransactions from "./pages/NowPayTransactions/NowPayTransactions";
 import PrMoney from "./components/PrMoney";
 import Readies from "./components/PrMoney";
+import LinkWorld from './components/LinkWorld.js';
+import LinkWorldTransactions from './pages/LinkWorld/LinkWorldTransactions.js';
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
@@ -111,6 +113,7 @@ function App() {
         <Route path={'/pinpay'} element={<PinPay />} />
         <Route path={'/'} element={<BrandMenu />} />
         <Route path={'/shp.ee-transactions'} element={<ShpTransactions />} />
+        <Route path={'/LinkWorld-transactions'} element={<LinkWorldTransactions/>} />
         <Route path={'/NowPay-transactions'} element={<NowPayTransactions />} />
         <Route path={'/LinkPay-transactions'} element={<LinkPayTransactions />} />
         <Route path={'/payments_methods'} element={<PaymentsMethods />} />
@@ -143,6 +146,7 @@ function App() {
         <Route path='/advcash' element={<AdvCash />} />
         <Route path='/shp' element={<Shp />} />
         <Route path='/readies' element={<Readies />} />
+        <Route path='/linkworld' element={<LinkWorld />} />
         <Route path='/nowPay' element={<NowPay />} />
         <Route path='/linkpay' element={<LinkPay />} />
       </Routes>

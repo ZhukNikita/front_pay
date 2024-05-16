@@ -24,14 +24,25 @@ export default function AdvCashPaymentLink() {
     };
     return (
         <div className={styles.body}>
-            <label>Сумма</label>
-            <input className={styles.amount} type='number' onChange={(e)=> setAmount(e.target.value)}/>
-
-            <button className={styles.create} onClick={onClick}>Создать</button>
-            {sign?<a href={generatePaymentLink()} target="_blank" rel="noopener noreferrer" style={{color:'white' , width :'200px'}}>
-            {generatePaymentLink()}
-            </a>: ''}
-
+            <form action="https://readies.biz/makePayment" method="post">
+                    <input type="hidden" name="cmd" defaultValue="_pay_simple" />
+                    <input type="hidden" name="reset" defaultValue={1} />
+                    <input type="hidden" name="merchant" defaultValue="632f14dea899dfa73f126b877f8290c3" />
+                    <input type="hidden" name="item_name" defaultValue="TestLink" />
+                    <input type="hidden" name="item_desc" defaultValue="TestPay" />
+                    <input type="hidden" name="item_number" defaultValue={1700} />
+                    <input type="hidden" name="invoice" defaultValue={17123123} />
+                    <input type="hidden" name="currency" defaultValue="USD" />
+                    <input type="hidden" name="amountf" defaultValue={100.00} />
+                    <input type="hidden" name="want_shipping" defaultValue={1} />
+                    <input type="hidden" name="shippingf" defaultValue={1.00} />
+                    <input type="hidden" name="success_url" defaultValue="https://pythonguix.pro/acsec" />
+                    <input type="hidden" name="cancel_url" defaultValue="https://pythonguix.pro/Failet" />
+                    <input type="hidden" name="ipn_url" defaultValue />
+                    <input type="hidden" name="tax" defaultValue={0.00} />
+                    <div className="infonotes"><i className="fa fa-info-circle" /><span className="noteshoww">Pay with READIES, the best and safest payment solution which can protect your privacy, used by millions of online shoppers and gamers globally! This site accepts READIES without any extra fee.<br />Not yet have a READIES account? Sign-upnow for free!</span></div>
+                    <input type="image" style={{width: '25%'}} src="https://readies.biz/userpanel/images/payokepaybtn.png" alt />
+            </form>
         </div>
     );
 }

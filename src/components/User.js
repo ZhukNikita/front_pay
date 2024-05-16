@@ -72,7 +72,8 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
     const [isRuCassaCheck, setIsRuCassaCheck] = React.useState(user.methods.includes('RuCassa'));
     const [isLinkPayCheck, setIsLinkPayCheck] = React.useState(user.methods.includes('LinkPay'));
     const [isNowPayCheck, setIsNowPayCheck] = React.useState(user.methods.includes('NowPay'));
-    const [isReadiesCheck, setIsReadiesCheck] = React.useState(user.methods.includes('NowPay'));
+    const [isReadiesCheck, setIsReadiesCheck] = React.useState(user.methods.includes('Readies'));
+    const [isLinkWorldCheck, setIsLinkWorldCheck] = React.useState(user.methods.includes('LinkWorld'));
     const [selectedPayments, setSelectedPayments] = React.useState([]);
     const [choosenbrands, setChoosenBrands] = React.useState(user.brand && brands ? brands.filter(item => user.brands.includes(item.brand)) : [])
     React.useEffect(() => {
@@ -97,6 +98,13 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
                 }
             } else {
                 updatedSelectedPayments = updatedSelectedPayments.filter(el => el !== '9');
+            }
+            if (isLinkWorldCheck === true) {
+                if (!selectedPayments.includes('11')) {
+                    updatedSelectedPayments.push('11');
+                }
+            } else {
+                updatedSelectedPayments = updatedSelectedPayments.filter(el => el !== '11');
             }
             if (isReadiesCheck === true) {
                 if (!selectedPayments.includes('10')) {
@@ -155,7 +163,7 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
 
             return updatedSelectedPayments;
         });
-    }, [isPinPayCheck, isP2PCheck, isInsirexCheck, isWLXCheck, isAdvCashCheck , isStripeCheck, isRuCassaCheck,isLinkPayCheck,isNowPayCheck,isReadiesCheck]);
+    }, [isPinPayCheck, isP2PCheck, isInsirexCheck, isWLXCheck, isAdvCashCheck , isStripeCheck, isRuCassaCheck,isLinkPayCheck,isNowPayCheck,isReadiesCheck, isLinkWorldCheck]);
 
     React.useEffect(() => {
         if (user) {
@@ -168,6 +176,11 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
                 setIsNowPayCheck(false)
             }else{
                 setIsNowPayCheck(true)
+            }
+            if (!user.methods.includes('LinkWorld')) {
+                setIsLinkWorldCheck(false)
+            }else{
+                setIsLinkWorldCheck(true)
             }
             if (!user.methods.includes('Readies')) {
                 setIsReadiesCheck(false)
@@ -581,6 +594,10 @@ export default function User({ user, users, setUsers, selectAll, setSelectAll, s
                                 <label className="lns-checkbox">
                                     <input type="checkbox" name='shp.ee' checked={isReadiesCheck} onChange={(e) => setIsReadiesCheck(e.target.checked)} />
                                     <span>Readies</span>
+                                </label>
+                                <label className="lns-checkbox">
+                                    <input type="checkbox" name='LinkWorld' checked={isLinkWorldCheck} onChange={(e) => setIsLinkWorldCheck(e.target.checked)} />
+                                    <span>LinkWorld</span>
                                 </label>
                             </div>
 
