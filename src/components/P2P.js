@@ -64,7 +64,7 @@ export default function P2P() {
   useEffect(() => {
     if (seconds === 180) {
       $api
-        .get(`/p2p/${country}`)
+        .post(`/p2p/${country}`,{brand:secureLocalStorage.getItem('userBrand')})
         .then((response) => {
           setUrl(response.data.IBAN);
           setRecipient(response.data.Recipient);

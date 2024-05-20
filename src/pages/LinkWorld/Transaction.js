@@ -141,7 +141,7 @@ export default function Transaction({transaction}) {
     console.log(transaction)
     return(
       <div className={styles.transaction} style={{zIndex:'1'}}>
-          <Link to={`/shp-transaction/${transaction.id}`} className={styles.body}>
+          <div className={styles.body}>
               <h3 style={{ width: '7vw' }}>{moment(new Date(transaction.order_id)).utc(true).format('YYYY-MM-DD HH:mm:ss')}</h3>
               <h3 style={{ width: '10vw' }}>{transaction.order_id}</h3>
               <h3 style={{ width: '13.5vw'}}><p style={{width:'85%' , wordBreak: 'break-word'}}>{transaction?.card}</p></h3>
@@ -151,7 +151,7 @@ export default function Transaction({transaction}) {
               <h3 style={{ width: '7vw' }}>
                   {getStatus(transaction)}
               </h3>
-          </Link>
+          </div>
 
           {/* <Link to={`https://merchantaccount.dev/edit-input-data/${transaction.uuid}`} style={{fontSize:'14px',fontWeight:'bold',backgroundColor:'#233e68', padding:'10px', borderRadius:'8px', color:'white',textDecoration:'none' , width:'70px' , display:'flex',justifyContent:'center' , textAlign:'center' , marginLeft:'3vw'}}>Загрузка данных</Link> */}
           {/* <input

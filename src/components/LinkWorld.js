@@ -30,7 +30,7 @@ export default function LinkWorld() {
       setIsLoading(true)
       if (amount && currency) {
         const brand = secureLocalStorage.getItem('userBrand')
-        setUrl(`https://new.prmoney.com/payments/create?client_id=qI4rbPBB0GWERE5XPGS23Mub72hQldCLD4xVnKkg&amount=${amount}&description=${brand}&client_email=${email}&order_id=${Date.now()}`)
+        setUrl(`https://new.prmoney.com/payments/create?client_id=qI4rbPBB0GWERE5XPGS23Mub72hQldCLD4xVnKkg&amount=${amount}&description=${brand}&order_id=${Date.now()}`)
         setIsLoading(false)
       }
       else {
@@ -79,11 +79,6 @@ export default function LinkWorld() {
         <div className={styles.input}>
           <label>Сумма</label>
           <input type='text' name='Amount' placeholder='Сумма' onChange={(e) => {setAmount(e.target.value); setError('')}} />
-
-        </div>
-        <div className={styles.input}>
-          <label>Email</label>
-          <input type='text' name='Email' placeholder='Email' onChange={(e) => {setEmail(e.target.value); setError('')}} />
 
         </div>
         <button className={amount && currency ? styles.Button : styles.Disable} onClick={generatePaymentLink}>Создать</button>

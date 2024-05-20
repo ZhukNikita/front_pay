@@ -38,12 +38,11 @@ const style = {
     width: "550px"
 };
 
-export default function P2PTransactionsList({ibans ,setIbans}) {
+export default function P2PTransactionsList({ibans ,setIbans,setBrands,brands}) {
     const [search, setSearch] = useState('')
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const [brand, setBrand] = useState('')
-    const [brands, setBrands] = useState('')
     const [brandError, setBrandError] = useState('')
     const [login, setLogin] = useState('')
     const [loginError, setLoginError] = useState('')

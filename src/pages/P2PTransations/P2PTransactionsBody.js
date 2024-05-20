@@ -23,6 +23,8 @@ import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import utc from 'dayjs/plugin/utc'
 import { DateTimePicker } from '@mui/x-date-pickers'
 import moment from 'moment/moment'
+import ChangeCircleRoundedIcon from '@mui/icons-material/ChangeCircleRounded';
+import IbansList from './IbansList'
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
@@ -48,13 +50,16 @@ export default function P2PTransactionsBody() {
     const [open, setOpen] = useState(false);
     const [openDelete, setOpenDelete] = useState(false);
     const [openEdit, setOpenEdit] = useState(false);
+    const [openEditBrand, setOpenEditBrand] = useState(false);
     const [openEditIban, setOpenEditIban] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleOpenDelete = () => setOpenDelete(true);
     const handleOpenEdit = () => setOpenEdit(true);
+    const handleOpenEditBrand = () => setOpenEditBrand(true);
     const handleOpenEditIban = () => setOpenEditIban(true);
     const [iban1, setIban] = useState('')
     const [ibanToDelete, setIbanToDelete] = useState('')
+    const [brandToChange, setBrandToChange] = useState('all')
     const [ibanError, setIbanError] = useState('')
     const [ibanErrorToDelete, setIbanErrorToDelete] = useState('')
     const [recipient, setRecipient] = useState('')
@@ -67,6 +72,7 @@ export default function P2PTransactionsBody() {
     const [accountNumber, setAccountNumber] = useState('')
     const [bicError, setBicError] = useState('')
     const [ibans, setIbans] = useState([])
+    const [brands, setBrands] = useState([])
     const [snack, setSnack] = useState(false);
     const [limit, setLimit] = useState(false);
     const [snackMessage, setSnackMessage] = useState('');
@@ -89,6 +95,12 @@ export default function P2PTransactionsBody() {
     };
     const handleEditClose = () => {
         setOpenEdit(false);
+        setIbanToDelete('');
+        setLimit(false)
+        setPeriod()
+    };
+    const handleEditBrandClose = () => {
+        setOpenEditBrand(false);
         setIbanToDelete('');
         setLimit(false)
         setPeriod()
@@ -210,6 +222,20 @@ export default function P2PTransactionsBody() {
             handleDeleteClose()
         }
     }
+    const ChangeBrand =  async()=>{
+        const createdBy = secureLocalStorage.getItem('userId')
+        console.log(brandToChange)
+        try{
+            const { data } = await $api.post('/changeIban', { ibanToDelete, createdBy,brandToChange })
+            await $api.get('/p2pGetAll').then(res => setIbans(res.data))
+            setSnack(true)
+            setSnackType('success')
+            setSnackMessage('IBAN успешно изменён')
+            return data
+        }catch(e){
+
+        }
+    }
     return (
         <div className={styles.body}>
             <div className={styles.header}>
@@ -219,6 +245,7 @@ export default function P2PTransactionsBody() {
                         secureLocalStorage.getItem('role') === 'SuperAdmin' ?
                             <>
                                 <button onClick={handleOpenEdit}><BlockIcon />Внести в спам</button>
+                                <button onClick={handleOpenEditBrand}><ChangeCircleRoundedIcon />Распределить Ibans</button>
                                 <button onClick={handleOpenEditIban}><CheckCircleRoundedIcon />Убрать из спама</button>
                                 <button onClick={handleOpen}><AccountBalanceIcon />Добавить IBAN</button>
                                 <button onClick={handleOpenDelete} style={{ backgroundColor: '#ad2824', color: '#ffa6b2' }}><DeleteOutlineIcon />Удалить IBAN</button>
@@ -231,7 +258,8 @@ export default function P2PTransactionsBody() {
                 </div>
 
             </div>
-            <P2PTransactionsList ibans={ibans} setIbans={setIbans} />
+            <P2PTransactionsList ibans={ibans} setIbans={setIbans} setBrands={setBrands} brands={brands}/>
+            <IbansList ibans={ibans} setIbans={setIbans} setBrands={setBrands} brands={brands}/>
             <Modal
                 open={open}
                 onClose={handleClose}
@@ -344,6 +372,74 @@ export default function P2PTransactionsBody() {
                                 </button>
                         }
 
+                    </div>
+                </Box>
+            </Modal>
+            <Modal
+                open={openEditBrand}
+                onClose={handleEditBrandClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <h2 style={{ fontFamily: "'Nunito',sans-serif", color: 'rgb(183, 220, 233)', marginTop: '0' }}>Распределить IBAN</h2>
+                    <div style={{ width: '100%' }}>
+                        <label style={{ color: 'white', width: '100%', fontFamily: "'Nunito',sans-serif" }}>IBAN</label>
+                        <select value={ibanToDelete} onChange={(e) => { setIbanToDelete(e.target.value); setIbanErrorToDelete('') }} style={{ outline: 'none', padding: '15px 20px', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', width: '100%' }} placeholder='Бренд'>
+                            <option value="">None</option>
+                            {ibans.map(el => <option style={{ width: '300px', wordBreak: 'break-all' }} value={el.IBAN} key={el.IBAN}>{el.IBAN}</option>)}
+                        </select>
+                        {
+                            ibanErrorToDelete && <p style={{ color: 'red', fontSize: '16px', margin: '0 0 0 5px', fontFamily: "'Nunito',sans-serif", fontWeight: 'bold' }}>{ibanErrorToDelete}</p>
+                        }
+                    </div>
+                    <div style={{ width: '100%' }}>
+                        <label style={{ color: 'white', width: '100%', fontFamily: "'Nunito',sans-serif" }}>Бренд</label>
+                        <select value={brandToChange} onChange={(e) => { setBrandToChange(e.target.value)}} style={{ outline: 'none', padding: '15px 20px', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', width: '100%' }} placeholder='Бренд'>
+                            <option value="all">All</option>
+                            {brands.map(el => <option style={{ width: '300px', wordBreak: 'break-all' }} value={el.brand} key={el.brand}>{el.brand}</option>)}
+                        </select>
+                    </div>
+                    <div>
+                        {
+                            ibanToDelete
+                                ? <button
+                                    onClick={ChangeBrand}
+                                    style={{
+                                        border: 'none',
+                                        padding: '15px',
+                                        borderRadius: '8px',
+                                        backgroundColor: 'rgb(56, 182, 255)',
+                                        fontFamily: "'Nunito',sans-serif",
+                                        fontWeight: '600',
+                                        color: 'white',
+                                        fontSize: '16px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '5px',
+                                        cursor: 'pointer'
+                                    }}>
+                                    <ChangeCircleRoundedIcon />Изменить
+                                </button>
+                                : <button
+                                    onClick={CheckToDelete}
+                                    style={{
+                                        border: '1px solid rgb(56, 182, 255)',
+                                        padding: '15px',
+                                        borderRadius: '8px',
+                                        background: 'none',
+                                        fontFamily: "'Nunito',sans-serif",
+                                        fontWeight: '600',
+                                        color: 'white',
+                                        fontSize: '16px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '5px',
+                                        cursor: 'pointer'
+                                    }}>
+                                    <ChangeCircleRoundedIcon />Изменить
+                                </button>
+                        }
                     </div>
                 </Box>
             </Modal>
