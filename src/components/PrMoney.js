@@ -9,6 +9,7 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import Clipboard from 'react-clipboard.js';
 import { Oval } from 'react-loader-spinner';
 import {decode as base64_decode, encode as base64_encode} from 'base-64';
+import axios from 'axios';
 export default function Readies() {
   const [amount, setAmount] = useState('')
   const [email, setEmail] = useState('')
@@ -30,8 +31,11 @@ export default function Readies() {
       setIsLoading(true)
       if (amount && currency) {
         const brand = secureLocalStorage.getItem('userBrand')
-        setUrl(`https://new.prmoney.com/payments/create?client_id=VuYvE76e99WmepDB5DE3B7zBAgwlb8CcPjrCs0XL&amount=${amount}&description=${brand}&client_email=${email}`)
-        setIsLoading(false)
+        const {data} = await $api.post('/createTransaction',{amount,email , brand})
+        if(data){
+          setUrl(data.response.checkout_url)
+          setIsLoading(false)
+        }
       }
       else {
         setIsLoading(false)

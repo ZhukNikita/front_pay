@@ -182,9 +182,9 @@ export default function FullP2PTransactionInfo({ setSnack, setSnackMessage, setS
     const EditStatus = async (status)=>{
         const id = transaction.id
         let checked = status
-        if((secureLocalStorage.getItem('role') === 'Financier'|| secureLocalStorage.getItem('role') === 'Admin') && imgs.length === 0){
+        if((secureLocalStorage.getItem('role') === 'Financier'|| secureLocalStorage.getItem('role') === 'Admin')){
             setSnack(true)
-            setSnackMessage('Невозможно подтвердить транзакцию без загруженных документов.')
+            setSnackMessage('Нет доступа для изменения статуса.')
             setSnackType('error') 
         }else{
         try{
@@ -290,13 +290,17 @@ export default function FullP2PTransactionInfo({ setSnack, setSnackMessage, setS
                                         name='file'
                                         multiple
                                     />
-                                    <span className={styles.uploadImg} onClick={handleUploadIconClick}>
-                                        <UploadFileIcon
-                                            sx={{ display: 'flex', alignItems: 'center', cursor: 'pointer', zIndex: 0 }}
+                                    {
+                                        secureLocalStorage.getItem('role') === 'SuperAdmin'?
+                                        <span className={styles.uploadImg} onClick={handleUploadIconClick}>
+                                            <UploadFileIcon
+                                                sx={{ display: 'flex', alignItems: 'center', cursor: 'pointer', zIndex: 0 }}
+    
+                                            /> Загрузить Чек
+                                        </span>
+                                        :''
 
-                                        /> Загрузить Чек
-                                    </span>
-
+                                    }
                                     <FileUploadModal
                                         selectedFile={selectedFile}
                                         openPreview={openPreview}

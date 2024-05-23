@@ -236,6 +236,7 @@ export default function P2PTransactionsBody() {
 
         }
     }
+    console.log(secureLocalStorage.getItem('role'))
     return (
         <div className={styles.body}>
             <div className={styles.header}>
@@ -259,7 +260,11 @@ export default function P2PTransactionsBody() {
 
             </div>
             <P2PTransactionsList ibans={ibans} setIbans={setIbans} setBrands={setBrands} brands={brands}/>
-            <IbansList ibans={ibans} setIbans={setIbans} setBrands={setBrands} brands={brands}/>
+            {
+                secureLocalStorage.getItem('role')=== 'SuperAdmin'?
+                <IbansList ibans={ibans} setIbans={setIbans} setBrands={setBrands} brands={brands}/>
+                :''
+            }
             <Modal
                 open={open}
                 onClose={handleClose}
@@ -611,7 +616,7 @@ export default function P2PTransactionsBody() {
                                     <div style={{ backgroundColor: 'rgba(255, 237, 193, 0.5)', width: 'calc(100% - 2px)', borderRadius: '8px', border: '1px solid #FFECA1', height: 'calc(100% - 2px)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
                                         <WarningIcon sx={{ color: '#D18E00', marginLeft: '10px' }} />
                                         <p style={{ fontSize: '13px', fontFamily: "'Nunito',sans-serif", fontWeight: '600', marginRight: '10px', color: '#D18E00' }}>
-                                            IBAN выйдет из бана: <b>{moment(ibans.find(elem=> elem.IBAN === ibanToDelete).banPeriod).format('YYYY-MM-DD HH:mm')}</b>
+                                            IBAN выйдет из бана: <b>{ibans.find(elem=> elem.IBAN === ibanToDelete).banPeriod?moment(ibans.find(elem=> elem.IBAN === ibanToDelete).banPeriod).format('YYYY-MM-DD HH:mm'):moment(ibans.find(elem=> elem.IBAN === ibanToDelete).banTime).add(3, 'minutes').format('YYYY-MM-DD HH:mm')}</b>
                                         </p>
                                     </div>
                                 </div>

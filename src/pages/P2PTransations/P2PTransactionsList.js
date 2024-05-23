@@ -205,7 +205,11 @@ export default function P2PTransactionsList({ibans ,setIbans,setBrands,brands}) 
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                 />
-                <button onClick={handleOpen}><AddIcon />Добавить транзакцию</button>
+                {
+                    secureLocalStorage.getItem('role') === 'SuperAdmin'?
+                    <button onClick={handleOpen}><AddIcon />Добавить транзакцию</button>
+                    :''
+                }
             </div>
             <div className={styles.header}>
                 <h3 className={styles.login}>Логин

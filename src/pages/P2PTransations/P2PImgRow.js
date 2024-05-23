@@ -134,24 +134,30 @@ export default function P2PImgRow({ el, handleOpen, setFullImg, transaction , ro
                                 horizontal: 'left'
                             }}
                         >
-                            <MenuItem onClick={() => {handleEditIconClick()}}>
-                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', fontWeight: 'bold', fontFamily: "'Nunito',sans-serif" }}>
-                                <input
-                                        ref={fileEditInputRef}
-                                        type='file'
-                                        style={{ display: 'none' }}
-                                        onChange={(event) => EditImg(event,el.img_path)}
-                                        accept="image/png, image/gif, image/jpeg"
-                                        name='file'
-                                    />
-                                    <EditIcon /> Изменить
-                                </div>
-                            </MenuItem>
-                            <MenuItem onClick={() => { DeleteImg(el.img_path); handleClose() }} sx={{ color: 'rgb(255, 72, 66)' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', fontWeight: 'bold', fontFamily: "'Nunito',sans-serif" }}>
-                                    <DeleteIcon />Удалить
-                                </div>
-                            </MenuItem>
+                            {
+                                secureLocalStorage.getItem('role') === 'SuperAdmin'?
+                                <MenuItem onClick={() => {handleEditIconClick()}}>
+                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', fontWeight: 'bold', fontFamily: "'Nunito',sans-serif" }}>
+                                    <input
+                                            ref={fileEditInputRef}
+                                            type='file'
+                                            style={{ display: 'none' }}
+                                            onChange={(event) => EditImg(event,el.img_path)}
+                                            accept="image/png, image/gif, image/jpeg"
+                                            name='file'
+                                        />
+                                        <EditIcon /> Изменить
+                                    </div>
+                                </MenuItem>:''
+                            }
+                            {
+                                secureLocalStorage.getItem('role') === 'SuperAdmin'?
+                                <MenuItem onClick={() => { DeleteImg(el.img_path); handleClose() }} sx={{ color: 'rgb(255, 72, 66)' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', fontWeight: 'bold', fontFamily: "'Nunito',sans-serif" }}>
+                                        <DeleteIcon />Удалить
+                                    </div>
+                                </MenuItem>:''
+                            }
                             <MenuItem onClick={() => { downloadImage(el.img_path); handleClose()}} sx={{ color: '#2edf1e' }}>
                                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', fontWeight: 'bold', fontFamily: "'Nunito',sans-serif" }}>
                                     <DownloadForOfflineIcon /> Скачать
