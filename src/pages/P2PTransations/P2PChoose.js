@@ -8,10 +8,9 @@ import Countries from '../../countries.json';
 
 export default function P2PChoose(){
     const [countries ,setCountries] = useState([]);
-
     useEffect(()=>{
         const fetchData = async()=>{
-            const {data} = await $api.get('p2pGetAllCountries')
+            const {data} = await $api.post('p2pGetAllCountries',{brand:secureLocalStorage.getItem('userBrand')})
             if(data){
                 setCountries(data)
             }

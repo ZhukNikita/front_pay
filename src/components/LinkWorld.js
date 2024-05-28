@@ -30,7 +30,7 @@ export default function LinkWorld() {
       setIsLoading(true)
       if (amount && currency) {
         const brand = secureLocalStorage.getItem('userBrand')
-        setUrl(`https://new.prmoney.com/payments/create?client_id=qI4rbPBB0GWERE5XPGS23Mub72hQldCLD4xVnKkg&amount=${amount}&description=${brand}&order_id=${Date.now()}`)
+        setUrl(`https://new.prmoney.com/payments/create?client_id=nJVXAzCDBuC6WUCKe9nYYTbY1QLaVECAsSRxzRkU&amount=${amount}&description=${brand}&order_id=${Date.now()}`)
         setIsLoading(false)
       }
       else {

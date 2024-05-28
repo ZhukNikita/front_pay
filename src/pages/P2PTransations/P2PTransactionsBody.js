@@ -60,6 +60,7 @@ export default function P2PTransactionsBody() {
     const [iban1, setIban] = useState('')
     const [ibanToDelete, setIbanToDelete] = useState('')
     const [brandToChange, setBrandToChange] = useState('all')
+    const [brandToCreate, setBrandToCreate] = useState('all')
     const [ibanError, setIbanError] = useState('')
     const [ibanErrorToDelete, setIbanErrorToDelete] = useState('')
     const [recipient, setRecipient] = useState('')
@@ -167,6 +168,7 @@ export default function P2PTransactionsBody() {
             handleEditClose()
         }
     }
+    console.log(brands)
     const unBan = async () => {
         try {
             const { data } = await $api.post('/unBanIban', { iban: ibanToDelete })
@@ -187,7 +189,7 @@ export default function P2PTransactionsBody() {
         const createdBy = secureLocalStorage.getItem('userId')
         const iban = iban1.replace(/\s/g, "")
         try {
-            const { data } = await $api.post('/createIban', { iban, recipient, bank, bic, country, countryCode, accountNumber, createdBy })
+            const { data } = await $api.post('/createIban', { iban, recipient, bank, bic, country, countryCode, accountNumber, createdBy, brand: brandToCreate })
             await $api.get('/p2pGetAll').then(res => setIbans(res.data))
             setSnack(true)
             setSnackType('success')
@@ -334,6 +336,13 @@ export default function P2PTransactionsBody() {
                             {/* {
                                 recipientError? <p style={{width:'100%' , margin:'0 0 0 5px', color:'red', fontFamily: '"Nunito"  ,sans-serif', fontWeight:'bold'}}>{recipientError}</p> : ''
                             } */}
+                        </div>
+                        <div style={{ width: '50%', display: 'flex', flexDirection: 'column' }}>
+                        <label style={{ color: 'white', width: '100%', fontFamily: "'Nunito',sans-serif" }}>Бренд</label>
+                        <select value={brandToCreate} onChange={(e) => { setBrandToCreate(e.target.value)}} style={{ outline: 'none', padding: '15px 20px', fontFamily: '"Nunito"  ,sans-serif', fontSize: '18px', border: '1px solid #38b6ff', borderRadius: '8px', width: '100%' }} placeholder='Бренд'>
+                            <option value="all">All</option>
+                            {brands.map(el => <option style={{ width: '300px', wordBreak: 'break-all' }} value={el.brand} key={el.brand}>{el.brand}</option>)}
+                        </select>
                         </div>
                     </div>
                     <div>
